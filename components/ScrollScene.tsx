@@ -159,41 +159,41 @@ function OrbitModels() {
   );
 }
 
-/* ---------- 主角:贯穿全页的银项圈 ---------- */
-function TravelingCollar({
+/* ---------- 主角:贯穿全页的錾刻龙纹银饰(hero-dragon 贴图档) ---------- */
+/* 龙纹正面相对初始位的偏移角(story 段锁正面时龙脸朝镜头, 实测可调) */
+const FRONT_ANGLE = 0;
+/* 尺寸归一目标最大边(世界单位): 龙纹为横幅浮雕件, 按此值定 hero 画面占比(2.1 ≈ 宽37% 留呼吸感) */
+const HERO_FIT = 2.1;
+
+function TravelingHero({
   keys,
   reduced,
 }: {
   keys: MutableRefObject<Keyframe[]>;
   reduced: boolean;
 }) {
-  const { scene } = useGLTF("/models/collar-meshopt.glb", true, true);
+  const { scene } = useGLTF("/models/hero-dragon.glb", true, true);
   const group = useRef<THREE.Group>(null); // 位移/缩放
   const spinner = useRef<THREE.Group>(null); // 旋转
   const idleAccum = useRef(0);
   const storyBase = useRef<number | null>(null);
 
-  const silver = useMemo(
-    () =>
-      new THREE.MeshPhysicalMaterial({
-        metalness: 1,
-        roughness: 0.16,
-        color: new THREE.Color("#e6e7ec"),
-        envMapIntensity: 1.4,
-        clearcoat: 0.3,
-        clearcoatRoughness: 0.25,
-      }),
-    []
-  );
-
+  /* 尺寸归一(居中 + fit) + 贴图材质接管: 保留 GLB 自带贴图, 仅增强环境反射适配暗底 */
   useEffect(() => {
+    const box = new THREE.Box3().setFromObject(scene);
+    const dim = box.getSize(new THREE.Vector3());
+    const center = box.getCenter(new THREE.Vector3());
+    scene.position.copy(center.negate());
+    scene.scale.setScalar(HERO_FIT / Math.max(dim.x, dim.y, dim.z, 1e-6));
     scene.traverse((o: any) => {
-      if (o.isMesh) {
-        o.geometry.computeVertexNormals();
-        o.material = silver;
+      if (!o.isMesh) return;
+      const mats = Array.isArray(o.material) ? o.material : [o.material];
+      for (const m of mats) {
+        if ((m as THREE.MeshStandardMaterial).isMeshStandardMaterial)
+          (m as THREE.MeshStandardMaterial).envMapIntensity = 1.2;
       }
     });
-  }, [scene, silver]);
+  }, [scene]);
 
   useFrame((state, dt) => {
     if (!group.current || !spinner.current) return;
@@ -217,7 +217,7 @@ function TravelingCollar({
 
     if (!reduced) idleAccum.current += dt * 0.35 * idle;
 
-    /* 叙事段(ks[2]→ks[3]):进入时捕获当前角,段末精确锁正面 */
+    /* 叙事段(ks[2]→ks[3]):进入时捕获当前角,段末精确锁正面(龙脸) */
     const sIn = ks[2].sy;
     const sOut = ks[3].sy;
     const sp = sOut > sIn ? Math.min(1, Math.max(0, (sy - sIn) / (sOut - sIn))) : 1;
@@ -228,7 +228,9 @@ function TravelingCollar({
     } else {
       if (storyBase.current === null) storyBase.current = idleAccum.current;
       const base = storyBase.current;
-      const front = Math.round(base / (Math.PI * 2)) * Math.PI * 2;
+      /* 锁到最近的 FRONT_ANGLE + 2π 整数倍: 滚完时龙纹正脸朝镜头 */
+      const front =
+        Math.round((base - FRONT_ANGLE) / (Math.PI * 2)) * Math.PI * 2 + FRONT_ANGLE;
       rotY = base + (front - base) * smoothstep(sp);
     }
 
@@ -366,7 +368,7 @@ export default function ScrollScene() {
         <Env />
         <ambientLight intensity={0.3} />
         <Suspense fallback={null}>
-          <TravelingCollar keys={keys} reduced={reduced} />
+          <TravelingHero keys={keys} reduced={reduced} />
         </Suspense>
         <Ornaments />
         {orbitReady && (

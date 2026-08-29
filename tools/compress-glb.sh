@@ -2,30 +2,34 @@
 # compress-glb.sh — 苗族银饰 GLB 压缩管线（贴图 WebP 化 + gltfpack 几何简化/压缩）
 #
 # 用法:
-#   tools/compress-glb.sh <源.glb> <detail|hero> <输出名> [si覆盖值]
+#   tools/compress-glb.sh <源.glb> <detail|hero|portrait> <输出名> [si覆盖值]
 #   例: tools/compress-glb.sh "~/Desktop/苗族银饰3D/Meshy_xxx_texture.glb" hero hero-tribal 0.03
 #   产物: public/models/<输出名>.glb
 #
 # 档位:
-#   detail  贴图 baseColor/normal 2048(q85) + metalRough 1024(q75), 保留 TANGENT,
-#           gltfpack -cc -si 0.12        (详情页全量档, ~240K 面 / 2.9MB)
-#   hero    贴图全部 512(q55-62 低档), 剥 TANGENT(three 由屏幕空间导数重建),
-#           gltfpack -cc -si 0.05 -vp 12 -vt 12 -vn 6   (首屏环绕档, 目标 <400KB/只)
+#   detail   贴图 baseColor/normal 2048(q85) + metalRough 1024(q75), 保留 TANGENT,
+#            gltfpack -cc -si 0.12        (详情页全量档, ~240K 面 / 2.9MB)
+#   hero     贴图全部 512(q55-62 低档), 剥 TANGENT(three 由屏幕空间导数重建),
+#            gltfpack -cc -si 0.05 -vp 12 -vt 12 -vn 6   (首屏环绕档, 目标 <400KB/只)
+#   portrait 贴图 baseColor/normal 1024(q78/72) + metalRough 1024(q70), 剥 TANGENT,
+#            gltfpack -cc -si 0.06 -vp 14 -vt 12 -vn 8   (首屏主角档: 展示尺寸大, 介于
+#            detail 与 hero 之间, 目标 <1.2MB)
 #
 # 依赖: cwebp / magick / node; gltfpack 用项目内 node_modules(gltfpack WASM 版
 #       不支持贴图编码, 故贴图由本脚本内联 node 脚本解包→cwebp→回写)。
 set -euo pipefail
 
 # ---------- 参数与依赖 ----------
-SRC="${1:?用法: compress-glb.sh <源.glb> <detail|hero> <输出名> [si]}"
-TIER="${2:?档位必须是 detail 或 hero}"
+SRC="${1:?用法: compress-glb.sh <源.glb> <detail|hero|portrait> <输出名> [si]}"
+TIER="${2:?档位必须是 detail、hero 或 portrait}"
 NAME="${3:?输出名不能为空, 例: hero-tribal}"
 SI="${4:-}"
 
 case "$TIER" in
-  detail) SI="${SI:-0.12}" ;;
-  hero)   SI="${SI:-0.05}" ;;
-  *) echo "错误: 未知档位 '$TIER'(只能是 detail|hero)" >&2; exit 1 ;;
+  detail)   SI="${SI:-0.12}" ;;
+  hero)     SI="${SI:-0.05}" ;;
+  portrait) SI="${SI:-0.06}" ;;
+  *) echo "错误: 未知档位 '$TIER'(只能是 detail|hero|portrait)" >&2; exit 1 ;;
 esac
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -62,6 +66,10 @@ const PLAN = {
   },
   hero: {
     roles: { baseColor: { size: 512, q: 62 }, normal: { size: 512, q: 58 }, metalRough: { size: 512, q: 55 } },
+    stripTangent: true,
+  },
+  portrait: {
+    roles: { baseColor: { size: 1024, q: 78 }, normal: { size: 1024, q: 82 }, metalRough: { size: 1024, q: 70 } },
     stripTangent: true,
   },
 }[tier];
@@ -179,6 +187,7 @@ node "$WORK/repack.js" "$SRC" "$WORK/repacked.glb" "$TIER"
 # ---------- 第 2 步: gltfpack 几何简化 + meshopt 压缩 ----------
 EXTRA_FLAGS=""
 [ "$TIER" = "hero" ] && EXTRA_FLAGS="-vp 12 -vt 12 -vn 6"
+[ "$TIER" = "portrait" ] && EXTRA_FLAGS="-vp 14 -vt 12 -vn 8"
 echo "==> gltfpack -cc -si $SI $EXTRA_FLAGS"
 node "$GLTFPACK" -cc -si "$SI" $EXTRA_FLAGS -i "$WORK/repacked.glb" -o "$WORK/out.glb"
 
@@ -202,7 +211,7 @@ for (const m of json.meshes || []) for (const p of m.primitives || []) {
 let tex = 0;
 for (const im of json.images || []) tex += json.bufferViews[im.bufferView].byteLength;
 const kb = buf.length / 1024;
-const budget = tier === 'hero' ? 400 : 4096;
+const budget = tier === 'hero' ? 400 : tier === 'portrait' ? 1228 : 4096;
 const verdict = kb <= budget ? '✓ 预算内' : `⚠ 超出${tier}档预算(${budget}KB)`;
 console.log(`校验通过: ${(kb / 1024).toFixed(2)}MB | 几何${((buf.length - tex) / 1024).toFixed(0)}KB + 贴图${(tex / 1024).toFixed(0)}KB | ${Math.round(tris).toLocaleString()} 三角形 | ${verdict}`);
 EOF
