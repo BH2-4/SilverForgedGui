@@ -1,3 +1,4 @@
+// REVIEW_PENDING: 文案待人工审核（见 data/COPY-REVIEW.md）
 // /products 产品列表页(服务端组件):读 data/products.ts 渲染卡片网格
 // + 顶部 coverflow 横滑流廊。/product(单数)为 360° 预览 demo,两者并存。
 
@@ -11,7 +12,7 @@ import ProductCoverflowLazy from "@/components/ProductCoverflowLazy";
 export const metadata: Metadata = {
   title: "产品系列 · 苗族银饰",
   description:
-    "苗族银饰全系列:繁花银冠、月牙银角、部落胸牌、盘龙银镯、螺旋耳坠、苗银项圈——非遗手作数字陈列。",
+    "苗族银饰全系列:繁花银冠、月牙银角、图腾银胸牌、盘龙银镯、螺旋银耳坠、苗银项圈——非遗锻制技艺手作,数字陈列。",
 };
 
 /** 品类中文标签(schema 7 类全覆盖,防数据扩展漏标) */

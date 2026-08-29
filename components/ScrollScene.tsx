@@ -7,7 +7,7 @@ import { Sparkles, useGLTF } from "@react-three/drei";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 
 /* ---------- 共享运行时状态(免重渲染) ---------- */
-const fx = { fade: 1, px: 0, py: 0 };
+const fx = { fade: 1, px: 0, py: 0, modelIn: 0 };
 
 /* ---------- 关键帧状态表(滚动位在 useKeyframes 按各 section 实测) ---------- */
 type KeyState = { xf: number; y: number; scale: number; idle: number; fade: number };
@@ -38,6 +38,7 @@ function Env() {
 }
 
 /* ---------- 银饰环绕层(hero 氛围,随滚动淡出) ---------- */
+/* 占位几何:真实 hero 模型异步加载期间顶替,模型就位后交叉淡出 */
 function Ornaments() {
   const group = useRef<THREE.Group>(null);
   const mat = useMemo(
@@ -54,7 +55,7 @@ function Ornaments() {
   useFrame((_, dt) => {
     if (!group.current) return;
     group.current.rotation.y += dt * 0.15;
-    mat.opacity = fx.fade;
+    mat.opacity = fx.fade * (1 - fx.modelIn); // 模型淡入 → 占位几何淡出
     group.current.rotation.x = THREE.MathUtils.lerp(group.current.rotation.x, fx.py * 0.2, 0.05);
     group.current.rotation.z = THREE.MathUtils.lerp(group.current.rotation.z, fx.px * -0.1, 0.05);
   });
@@ -72,6 +73,88 @@ function Ornaments() {
       <mesh material={mat} position={[1.6, -1.6, -0.2]} rotation={[1.2, 0, 0.4]}>
         <torusGeometry args={[0.45, 0.07, 32, 80]} />
       </mesh>
+    </group>
+  );
+}
+
+/* ---------- hero 环绕层:真实模型档(tools/compress-glb.sh hero 产物) ---------- */
+type OrbitCfg = {
+  url: string;
+  position: [number, number, number];
+  rotation?: [number, number, number];
+  size: number; // 归一化目标最大边(世界单位)
+  silver?: boolean; // true = 纯几何无贴图,程序化银材质
+};
+
+/* 件数固定,勿在运行时增删(hooks 依赖);项圈复用详情页模型,零新增下载 */
+const HERO_ORBIT: OrbitCfg[] = [
+  { url: "/models/hero-tribal.glb", position: [2.6, 0.2, -1.2], rotation: [0, -0.4, 0.12], size: 1.9 },
+  { url: "/models/hero-spirals.glb", position: [-1.6, 1.5, -0.8], rotation: [0.15, 0.5, -0.1], size: 1.25 },
+  { url: "/models/hero-crescent.glb", position: [-2.9, -0.6, -2], rotation: [0.05, 0.7, 0.08], size: 1.45 },
+  { url: "/models/collar-meshopt.glb", position: [1.6, -1.6, -0.2], rotation: [1.2, 0, 0.4], size: 0.95, silver: true },
+];
+
+/* 单件:尺寸归一 + 材质接管(透明受 fx.fade×modelIn 驱动) */
+function OrbitPiece({ cfg }: { cfg: OrbitCfg }) {
+  const { scene } = useGLTF(cfg.url, true, true);
+  const root = useRef<THREE.Group>(null);
+  const mats = useRef<THREE.Material[]>([]);
+  /* 克隆缓存场景:项圈与主角共用同一 GLB,同一对象不能挂两处 */
+  const obj = useMemo(() => scene.clone(true), [scene]);
+
+  useEffect(() => {
+    if (!root.current) return;
+    const box = new THREE.Box3().setFromObject(obj);
+    const dim = box.getSize(new THREE.Vector3());
+    root.current.scale.setScalar(cfg.size / Math.max(dim.x, dim.y, dim.z, 1e-6));
+    const list: THREE.Material[] = [];
+    const take = (src: THREE.Material) => {
+      const m = cfg.silver
+        ? new THREE.MeshPhysicalMaterial({
+            metalness: 1,
+            roughness: 0.18,
+            color: new THREE.Color("#dfe1e8"),
+            envMapIntensity: 1.3,
+            transparent: true,
+          })
+        : Object.assign(src.clone(), { transparent: true });
+      list.push(m);
+      return m;
+    };
+    obj.traverse((o: any) => {
+      if (!o.isMesh) return;
+      o.material = Array.isArray(o.material) ? o.material.map(take) : take(o.material);
+    });
+    mats.current = list;
+  }, [obj, cfg]);
+
+  useFrame(() => {
+    const opacity = fx.fade * fx.modelIn;
+    for (const m of mats.current) (m as THREE.MeshStandardMaterial).opacity = opacity;
+  });
+
+  return (
+    <group ref={root} position={cfg.position} rotation={cfg.rotation ?? [0, 0, 0]}>
+      <primitive object={obj} />
+    </group>
+  );
+}
+
+/* 环绕组:整组旋转/视差与原占位层一致;模型就位后 modelIn 0→1 交叉淡入 */
+function OrbitModels() {
+  const group = useRef<THREE.Group>(null);
+  useFrame((_, dt) => {
+    if (!group.current) return;
+    group.current.rotation.y += dt * 0.15;
+    fx.modelIn = THREE.MathUtils.damp(fx.modelIn, 1, 3, dt);
+    group.current.rotation.x = THREE.MathUtils.lerp(group.current.rotation.x, fx.py * 0.2, 0.05);
+    group.current.rotation.z = THREE.MathUtils.lerp(group.current.rotation.z, fx.px * -0.1, 0.05);
+  });
+  return (
+    <group ref={group}>
+      {HERO_ORBIT.map((cfg) => (
+        <OrbitPiece key={cfg.url} cfg={cfg} />
+      ))}
     </group>
   );
 }
@@ -223,6 +306,21 @@ export default function ScrollScene() {
   const keys = useKeyframes();
   const [reduced, setReduced] = useState(false);
   const [showFx, setShowFx] = useState(true);
+  const [orbitReady, setOrbitReady] = useState(false);
+
+  /* hero 环绕模型低优先级:浏览器空闲时才开始拉取,不与首屏(LCP/主角项圈)争带宽 */
+  useEffect(() => {
+    const w = window as Window & {
+      requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number;
+      cancelIdleCallback?: (id: number) => void;
+    };
+    if (!w.requestIdleCallback) {
+      const t = window.setTimeout(() => setOrbitReady(true), 300);
+      return () => window.clearTimeout(t);
+    }
+    const id = w.requestIdleCallback(() => setOrbitReady(true), { timeout: 1500 });
+    return () => w.cancelIdleCallback?.(id);
+  }, []);
 
   /* 指针视差(canvas 不接收指针,监听 window) */
   useEffect(() => {
@@ -271,6 +369,11 @@ export default function ScrollScene() {
           <TravelingCollar keys={keys} reduced={reduced} />
         </Suspense>
         <Ornaments />
+        {orbitReady && (
+          <Suspense fallback={null}>
+            <OrbitModels />
+          </Suspense>
+        )}
         {!reduced && showFx && (
           <Sparkles count={90} scale={[9, 5, 4]} size={2} speed={0.3} color="#cfd3dc" opacity={0.6} />
         )}
