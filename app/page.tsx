@@ -52,7 +52,9 @@ export default function Home() {
           <h2 style={{ fontSize: 30, letterSpacing: 4 }}>每件银饰,都是可以佩戴的历史</h2>
           <p style={{ color: "#8b93a7" }}>蝴蝶妈妈 · 錾刻 · 盛装 —— 叙事完</p>
           <a
-            href="/product"
+            href="https://shop.randomplayx.com?utm_source=silverforgedgui&utm_medium=3d-demo&utm_campaign=entry"
+            target="_blank"
+            rel="noopener noreferrer"
             style={{
               padding: "12px 28px",
               border: "1px solid #3a4052",
@@ -60,7 +62,7 @@ export default function Home() {
               marginTop: 8,
             }}
           >
-            进入产品 · 360° 预览
+            进入 RandomPlayX · 选购同款
           </a>
         </section>
       </div>
