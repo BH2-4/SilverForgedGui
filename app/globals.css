@@ -400,3 +400,8 @@ a:hover {
     grid-template-columns: 1fr;
   }
 }
+
+/* ---- 方案A:横向溢出硬裁剪(全断点,clip 不产生滚动容器、不影响 sticky) ---- */
+body {
+  overflow-x: clip;
+}
