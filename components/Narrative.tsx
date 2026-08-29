@@ -9,7 +9,9 @@ const CARDS = [
     title: "蝴蝶妈妈 · 创世图腾",
     teaser:
       "《苗族古歌》里,枫树心化出蝴蝶妈妈,她与水泡游方,生下十二个蛋,其中一个孵出了人类始祖姜央。",
-    img: "/images/butterfly.jpg",
+    img: "/images/narrative/patterns/yinshi-59.webp",
+    imgW: 1080,
+    imgH: 542,
     detail: [
       "蝴蝶妈妈(Mej Bangx Mej Lief)是苗族神话中的始祖形象。传说枫树被砍倒后,树心化作蝴蝶,与水泡游方十二天,产下十二个蛋,其中一枚孵出人类祖先姜央——因此苗人尊蝶为祖。",
       "银饰上的蝶纹因此不是装饰,而是族源记忆的携带体。黔东南银匠锤下的蝶纹有数十种变体:蝶身嵌鸟、蝶翅衔鱼、蝶腹藏石榴,每一变体都对应一支迁徙支系的口传谱系。",
@@ -21,7 +23,9 @@ const CARDS = [
     title: "錾刻 · 一錾一痕的手艺",
     teaser:
       "一片银到一件银饰,要经熔炼、锻打、錾刻、洗银等数十道工序;仅錾刻一步,匠人就需上百支不同錾头。",
-    img: "/images/chasing.jpg",
+    img: "/images/narrative/craftsmanship/yinshi-73.webp",
+    imgW: 1080,
+    imgH: 759,
     detail: [
       "錾刻分「錾花」与「錾刻」两路:錾花以弯錾在银面走出阴文线稿,錾刻以窝錾、豆錾顶出浮雕。一件银冠上的浮凸纹样,是匠人交替使用数十种錾头、数万次锤击的累积。",
       "錾头按刃形分:直、弯、勾、沙、丝、豆、窝——匠人自制的錾具往往不外传,这是「手作」二字的真实成本,也是与铸模制品的根本分界。",
@@ -33,7 +37,9 @@ const CARDS = [
     title: "盛装 · 无银不成女",
     teaser:
       "苗谚说「无银不成女」。盛装之日,银冠、银角、银项圈层层叠戴,走动时银铃相击,人未至而声先到。",
-    img: "/images/ornament.jpg",
+    img: "/images/narrative/craftsmanship/yinshi-82.webp",
+    imgW: 1080,
+    imgH: 1440,
     detail: [
       "黔东南苗族的盛装银饰是完整体系:银角高耸如月,银冠覆顶,银项圈、银压领、银衣片层层叠叠,全套可达十余公斤。",
       "银饰盛装只在芦笙节、姊妹节、婚嫁等重大场合穿戴。行走时银片相击的清脆声响,是盛装的「听觉维度」——银饰不仅被看,也被听见。",
@@ -45,7 +51,9 @@ const CARDS = [
     title: "银镯 · 财富与传承",
     teaser:
       "银饰既是穿戴,也是家庭财富的便携形态——「钱在身上,家在背上」。传女不传子,一代代增重改样。",
-    img: "/images/bracelet.jpg",
+    img: "/images/narrative/craftsmanship/yinshi-89.webp",
+    imgW: 1080,
+    imgH: 1440,
     detail: [
       "历史上苗寨以银为储值手段,银饰即「可穿戴的家产」。迁徙文化把财富铸成可背负的形态,这是苗族银饰体量惊人的经济根源。",
       "银镯常刻有支系标识纹样,母亲传给女儿时往往再加一环或改一纹——银饰因此是流动的族谱。",
@@ -130,8 +138,22 @@ export default function Narrative() {
       {open !== null && (
         <div className="modal-overlay" onClick={() => setOpen(null)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={CARDS[open].img} alt={CARDS[open].title} />
+            {/* 固定宽高比容器:渲染即预留高度,图片加载前后无跳动 */}
+            <div
+              style={{
+                aspectRatio: `${CARDS[open].imgW} / ${CARDS[open].imgH}`,
+                maxHeight: 380,
+              }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={CARDS[open].img}
+                alt={CARDS[open].title}
+                width={CARDS[open].imgW}
+                height={CARDS[open].imgH}
+                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+              />
+            </div>
             <div className="modal-body">
               <h3>{CARDS[open].title}</h3>
               {CARDS[open].detail.map((p, j) => (
