@@ -20,6 +20,14 @@ const nextConfig: NextConfig = {
         destination: "/collection/index.html",
         permanent: false,
       },
+      // Spree 遗留店域名（shop.）整体迁往成品独立站：按 host 命中，
+      // 任意旧路径一律 301 到 /collection（旧深链在静态站无对应页面）。
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "shop.randomplayx.com" }],
+        destination: "/collection",
+        permanent: true,
+      },
     ];
   },
   async rewrites() {
