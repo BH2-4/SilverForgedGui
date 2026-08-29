@@ -1,0 +1,313 @@
+{
+  "generatedAt": "2026-08-29T10:52:48+00:00",
+  "sourceRoot": "/Users/arco/Desktop/苗族银饰3D/苗族银饰非遗数据库（已分类）",
+  "spec": {
+    "format": "webp",
+    "maxEdge": 1600,
+    "quality": 80,
+    "categoryMap": {
+      "08_纹样与设计图": "patterns",
+      "09_非遗场景与制作工艺": "craftsmanship"
+    }
+  },
+  "items": [
+    {
+      "srcName": "银饰14.png",
+      "destPath": "/images/narrative/craftsmanship/yinshi-14.webp",
+      "category": "craftsmanship",
+      "width": 1133,
+      "height": 745,
+      "bytesAfter": 97618
+    },
+    {
+      "srcName": "银饰15.png",
+      "destPath": "/images/narrative/craftsmanship/yinshi-15.webp",
+      "category": "craftsmanship",
+      "width": 566,
+      "height": 769,
+      "bytesAfter": 95226
+    },
+    {
+      "srcName": "银饰16.png",
+      "destPath": "/images/narrative/craftsmanship/yinshi-16.webp",
+      "category": "craftsmanship",
+      "width": 1158,
+      "height": 703,
+      "bytesAfter": 232312
+    },
+    {
+      "srcName": "银饰21.png",
+      "destPath": "/images/narrative/craftsmanship/yinshi-21.webp",
+      "category": "craftsmanship",
+      "width": 632,
+      "height": 810,
+      "bytesAfter": 55928
+    },
+    {
+      "srcName": "银饰22.png",
+      "destPath": "/images/narrative/craftsmanship/yinshi-22.webp",
+      "category": "craftsmanship",
+      "width": 626,
+      "height": 354,
+      "bytesAfter": 26264
+    },
+    {
+      "srcName": "银饰43.png",
+      "destPath": "/images/narrative/craftsmanship/yinshi-43.webp",
+      "category": "craftsmanship",
+      "width": 1080,
+      "height": 543,
+      "bytesAfter": 58670
+    },
+    {
+      "srcName": "银饰44.png",
+      "destPath": "/images/narrative/craftsmanship/yinshi-44.webp",
+      "category": "craftsmanship",
+      "width": 1080,
+      "height": 543,
+      "bytesAfter": 83334
+    },
+    {
+      "srcName": "银饰45.png",
+      "destPath": "/images/narrative/craftsmanship/yinshi-45.webp",
+      "category": "craftsmanship",
+      "width": 1080,
+      "height": 544,
+      "bytesAfter": 46772
+    },
+    {
+      "srcName": "银饰46.png",
+      "destPath": "/images/narrative/craftsmanship/yinshi-46.webp",
+      "category": "craftsmanship",
+      "width": 1080,
+      "height": 543,
+      "bytesAfter": 32758
+    },
+    {
+      "srcName": "银饰47.png",
+      "destPath": "/images/narrative/craftsmanship/yinshi-47.webp",
+      "category": "craftsmanship",
+      "width": 1080,
+      "height": 543,
+      "bytesAfter": 31074
+    },
+    {
+      "srcName": "银饰48.png",
+      "destPath": "/images/narrative/craftsmanship/yinshi-48.webp",
+      "category": "craftsmanship",
+      "width": 1080,
+      "height": 538,
+      "bytesAfter": 37586
+    },
+    {
+      "srcName": "银饰49.png",
+      "destPath": "/images/narrative/craftsmanship/yinshi-49.webp",
+      "category": "craftsmanship",
+      "width": 1080,
+      "height": 545,
+      "bytesAfter": 68332
+    },
+    {
+      "srcName": "银饰52.png",
+      "destPath": "/images/narrative/craftsmanship/yinshi-52.webp",
+      "category": "craftsmanship",
+      "width": 1080,
+      "height": 543,
+      "bytesAfter": 41186
+    },
+    {
+      "srcName": "银饰54.png",
+      "destPath": "/images/narrative/craftsmanship/yinshi-54.webp",
+      "category": "craftsmanship",
+      "width": 1080,
+      "height": 544,
+      "bytesAfter": 35572
+    },
+    {
+      "srcName": "银饰55.png",
+      "destPath": "/images/narrative/craftsmanship/yinshi-55.webp",
+      "category": "craftsmanship",
+      "width": 1080,
+      "height": 544,
+      "bytesAfter": 38520
+    },
+    {
+      "srcName": "银饰56.png",
+      "destPath": "/images/narrative/craftsmanship/yinshi-56.webp",
+      "category": "craftsmanship",
+      "width": 1080,
+      "height": 543,
+      "bytesAfter": 30136
+    },
+    {
+      "srcName": "银饰57.png",
+      "destPath": "/images/narrative/craftsmanship/yinshi-57.webp",
+      "category": "craftsmanship",
+      "width": 1080,
+      "height": 542,
+      "bytesAfter": 54218
+    },
+    {
+      "srcName": "银饰58.png",
+      "destPath": "/images/narrative/craftsmanship/yinshi-58.webp",
+      "category": "craftsmanship",
+      "width": 1080,
+      "height": 543,
+      "bytesAfter": 58398
+    },
+    {
+      "srcName": "银饰61.png",
+      "destPath": "/images/narrative/craftsmanship/yinshi-61.webp",
+      "category": "craftsmanship",
+      "width": 1080,
+      "height": 543,
+      "bytesAfter": 71316
+    },
+    {
+      "srcName": "银饰69.jpg",
+      "destPath": "/images/narrative/craftsmanship/yinshi-69.webp",
+      "category": "craftsmanship",
+      "width": 600,
+      "height": 400,
+      "bytesAfter": 36452
+    },
+    {
+      "srcName": "银饰70.jpg",
+      "destPath": "/images/narrative/craftsmanship/yinshi-70.webp",
+      "category": "craftsmanship",
+      "width": 500,
+      "height": 333,
+      "bytesAfter": 14626
+    },
+    {
+      "srcName": "银饰72.jpg",
+      "destPath": "/images/narrative/craftsmanship/yinshi-72.webp",
+      "category": "craftsmanship",
+      "width": 474,
+      "height": 370,
+      "bytesAfter": 33116
+    },
+    {
+      "srcName": "银饰73.jpg",
+      "destPath": "/images/narrative/craftsmanship/yinshi-73.webp",
+      "category": "craftsmanship",
+      "width": 1080,
+      "height": 759,
+      "bytesAfter": 141508
+    },
+    {
+      "srcName": "银饰74.jpg",
+      "destPath": "/images/narrative/craftsmanship/yinshi-74.webp",
+      "category": "craftsmanship",
+      "width": 600,
+      "height": 338,
+      "bytesAfter": 7660078
+    },
+    {
+      "srcName": "银饰82.jpg",
+      "destPath": "/images/narrative/craftsmanship/yinshi-82.webp",
+      "category": "craftsmanship",
+      "width": 1080,
+      "height": 1440,
+      "bytesAfter": 207438
+    },
+    {
+      "srcName": "银饰89.jpg",
+      "destPath": "/images/narrative/craftsmanship/yinshi-89.webp",
+      "category": "craftsmanship",
+      "width": 1080,
+      "height": 1440,
+      "bytesAfter": 162462
+    },
+    {
+      "srcName": "银饰36.jpg",
+      "destPath": "/images/narrative/patterns/yinshi-36.webp",
+      "category": "patterns",
+      "width": 1080,
+      "height": 1434,
+      "bytesAfter": 121690
+    },
+    {
+      "srcName": "银饰37.jpg",
+      "destPath": "/images/narrative/patterns/yinshi-37.webp",
+      "category": "patterns",
+      "width": 1080,
+      "height": 1434,
+      "bytesAfter": 53030
+    },
+    {
+      "srcName": "银饰38.jpg",
+      "destPath": "/images/narrative/patterns/yinshi-38.webp",
+      "category": "patterns",
+      "width": 1080,
+      "height": 1434,
+      "bytesAfter": 73002
+    },
+    {
+      "srcName": "银饰39.jpg",
+      "destPath": "/images/narrative/patterns/yinshi-39.webp",
+      "category": "patterns",
+      "width": 1080,
+      "height": 1434,
+      "bytesAfter": 58924
+    },
+    {
+      "srcName": "银饰40.jpg",
+      "destPath": "/images/narrative/patterns/yinshi-40.webp",
+      "category": "patterns",
+      "width": 1080,
+      "height": 1434,
+      "bytesAfter": 74926
+    },
+    {
+      "srcName": "银饰41.jpg",
+      "destPath": "/images/narrative/patterns/yinshi-41.webp",
+      "category": "patterns",
+      "width": 1080,
+      "height": 1434,
+      "bytesAfter": 46942
+    },
+    {
+      "srcName": "银饰42.jpg",
+      "destPath": "/images/narrative/patterns/yinshi-42.webp",
+      "category": "patterns",
+      "width": 1080,
+      "height": 1434,
+      "bytesAfter": 89942
+    },
+    {
+      "srcName": "银饰59.png",
+      "destPath": "/images/narrative/patterns/yinshi-59.webp",
+      "category": "patterns",
+      "width": 1080,
+      "height": 542,
+      "bytesAfter": 80952
+    },
+    {
+      "srcName": "银饰75.jpg",
+      "destPath": "/images/narrative/patterns/yinshi-75.webp",
+      "category": "patterns",
+      "width": 613,
+      "height": 1600,
+      "bytesAfter": 73216
+    },
+    {
+      "srcName": "银饰84.jpg",
+      "destPath": "/images/narrative/patterns/yinshi-84.webp",
+      "category": "patterns",
+      "width": 576,
+      "height": 1600,
+      "bytesAfter": 135242
+    }
+  ],
+  "summary": {
+    "totalFiles": 36,
+    "converted": 36,
+    "failed": [],
+    "skipped": [],
+    "totalBytesAfter": 10258766,
+    "notes": [
+      "银饰74.jpg 实际为 GIF 动图（9.7MB, 600x338），cwebp 不支持 GIF 输入，改用 gif2webp 1.6.0（同 libwebp）以 -q 80 转为动画 webp（7.66MB，动画保留）"
+    ]
+  }
+}

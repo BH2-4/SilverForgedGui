@@ -12,6 +12,7 @@ export default function Home() {
       <div className="content-layer">
         <nav className="nav">
           <a href="/">首页</a>
+          <a href="/products">Products</a>
           <a href="/product">产品 · 360° 预览</a>
         </nav>
 

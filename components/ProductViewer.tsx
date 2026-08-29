@@ -74,6 +74,8 @@ function Collar({
 }
 
 export default function ProductViewer({ url }: { url: string }) {
+  useGLTF.preload(url); // 泛化：按传入产品模型预加载对应 GLB（slug → model 路径）
+
   const { progress, active } = useProgress();
   const [ready, setReady] = useState(false);
   const [overlayGone, setOverlayGone] = useState(false);

@@ -292,3 +292,111 @@ a:hover {
     max-width: none;
   }
 }
+
+/* ---- /products 列表页:coverflow 流廊 + 卡片网格 ---- */
+.products-head h1 {
+  font-size: 32px;
+  letter-spacing: 4px;
+}
+.products-head p {
+  color: #8b93a7;
+  margin-top: 8px;
+}
+.cf-section {
+  padding-top: 8px;
+}
+/* coverflow slidesPerView="auto" 需要固定 slide 宽;
+   加 .swiper-slide 提升特异性,压过 swiper/css 后注入的 .swiper-slide{width:100%} */
+.swiper-slide.cf-slide {
+  width: 260px;
+}
+.cf-card {
+  display: block;
+}
+.cf-img-wrap {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  display: block;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #101218;
+  border: 1px solid #232733;
+}
+.cf-cap {
+  display: block;
+  text-align: center;
+  padding: 12px 8px 0;
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: #a9aeb9;
+}
+/* 流廊懒加载占位:与真实渲染高度近似,减少布局跳动 */
+.cf-fallback {
+  height: 430px;
+  border-radius: 14px;
+  background: #101218;
+}
+.products-grid-h {
+  font-size: 22px;
+  letter-spacing: 2px;
+  margin: 24px 0 20px;
+}
+.products-grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 24px;
+}
+.pcard-link {
+  display: flex;
+  flex-direction: column;
+  background: #14161d;
+  border: 1px solid #232733;
+  border-radius: 14px;
+  overflow: hidden;
+  transition: border-color 0.3s;
+}
+.pcard-link:hover {
+  border-color: #3a4052;
+}
+/* 固定宽高比占位:图片加载前后盒子尺寸不变,防 CLS */
+.pcard-img-wrap {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  background: #101218;
+}
+.pcard-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 14px 16px;
+}
+.pcard-names {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.pcard-names strong {
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+.pcard-names em {
+  font-style: normal;
+  font-size: 12px;
+  color: #8b93a7;
+}
+.pcard-tag {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: #a9aeb9;
+  border: 1px solid #2a2f3d;
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+/* 移动端(≤860px)单列 */
+@media (max-width: 860px) {
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -29,6 +29,9 @@ importers:
       three:
         specifier: 0.185.1
         version: 0.185.1
+      zod:
+        specifier: ^4.5.2
+        version: 4.5.2
     devDependencies:
       '@types/node':
         specifier: ^22
@@ -647,6 +650,9 @@ packages:
     engines: {node: '>= 8'}
     hasBin: true
 
+  zod@4.5.2:
+    resolution: {integrity: sha512-XkYXCol10+ba/6F/cueWV+TezUeOqXW0hdeJt5CdXjTYeAgAQg5N03RQdJ80mhfFE72+pblvYMW4wy2Qp4Qbrg==}
+
   zustand@4.3.2:
     resolution: {integrity: sha512-rd4haDmlwMTVWVqwvgy00ny8rtti/klRoZjFbL/MAcDnmD5qSw/RZc+Vddstdv90M5Lv6RPgWvm1Hivyn0QgJw==}
     engines: {node: '>=12.7.0'}
@@ -1189,6 +1195,8 @@ snapshots:
   which@2.0.1:
     dependencies:
       isexe: 2.0.0
+
+  zod@4.5.2: {}
 
   zustand@4.3.2(react@19.2.0):
     dependencies:
