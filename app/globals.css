@@ -1,0 +1,466 @@
+@import "tailwindcss";
+
+@theme {
+  /* Surface */
+  --color-bg: #0a0a0b;
+  --color-surface: #111114;
+  --color-surface-2: #16161a;
+  --color-surface-3: #1c1c22;
+
+  /* Silver ramp */
+  --color-silver-100: #f2f2f4;
+  --color-silver-200: #d8d8de;
+  --color-silver-300: #b6b6bf;
+  --color-silver-400: #8a8a93;
+  --color-silver-500: #5c5c66;
+  --color-silver-600: #3c3c42;
+  --color-silver-700: #26262b;
+
+  --color-ivory: #f5f1e8;
+  --color-highlight: #c9ccd1;
+  --color-accent: #e7e2d3;
+
+  /* Borders */
+  --color-line: rgba(255, 255, 255, 0.08);
+  --color-line-strong: rgba(255, 255, 255, 0.16);
+
+  /* Fonts */
+  --font-sans: var(--font-inter), "Inter", system-ui, -apple-system, "Segoe UI",
+    sans-serif;
+  --font-editorial: var(--font-fraunces), "Fraunces", Georgia, "Times New Roman",
+    serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Radii */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+
+  /* Motion */
+  --ease-editorial: cubic-bezier(0.2, 0.65, 0.2, 1);
+  --ease-atelier: cubic-bezier(0.16, 0.84, 0.24, 1);
+  --ease-emerge: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Durations — one clock the whole atelier runs on. */
+  --dur-hover: 280ms;
+  --dur-reveal: 640ms;
+  --dur-transition: 780ms;
+  --dur-object: 1100ms;
+  --dur-wash: 460ms;
+
+  /* Depth shadows — never harsh, only spatial. */
+  --shadow-object-1: 0 1px 0 rgba(255, 255, 255, 0.03) inset,
+    0 12px 32px -20px rgba(0, 0, 0, 0.85);
+  --shadow-object-2: 0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 22px 48px -24px rgba(0, 0, 0, 0.9),
+    0 1px 0 rgba(255, 255, 255, 0.05);
+  --shadow-object-lift: 0 1px 0 rgba(255, 255, 255, 0.06) inset,
+    0 32px 60px -28px rgba(0, 0, 0, 0.95),
+    0 1px 0 rgba(231, 226, 211, 0.05);
+}
+
+@layer base {
+  html {
+    background-color: var(--color-bg);
+  }
+
+  html,
+  body {
+    color: var(--color-silver-100);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* The body is intentionally TRANSPARENT so the fixed particle canvas
+     (mounted directly under <body>) sits above the html background but
+     below the content. The radial glows are re-attached to the html
+     element so they render behind the canvas. */
+  body {
+    background-color: transparent;
+    min-height: 100dvh;
+  }
+
+  html {
+    background-image: radial-gradient(
+        1200px 600px at 80% -10%,
+        rgba(231, 226, 211, 0.06),
+        transparent 60%
+      ),
+      radial-gradient(
+        900px 500px at -10% 110%,
+        rgba(201, 204, 209, 0.05),
+        transparent 60%
+      );
+  }
+
+  ::selection {
+    background-color: rgba(231, 226, 211, 0.22);
+    color: var(--color-ivory);
+  }
+
+  :focus-visible {
+    outline: 1px solid var(--color-highlight);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-editorial);
+    font-weight: 300;
+    letter-spacing: -0.01em;
+  }
+}
+
+@layer components {
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-silver-400);
+  }
+
+  .hairline {
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      var(--color-line-strong),
+      transparent
+    );
+  }
+
+  .glass-panel {
+    position: relative;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.028),
+      rgba(255, 255, 255, 0)
+    );
+    border: 1px solid var(--color-line);
+    backdrop-filter: blur(6px);
+    box-shadow: var(--shadow-object-1);
+    transition:
+      transform var(--dur-hover) var(--ease-atelier),
+      box-shadow var(--dur-hover) var(--ease-atelier),
+      border-color var(--dur-hover) var(--ease-atelier);
+    will-change: transform;
+  }
+  /* Interactive glass panels (buttons, cards with hover states) lift on
+     hover. Static content panels stay put — driven by the parent's
+     :hover / group-hover behaviour existing components already use. */
+  a.glass-panel:hover,
+  button.glass-panel:hover,
+  label.glass-panel:hover,
+  .glass-panel[data-hoverable="true"]:hover {
+    transform: translate3d(0, -2px, 0);
+    box-shadow: var(--shadow-object-2);
+    border-color: var(--color-line-strong);
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-silver-200);
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    background: transparent;
+    transition: all 220ms var(--ease-editorial);
+    cursor: pointer;
+  }
+
+  .chip:hover {
+    border-color: var(--color-line-strong);
+    color: var(--color-ivory);
+  }
+
+  .chip[data-selected="true"] {
+    color: var(--color-bg);
+    background: linear-gradient(
+      180deg,
+      var(--color-silver-100),
+      var(--color-silver-300)
+    );
+    border-color: var(--color-silver-200);
+  }
+
+  .chip:active {
+    transform: scale(0.97);
+  }
+}
+
+@keyframes fade-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-slide-up 500ms var(--ease-editorial) both;
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(231, 226, 211, 0.14) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2.2s linear infinite;
+}
+
+/* --------------------------------------------------------------------
+ * SPATIAL MOTION SYSTEM · Digital Silver Atelier
+ * All new visual layer utilities live below. Existing components keep
+ * working unchanged; opting in is a matter of adding the class or a
+ * data attribute at the wrapper level.
+ * --------------------------------------------------------------------*/
+
+/* Typography hierarchy — five deliberate steps, editorial cadence.
+   Applied via .type-display / .type-h1 / .type-h2 / .type-body / .type-meta.
+   Base <h1..h3> rules above are untouched. */
+.type-display {
+  font-family: var(--font-editorial);
+  font-weight: 300;
+  font-size: clamp(3rem, 5.4vw, 5.4rem);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  color: var(--color-ivory);
+}
+.type-h1 {
+  font-family: var(--font-editorial);
+  font-weight: 300;
+  font-size: clamp(2rem, 3.2vw, 3.25rem);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  color: var(--color-ivory);
+}
+.type-h2 {
+  font-family: var(--font-editorial);
+  font-weight: 300;
+  font-size: clamp(1.35rem, 2.1vw, 2rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--color-silver-100);
+}
+.type-body {
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--color-silver-300);
+}
+.type-meta {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-silver-500);
+}
+
+/* Depth object — a spatial container the eye reads as "floating".
+   Uses subtle inset highlight + directional drop, never a card shadow. */
+.depth-object {
+  position: relative;
+  box-shadow: var(--shadow-object-1);
+  transition:
+    transform var(--dur-hover) var(--ease-atelier),
+    box-shadow var(--dur-hover) var(--ease-atelier),
+    border-color var(--dur-hover) var(--ease-atelier);
+  will-change: transform;
+}
+.depth-object-2 {
+  box-shadow: var(--shadow-object-2);
+}
+.depth-object:hover,
+.depth-lift:hover {
+  transform: translate3d(0, -3px, 0) scale(1.005);
+  box-shadow: var(--shadow-object-lift);
+}
+.depth-lift {
+  transition:
+    transform var(--dur-hover) var(--ease-atelier),
+    box-shadow var(--dur-hover) var(--ease-atelier),
+    border-color var(--dur-hover) var(--ease-atelier);
+  will-change: transform;
+}
+
+/* Scroll choreography — an element with [data-reveal] starts recessed
+   and eases forward when its wrapper (MotionReveal) toggles the ready
+   flag. Composable via --reveal-delay. */
+[data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 14px, 0);
+  transition:
+    opacity var(--dur-reveal) var(--ease-emerge),
+    transform var(--dur-reveal) var(--ease-emerge);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: transform, opacity;
+}
+[data-reveal="ready"] {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+/* Route wash — a single black overlay that fades out on every route
+   mount, giving the sense of "emerging into a new space" without
+   changing anything about the routing itself. */
+@keyframes atelier-wash {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.atelier-wash {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  background: #050506;
+  opacity: 0;
+  animation: atelier-wash var(--dur-wash) var(--ease-atelier) both;
+}
+
+/* Page enter — the content inside PageTransition emerges after the
+   wash. Two staged movements: the whole page eases up 18px → 0, and
+   its own reveal chain (if any) fires on top of that. */
+@keyframes atelier-page-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+.atelier-page {
+  animation: atelier-page-enter var(--dur-transition) var(--ease-atelier) both;
+  animation-delay: 80ms;
+}
+
+/* Per-stage atmosphere accents. Each stage gets one very weak radial
+   glow bias in the html background — small tonal shift, never overt.
+   Applied by PageTransition via html[data-stage="..."] so it stays
+   route-scoped without touching the html static gradients above. */
+html[data-stage="home"]::before,
+html[data-stage="interview"]::before,
+html[data-stage="global"]::before,
+html[data-stage="match"]::before,
+html[data-stage="translation"]::before,
+html[data-stage="proposal"]::before,
+html[data-stage="render"]::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 900ms var(--ease-atelier);
+  background: transparent;
+}
+html[data-stage="home"]::before {
+  opacity: 1;
+  background: radial-gradient(
+    900px 700px at 62% 40%,
+    rgba(231, 226, 211, 0.028),
+    transparent 65%
+  );
+}
+html[data-stage="interview"]::before {
+  opacity: 1;
+  background: radial-gradient(
+    700px 520px at 30% 34%,
+    rgba(214, 214, 220, 0.02),
+    transparent 65%
+  );
+}
+html[data-stage="global"]::before {
+  opacity: 1;
+  background: radial-gradient(
+    820px 600px at 72% 30%,
+    rgba(214, 214, 220, 0.022),
+    transparent 65%
+  );
+}
+html[data-stage="match"]::before {
+  opacity: 1;
+  background: radial-gradient(
+    980px 700px at 20% 78%,
+    rgba(214, 214, 220, 0.028),
+    transparent 65%
+  );
+}
+html[data-stage="translation"]::before {
+  opacity: 1;
+  background: radial-gradient(
+    920px 680px at 78% 66%,
+    rgba(214, 214, 220, 0.024),
+    transparent 65%
+  );
+}
+html[data-stage="proposal"]::before {
+  opacity: 1;
+  background: radial-gradient(
+    1080px 780px at 50% 46%,
+    rgba(231, 226, 211, 0.032),
+    transparent 60%
+  );
+}
+html[data-stage="render"]::before {
+  opacity: 1;
+  background:
+    radial-gradient(
+      1200px 820px at 50% 45%,
+      rgba(231, 226, 211, 0.04),
+      transparent 60%
+    ),
+    radial-gradient(
+      620px 460px at 50% 90%,
+      rgba(201, 204, 209, 0.02),
+      transparent 60%
+    );
+}
+
+/* Accessibility — respect reduced motion strictly. Fade stays (opacity
+   is not motion), transforms/parallax/wash animation are neutralized. */
+@media (prefers-reduced-motion: reduce) {
+  .atelier-page,
+  .atelier-wash,
+  [data-reveal],
+  .depth-object,
+  .depth-lift {
+    animation: none !important;
+    transition: opacity var(--dur-reveal) linear !important;
+    transform: none !important;
+  }
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  html[data-stage]::before {
+    transition: none !important;
+  }
+}

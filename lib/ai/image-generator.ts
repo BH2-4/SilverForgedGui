@@ -1,0 +1,265 @@
+/**
+ * STAGE 5 — AI IMAGE GENERATION · Provider adapter
+ *
+ * The single seam between the app and whatever image model renders the
+ * confirmed design proposal. Pages and the API route only ever call
+ * generateDesignImage(); the concrete provider is selected here and can be
+ * swapped (replicate / openai / volcengine / …) without touching any stage.
+ *
+ * V1 ships the MOCK provider: it deterministically draws an SVG concept
+ * render from the structured prompt (product category, scale, finish,
+ * tier, motif-presence, seed) so the whole Stage 5 UI runs end-to-end with
+ * no API key. The mock is honest about what it is — the render is clearly
+ * watermarked as a design concept, never as a real artifact.
+ *
+ * CULTURAL SAFETY in the mock: it never draws a recognizable cultural
+ * pattern (that would be inventing heritage imagery). Motif presence is
+ * shown as an abstract, clearly-labeled placeholder zone; the motif's
+ * documented NAME appears only in the information strip, verbatim.
+ */
+
+import type { ImagePrompt } from "@/lib/design/render-prompt";
+
+export type ImageProvider = "mock";
+
+export interface DesignImageRequest {
+  /** The structured prompt built from the confirmed proposal. */
+  prompt: ImagePrompt;
+  /** Regeneration seed — varies decorative placement per click. */
+  seed: number;
+}
+
+export interface DesignImageResult {
+  /** Self-contained image the browser can render directly. */
+  dataUrl: string;
+  mime: "image/svg+xml";
+  provider: ImageProvider;
+  model: string;
+  generatedAt: string;
+}
+
+/** Reads the provider selector; V1 only knows "mock". */
+function resolveProvider(): ImageProvider {
+  const configured = process.env.IMAGE_PROVIDER;
+  if (configured && configured !== "mock") {
+    // Unknown future provider — fail closed to mock rather than crash.
+    return "mock";
+  }
+  return "mock";
+}
+
+export async function generateDesignImage(
+  request: DesignImageRequest,
+): Promise<DesignImageResult> {
+  const provider = resolveProvider();
+  if (provider === "mock") {
+    return {
+      dataUrl: renderMockSvg(request),
+      mime: "image/svg+xml",
+      provider,
+      model: "mock-concept-renderer-v1",
+      generatedAt: new Date().toISOString(),
+    };
+  }
+  // Exhaustive: provider is typed as "mock" only.
+  throw new Error(`Unsupported image provider: ${provider satisfies never}`);
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Mock concept renderer                                                      */
+/* -------------------------------------------------------------------------- */
+
+function escapeXml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+/** Deterministic PRNG — the same seed always draws the same render. */
+function mulberry32(seed: number): () => number {
+  let a = seed >>> 0;
+  return () => {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/* Controlled geometry per product category (design translation only). */
+const CATEGORY_GEOMETRY: Record<
+  string,
+  { shape: "stud-drop" | "hoop" | "band" | "chain-pendant" | "brooch-bar" }
+> = {
+  earrings: { shape: "stud-drop" },
+  ring: { shape: "band" },
+  bracelet: { shape: "hoop" },
+  cuff: { shape: "hoop" },
+  anklet: { shape: "chain-pendant" },
+  necklace: { shape: "chain-pendant" },
+  pendant: { shape: "chain-pendant" },
+  brooch: { shape: "brooch-bar" },
+  hairpiece: { shape: "brooch-bar" },
+  unknown: { shape: "chain-pendant" },
+};
+
+const FINISH_STOPS: Record<string, [string, string, string]> = {
+  "high-polish": ["#f2f4f7", "#b7bdc7", "#8d949f"],
+  "satin-matte": ["#dedfe3", "#b3b7bd", "#989da4"],
+  "textured-relief": ["#e8eaee", "#a8adb6", "#7f858f"],
+};
+
+const TIER_DECOR_COUNT: Record<string, number> = {
+  quiet: 5,
+  balanced: 9,
+  statement: 14,
+};
+
+function renderMockSvg({ prompt, seed }: DesignImageRequest): string {
+  const rng = mulberry32(seed);
+  const { form, material, motif, vision, craft } = prompt;
+  const geometry = CATEGORY_GEOMETRY[form.product_type] ?? CATEGORY_GEOMETRY.unknown;
+  const [stopA, stopB, stopC] = FINISH_STOPS[material.finish] ?? FINISH_STOPS["high-polish"];
+
+  const W = 1024;
+  const H = 1024;
+  const cx = W / 2;
+  const cy = H / 2 - 40;
+
+  /* Base scale from the confirmed size — the render obeys the proposal. */
+  const scaleR: Record<string, number> = { small: 110, medium: 160, large: 215 };
+  const R = scaleR[form.scale] ?? 160;
+
+  const decorCount = TIER_DECOR_COUNT[vision.visual_style] ?? 9;
+
+  /* --- the piece, per geometry --------------------------------------- */
+  const piece: string[] = [];
+  if (geometry.shape === "stud-drop") {
+    const dual = form.arrangement === "balanced-dual";
+    const drawDrop = (x: number) => {
+      piece.push(`<circle cx="${x}" cy="${cy - R * 0.9}" r="${R * 0.18}" fill="url(#silver)"/>`);
+      piece.push(`<line x1="${x}" y1="${cy - R * 0.72}" x2="${x}" y2="${cy - R * 0.35}" stroke="url(#silver)" stroke-width="${R * 0.08}" stroke-linecap="round"/>`);
+      piece.push(`<ellipse cx="${x}" cy="${cy}" rx="${R * 0.52}" ry="${R * 0.68}" fill="url(#silver)"/>`);
+      piece.push(`<ellipse cx="${x - R * 0.16}" cy="${cy - R * 0.18}" rx="${R * 0.1}" ry="${R * 0.22}" fill="rgba(255,255,255,0.55)"/>`);
+    };
+    if (dual) {
+      drawDrop(cx - R * 1.1);
+      drawDrop(cx + R * 1.1);
+    } else {
+      drawDrop(cx);
+    }
+  } else if (geometry.shape === "hoop") {
+    piece.push(
+      `<ellipse cx="${cx}" cy="${cy}" rx="${R * 1.05}" ry="${R * 0.78}" fill="none" stroke="url(#silver)" stroke-width="${R * 0.22}"/>`,
+    );
+    piece.push(
+      `<ellipse cx="${cx}" cy="${cy}" rx="${R * 1.05}" ry="${R * 0.78}" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="${R * 0.04}"/>`,
+    );
+  } else if (geometry.shape === "band") {
+    piece.push(`<circle cx="${cx}" cy="${cy}" r="${R * 0.8}" fill="none" stroke="url(#silver)" stroke-width="${R * 0.3}"/>`);
+    piece.push(
+      `<path d="M ${cx - R * 0.62} ${cy - R * 0.42} A ${R * 0.8} ${R * 0.8} 0 0 1 ${cx - R * 0.2} ${cy - R * 0.74}" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="${R * 0.05}" stroke-linecap="round"/>`,
+    );
+  } else if (geometry.shape === "brooch-bar") {
+    piece.push(
+      `<rect x="${cx - R * 1.15}" y="${cy - R * 0.28}" width="${R * 2.3}" height="${R * 0.56}" rx="${R * 0.28}" fill="url(#silver)"/>`,
+    );
+    piece.push(
+      `<rect x="${cx - R * 0.9}" y="${cy - R * 0.14}" width="${R * 1.8}" height="${R * 0.1}" rx="${R * 0.05}" fill="rgba(255,255,255,0.45)"/>`,
+    );
+  } else {
+    /* chain-pendant: a soft chain arc + central drop. */
+    piece.push(
+      `<path d="M ${cx - R * 1.3} ${cy - R * 1.35} Q ${cx} ${cy - R * 0.55} ${cx + R * 1.3} ${cy - R * 1.35}" fill="none" stroke="url(#silver)" stroke-width="${R * 0.1}" stroke-linecap="round"/>`,
+    );
+    for (let i = 0; i <= 10; i++) {
+      const t = i / 10;
+      const x = cx + (t - 0.5) * 2 * R * 1.3;
+      const y =
+        cy - R * 1.35 + (1 - (1 - Math.abs(t - 0.5) * 2) ** 2) * R * 0.8;
+      piece.push(`<circle cx="${x}" cy="${y}" r="${R * 0.055}" fill="url(#silver)"/>`);
+    }
+    piece.push(`<path d="M ${cx} ${cy - R * 0.62} L ${cx + R * 0.5} ${cy} L ${cx} ${cy + R * 0.62} L ${cx - R * 0.5} ${cy} Z" fill="url(#silver)"/>`);
+    piece.push(
+      `<path d="M ${cx - R * 0.15} ${cy - R * 0.3} L ${cx + R * 0.1} ${cy - R * 0.05}" stroke="rgba(255,255,255,0.5)" stroke-width="${R * 0.05}" stroke-linecap="round"/>`,
+    );
+  }
+
+  /* --- motif placeholder: abstract dot/arc cluster, never a pattern ---- */
+  const motifZone: string[] = [];
+  if (motif !== null) {
+    const zoneR = R * 0.34;
+    for (let i = 0; i < decorCount; i++) {
+      const angle = rng() * Math.PI * 2;
+      const dist = zoneR * (0.25 + rng() * 0.75);
+      const x = cx + Math.cos(angle) * dist;
+      const y = cy + Math.sin(angle) * dist * 0.8;
+      const r = R * (0.025 + rng() * 0.045);
+      motifZone.push(`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(1)}" fill="rgba(80,88,100,0.5)"/>`);
+    }
+    for (let i = 0; i < 3; i++) {
+      const x = cx + (rng() - 0.5) * zoneR;
+      const y = cy + (rng() - 0.5) * zoneR * 0.7;
+      const r = zoneR * (0.3 + rng() * 0.3);
+      motifZone.push(
+        `<path d="M ${x - r} ${y} A ${r} ${r} 0 0 1 ${x + r} ${y}" fill="none" stroke="rgba(80,88,100,0.35)" stroke-width="${R * 0.025}"/>`,
+      );
+    }
+  }
+
+  /* --- textured-relief surface strokes -------------------------------- */
+  const relief: string[] = [];
+  if (material.finish === "textured-relief") {
+    for (let i = 0; i < 6; i++) {
+      const x = cx - R * 0.4 + (i / 5) * R * 0.8;
+      relief.push(
+        `<path d="M ${x} ${cy - R * 0.5} q ${R * 0.06} ${R * 0.5} 0 ${R}" fill="none" stroke="rgba(120,126,136,0.4)" stroke-width="${R * 0.02}"/>`,
+      );
+    }
+  }
+
+  const motifLabel = motif !== null
+    ? `MOTIF · ${escapeXml(motif.name)} (visual subject only)`
+    : "FORM-LED · NO MOTIF";
+
+  const info = [
+    `CATEGORY ${escapeXml(form.product_type.toUpperCase())}`,
+    `SCALE ${form.scale.toUpperCase()} · ${form.thickness.toUpperCase()}`,
+    `FINISH ${escapeXml(material.finish)}`,
+    `CRAFT ${escapeXml(craft.primary)}`,
+    `TIER ${vision.visual_style.toUpperCase()}`,
+  ].join("  ·  ");
+
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="42%" r="80%">
+      <stop offset="0%" stop-color="#f8f6f1"/>
+      <stop offset="100%" stop-color="#e0ddd4"/>
+    </radialGradient>
+    <linearGradient id="silver" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="${stopA}"/>
+      <stop offset="55%" stop-color="${stopB}"/>
+      <stop offset="100%" stop-color="${stopC}"/>
+    </linearGradient>
+  </defs>
+  <rect width="${W}" height="${H}" fill="url(#bg)"/>
+  <ellipse cx="${cx}" cy="${cy + R * 1.25}" rx="${R * 1.7}" ry="${R * 0.22}" fill="rgba(60,64,70,0.12)"/>
+  ${piece.join("\n  ")}
+  ${relief.join("\n  ")}
+  ${motifZone.join("\n  ")}
+  ${motif !== null
+    ? `<circle cx="${cx}" cy="${cy}" r="${R * 0.5}" fill="none" stroke="rgba(80,88,100,0.28)" stroke-dasharray="4 6" stroke-width="1.5"/>`
+    : ""}
+  <g font-family="ui-monospace, monospace" text-anchor="middle">
+    <text x="${cx}" y="${H - 118}" font-size="17" letter-spacing="4" fill="#4a5058">DESIGN CONCEPT · AI VISUALIZATION</text>
+    <text x="${cx}" y="${H - 88}" font-size="13" letter-spacing="2" fill="#6b7280">${motifLabel}</text>
+    <text x="${cx}" y="${H - 62}" font-size="11" letter-spacing="1.5" fill="#8a8f98">${info}</text>
+    <text x="${cx}" y="${H - 36}" font-size="11" letter-spacing="2" fill="#9aa0a8">NOT A REAL ARTIFACT · 非实物复刻 · 不代表真实非遗纹样</text>
+  </g>
+</svg>`;
+
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+}

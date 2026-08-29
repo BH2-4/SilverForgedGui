@@ -1,0 +1,407 @@
+"use client";
+
+import { ArrowUpRight } from "lucide-react";
+import { SectionLabel } from "@/components/shared/SectionLabel";
+import { useI18n } from "@/components/i18n/I18nProvider";
+import type { ImagePrompt } from "@/lib/design/render-prompt";
+import type {
+  DesignProposal,
+  ProposalCulturalSource,
+} from "@/lib/design/schemas";
+
+/* -------------------------------------------------------------------------- */
+/*  Shared presentational bits                                                 */
+/* -------------------------------------------------------------------------- */
+
+function Row({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="flex flex-col gap-2 border-t border-[var(--color-line)] pt-5">
+      <span className="text-[10px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
+        {label}
+      </span>
+      <div className="text-[14px] leading-relaxed text-[var(--color-silver-200)]">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function SourceChip({ id }: { id: string }) {
+  return (
+    <span className="rounded-full border border-[var(--color-line)] px-2 py-0.5 font-mono text-[10px] tracking-[0.04em] text-[var(--color-silver-400)]">
+      {id}
+    </span>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*  SECTION 01 — AI 设计效果图                                                  */
+/* -------------------------------------------------------------------------- */
+
+interface RenderImageProps {
+  imageUrl: string;
+  prompt: ImagePrompt;
+}
+
+export function RenderImage({ imageUrl, prompt }: RenderImageProps) {
+  const { t } = useI18n();
+
+  return (
+    <section className="flex flex-col gap-8">
+      <SectionLabel>{t("designRender.renderLabel")}</SectionLabel>
+      <figure className="flex flex-col gap-5">
+        {/* eslint-disable-next-line @next/next/no-img-element — data URL, not a remote asset */}
+        <img
+          src={imageUrl}
+          alt={t("designRender.imageAlt")}
+          className="depth-object w-full rounded-[var(--radius-lg)] border border-[var(--color-line-strong)] bg-[var(--color-silver-900)]"
+        />
+        <figcaption className="flex flex-col gap-2">
+          <span className="text-[10px] tracking-[0.18em] text-[var(--color-silver-500)] uppercase">
+            {t("designRender.aiNoticeLabel")}
+          </span>
+          <p className="text-[13px] leading-relaxed text-[var(--color-silver-300)]">
+            {t("designRender.aiNoticeBody")}
+          </p>
+          <p className="text-[12px] leading-relaxed text-[var(--color-silver-400)]">
+            {t("designRender.aiNoticeBody2")}
+          </p>
+          <p className="text-[11px] leading-relaxed text-[var(--color-silver-500)]">
+            {t("designRender.aiNoticeBody3")}
+          </p>
+          <span className="font-mono text-[10px] tracking-[0.06em] text-[var(--color-silver-600)]">
+            {t("designRender.providerNote", {
+              provider: prompt.vision.visual_style,
+              model: "mock",
+            })}
+          </span>
+        </figcaption>
+      </figure>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*  SECTION 02 — 为什么这样生成                                                  */
+/* -------------------------------------------------------------------------- */
+
+export function RenderWhy({ prompt }: { prompt: ImagePrompt }) {
+  const { t, tv } = useI18n();
+
+  return (
+    <section className="flex flex-col gap-8">
+      <SectionLabel>{t("designRender.whyLabel")}</SectionLabel>
+      <div className="flex flex-col gap-4">
+        <h2 className="font-editorial max-w-2xl text-[26px] leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[32px]">
+          {t("designRender.whyTitle")}
+        </h2>
+        <p className="max-w-xl text-[12px] leading-relaxed text-[var(--color-silver-600)]">
+          {t("designRender.whyNote")}
+        </p>
+      </div>
+
+      <div className="grid gap-x-10 sm:grid-cols-2">
+        <div className="flex flex-col gap-5">
+          <Row label={t("designRender.field.subject")}>
+            {tv("product", prompt.form.product_type)} ·{" "}
+            {t(`designProposal.tier.${prompt.vision.visual_style}`)}
+          </Row>
+          <Row label={t("designRender.field.scale")}>
+            {tv("shared", prompt.form.scale)} · {tv("thickness", prompt.form.thickness)}
+          </Row>
+          <Row label={t("designRender.field.finish")}>
+            {tv("renderFinish", prompt.material.finish)}
+          </Row>
+          <Row label={t("designRender.field.craft")}>
+            {prompt.craft.primary} · {tv("shared", prompt.craft.fineness)}
+          </Row>
+        </div>
+        <div className="flex flex-col gap-5">
+          <Row label={t("designRender.field.motif")}>
+            {prompt.motif !== null ? (
+              <span className="flex flex-col gap-1.5">
+                <span>{prompt.motif.name}</span>
+                <span className="text-[11px] leading-relaxed text-[var(--color-silver-500)]">
+                  {t("designTranslation.motifPresented.visual-subject")}
+                </span>
+              </span>
+            ) : (
+              t("designTranslation.motifNone")
+            )}
+          </Row>
+          <Row label={t("designRender.field.composition")}>
+            {tv("arrangement", prompt.form.arrangement)} ·{" "}
+            {tv("coverage", prompt.form.coverage)}
+          </Row>
+          <Row label={t("designRender.field.scene")}>
+            {tv("occasion", prompt.wearing_scene)}
+          </Row>
+          <Row label={t("designRender.field.vision")}>
+            {prompt.vision.camera}
+          </Row>
+        </div>
+      </div>
+
+      {/* The assembled prompt — shown verbatim so the customer can audit it. */}
+      <div className="flex flex-col gap-3 border-t border-[var(--color-line)] pt-5">
+        <span className="text-[10px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
+          {t("designRender.promptTextLabel")}
+        </span>
+        <p className="rounded-[var(--radius-md)] border border-[var(--color-line)] bg-[rgba(231,226,211,0.04)] p-4 font-mono text-[11px] leading-relaxed text-[var(--color-silver-300)]">
+          {prompt.prompt}
+        </p>
+      </div>
+
+      {/* Cultural boundary — the affirmative constraints embedded in the prompt. */}
+      <div className="flex flex-col gap-3 border-t border-[var(--color-line)] pt-5">
+        <span className="text-[10px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
+          {t("designRender.constraintsLabel")}
+        </span>
+        <ul className="flex flex-col gap-2.5">
+          {prompt.cultural_constraints.map((constraint, i) => (
+            <li
+              key={i}
+              className="flex gap-3 text-[12px] leading-relaxed text-[var(--color-silver-300)]"
+            >
+              <span
+                aria-hidden
+                className="mt-[6px] h-1 w-1 shrink-0 rounded-full bg-[var(--color-accent)]"
+              />
+              {constraint}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Negative constraints — what this render refuses to draw. */}
+      <div className="flex flex-col gap-3 border-t border-[var(--color-line)] pt-5">
+        <span className="text-[10px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
+          {t("designRender.negativeLabel")}
+        </span>
+        <div className="flex flex-wrap gap-2">
+          {prompt.negative_constraints.map((constraint, i) => (
+            <span
+              key={i}
+              className="rounded-full border border-[var(--color-line)] px-2.5 py-0.5 text-[11px] tracking-[0.04em] text-[var(--color-silver-400)]"
+            >
+              {constraint}
+            </span>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*  SECTION 03 — 文化依据                                                       */
+/* -------------------------------------------------------------------------- */
+
+function CultureCard({ card }: { card: ProposalCulturalSource }) {
+  const { t, tv } = useI18n();
+
+  return (
+    <article className="flex flex-col gap-5 border-t border-[var(--color-line)] pt-6">
+      <div className="flex flex-wrap items-baseline justify-between gap-3">
+        <div className="flex flex-wrap items-baseline gap-3">
+          <h3 className="font-editorial text-[20px] tracking-[0.01em] text-[var(--color-ivory)]">
+            {card.entity_name}
+          </h3>
+          <span className="font-mono text-[11px] text-[var(--color-silver-500)]">
+            {card.entity_id}
+          </span>
+        </div>
+        <span
+          className={`rounded-full border px-2.5 py-0.5 text-[10px] tracking-[0.16em] uppercase ${card.classification === "official_record"
+            ? "border-[var(--color-line-strong)] text-[var(--color-accent)]"
+            : "border-[var(--color-line)] text-[var(--color-silver-400)]"
+            }`}
+        >
+          {t(`designProposal.source.classification.${card.classification}`)}
+        </span>
+      </div>
+
+      <div className="flex flex-wrap gap-x-6 gap-y-2">
+        <span className="text-[11px] tracking-[0.06em] text-[var(--color-silver-500)]">
+          {t("designProposal.source.kind")} ·{" "}
+          <span className="text-[var(--color-silver-300)]">
+            {tv("matchType", card.entity_kind)}
+          </span>
+        </span>
+        {card.region ? (
+          <span className="text-[11px] tracking-[0.06em] text-[var(--color-silver-500)]">
+            {t("designProposal.source.region")} ·{" "}
+            <span className="text-[var(--color-silver-300)]">{card.region}</span>
+          </span>
+        ) : null}
+        <span className="text-[11px] tracking-[0.06em] text-[var(--color-silver-500)]">
+          {t("designProposal.source.evidence")} ·{" "}
+          <span className="text-[var(--color-silver-300)]">
+            {tv("evidenceLevel", card.evidence_level)}
+          </span>
+        </span>
+      </div>
+
+      <div className="flex flex-col gap-3">
+        <span className="text-[10px] tracking-[0.18em] text-[var(--color-silver-500)] uppercase">
+          {t("designProposal.source.facts")}
+        </span>
+        <ul className="flex flex-col gap-3">
+          {card.facts.map((fact, i) => (
+            <li key={i} className="flex flex-col gap-1.5">
+              <p className="text-[13px] leading-relaxed text-[var(--color-silver-300)]">
+                {fact.fact}
+              </p>
+              <div className="flex flex-wrap items-center gap-2">
+                {fact.source_ids.map((id) => (
+                  <SourceChip key={id} id={id} />
+                ))}
+                <span className="text-[10px] tracking-[0.1em] text-[var(--color-silver-500)] uppercase">
+                  {tv("evidenceLevel", fact.evidence_level)}
+                </span>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {card.source_refs.length > 0 ? (
+        <div className="flex flex-col gap-2">
+          <span className="text-[10px] tracking-[0.18em] text-[var(--color-silver-500)] uppercase">
+            {t("designProposal.source.records")}
+          </span>
+          <ul className="flex flex-col gap-1.5">
+            {card.source_refs.map((ref) => (
+              <li key={ref.id}>
+                <a
+                  href={ref.url}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="group inline-flex items-center gap-1.5 text-[12px] tracking-[0.04em] text-[var(--color-silver-400)] transition-colors hover:text-[var(--color-silver-200)]"
+                >
+                  <span className="font-mono text-[10px]">{ref.id}</span>
+                  <span>{ref.title}</span>
+                  <ArrowUpRight
+                    className="h-3 w-3 shrink-0 opacity-50 transition-opacity group-hover:opacity-100"
+                    strokeWidth={1.5}
+                  />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+
+      <p className="border-l border-[var(--color-line-strong)] pl-4 text-[12px] leading-relaxed text-[var(--color-silver-400)]">
+        {tv("meaningStatus", card.meaning_status)}
+      </p>
+    </article>
+  );
+}
+
+export function RenderCulture({ proposal }: { proposal: DesignProposal }) {
+  const { t } = useI18n();
+
+  return (
+    <section className="flex flex-col gap-8">
+      <SectionLabel>{t("designRender.cultureLabel")}</SectionLabel>
+      <div className="flex flex-col gap-4">
+        <h2 className="font-editorial max-w-2xl text-[26px] leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[32px]">
+          {t("designRender.cultureTitle")}
+        </h2>
+        <p className="max-w-xl text-[12px] leading-relaxed text-[var(--color-silver-600)]">
+          {t("designRender.cultureNote")}
+        </p>
+      </div>
+      {proposal.cultural_sources.length > 0 ? (
+        <div className="flex flex-col gap-6">
+          {proposal.cultural_sources.map((card) => (
+            <CultureCard key={card.entity_id} card={card} />
+          ))}
+        </div>
+      ) : (
+        <p className="text-[14px] leading-relaxed text-[var(--color-silver-400)]">
+          {t("designProposal.sources.none")}
+        </p>
+      )}
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*  SECTION 04 — 设计转译                                                       */
+/* -------------------------------------------------------------------------- */
+
+export function RenderInterpretation({ proposal }: { proposal: DesignProposal }) {
+  const { t } = useI18n();
+
+  return (
+    <section className="flex flex-col gap-8">
+      <SectionLabel>{t("designRender.designLabel")}</SectionLabel>
+      <div className="flex flex-col gap-4">
+        <h2 className="font-editorial max-w-2xl text-[26px] leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[32px]">
+          {t("designRender.designTitle")}
+        </h2>
+        <p className="max-w-xl text-[12px] leading-relaxed text-[var(--color-silver-600)]">
+          {t("designRender.designNote")}
+        </p>
+      </div>
+
+      <div className="flex flex-col gap-4 border-t border-[var(--color-line)] pt-6">
+        <span className="text-[10px] tracking-[0.18em] text-[var(--color-silver-500)] uppercase">
+          {t("designRender.reasoningLabel")}
+        </span>
+        <ol className="flex flex-col gap-4">
+          {proposal.design_reasoning.map((step, i) => (
+            <li key={step.step} className="flex flex-col gap-2">
+              <span className="font-mono text-[10px] tracking-[0.1em] text-[var(--color-silver-600)]">
+                {String(i + 1).padStart(2, "0")} ·{" "}
+                {t(`designProposal.reasoning.step.${step.step}`)}
+              </span>
+              <ul className="flex flex-col gap-1.5">
+                {step.items.map((item, j) => (
+                  <li
+                    key={j}
+                    className="flex gap-3 text-[13px] leading-relaxed text-[var(--color-silver-300)]"
+                  >
+                    <span
+                      aria-hidden
+                      className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-[var(--color-silver-400)]"
+                    />
+                    {t(`designDirections.${item.key}`, item.vars)}
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      {/* Design interpretation — always labeled, never cultural fact. */}
+      <div className="flex flex-col gap-4 border-t border-[var(--color-line)] pt-6">
+        <div className="flex items-center gap-3">
+          <span className="text-[10px] tracking-[0.18em] text-[var(--color-silver-500)] uppercase">
+            {t("designTranslation.interpretationLabel")}
+          </span>
+          <span className="rounded-full border border-[var(--color-line)] px-2 py-0.5 text-[9px] tracking-[0.16em] text-[var(--color-silver-500)] uppercase">
+            {t("common.badges.aiRationale")}
+          </span>
+        </div>
+        <ul className="flex flex-col gap-2.5">
+          {proposal.design_interpretation.statements.map((statement, i) => (
+            <li
+              key={i}
+              className="flex gap-3 text-[13px] leading-relaxed text-[var(--color-silver-300)]"
+            >
+              <span
+                aria-hidden
+                className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-[var(--color-silver-400)]"
+              />
+              {statement}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}
