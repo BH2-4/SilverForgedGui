@@ -84,7 +84,9 @@
     "act5Title": "Votre mémoire devient forme.",
     "act5Body": "Un voyage, un nom, un adieu. Apportez-le à l'atelier — l'IA et la culture le forgeront en un argent que vous porterez.",
     "shopCollection": "Voir la collection",
-    "shopCollectionHint": "Pas envie de personnaliser ? Découvrez nos pièces existantes — demande ou achat →"
+    "shopCollectionHint": "Pas envie de personnaliser ? Découvrez nos pièces existantes — demande ou achat →",
+    "act3StoryLink": "Envie de manipuler une pièce ? Entrez dans la galerie numérique",
+    "footer3dStory": "Galerie numérique 3D"
   },
   "globalDemand": {
     "studioEyebrow": "Studio de Design Global",

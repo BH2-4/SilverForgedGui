@@ -84,7 +84,9 @@
     "act5Title": "你的记忆，成为形。",
     "act5Body": "一段旅程、一个名字、一次告别。把它交给工坊——让 AI 与文化一起，把它锻成一件可以佩戴的银。",
     "shopCollection": "直接选购成品",
-    "shopCollectionHint": "不想定制？浏览我们的已有银饰，直接询盘或购买 →"
+    "shopCollectionHint": "不想定制？浏览我们的已有银饰，直接询盘或购买 →",
+    "act3StoryLink": "想亲手转动一件银饰？进入数字展厅",
+    "footer3dStory": "3D 数字展厅"
   },
   "globalDemand": {
     "studioEyebrow": "全球设计工作室",

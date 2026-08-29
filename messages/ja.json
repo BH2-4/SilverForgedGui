@@ -84,7 +84,9 @@
     "act5Title": "あなたの記憶が、形になる。",
     "act5Body": "ひとつの旅、ひとつの名前、ひとつの別れ。それを工房に托してください——AIと文化が、身につけられる銀へと鍛えます。",
     "shopCollection": "コレクションを見る",
-    "shopCollectionHint": "オーダー以外のご希望は？ 既製の銀細工を直接お問い合わせ・ご購入いただけます →"
+    "shopCollectionHint": "オーダー以外のご希望は？ 既製の銀細工を直接お問い合わせ・ご購入いただけます →",
+    "act3StoryLink": "手に取って回してみる？デジタルギャラリーへ",
+    "footer3dStory": "3D デジタルギャラリー"
   },
   "globalDemand": {
     "studioEyebrow": "グローバルデザインスタジオ",

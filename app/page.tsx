@@ -8,6 +8,7 @@ import { motion, useScroll, useTransform } from "motion/react";
 import { useI18n } from "@/components/i18n/I18nProvider";
 import { MotionReveal } from "@/components/visual/MotionReveal";
 import { COLLECTION_URL } from "@/lib/collection-url";
+import { STORY_3D_URL } from "@/lib/story-url";
 
 /**
  * HOME — SILVER FUTURE · DIGITAL SILVER ATELIER
@@ -277,6 +278,16 @@ function ActThree() {
             <span className="act-label">{t("home.act3Label")}</span>
             <h2 className="act-title mt-5">{t("home.act3Title")}</h2>
             <p className="act-body mt-6 max-w-md">{t("home.act3Body")}</p>
+            {/* 3D 数字展厅 —— 工艺好奇时刻的深潜入口（新标签，不打断叙事） */}
+            <a
+              href={`${STORY_3D_URL}?utm_source=engine&utm_medium=act3-link&utm_campaign=3d-story`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-7 inline-flex items-center gap-1.5 text-[12px] tracking-[0.16em] uppercase underline decoration-[var(--color-line-strong)] underline-offset-8 transition-colors duration-300 hover:text-[var(--color-silver-300)]"
+            >
+              {t("home.act3StoryLink")}
+              <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={1.5} />
+            </a>
           </div>
         </motion.div>
       </div>
@@ -456,6 +467,14 @@ function AtelierFooter() {
     <footer className="border-t border-[var(--color-line)]">
       <div className="mx-auto flex max-w-[1400px] flex-col gap-3 px-8 py-10 text-[12px] tracking-[0.08em] text-[var(--color-silver-600)] sm:flex-row sm:items-center sm:justify-between sm:px-12 lg:px-16">
         <span>{t("home.footer1")}</span>
+        <a
+          href={`${STORY_3D_URL}?utm_source=engine&utm_medium=footer&utm_campaign=3d-story`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="transition-colors duration-300 hover:text-[var(--color-silver-300)]"
+        >
+          {t("home.footer3dStory")}
+        </a>
         <span>{t("home.footer2")}</span>
       </div>
     </footer>

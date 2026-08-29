@@ -84,7 +84,9 @@
     "act5Title": "Your memory becomes form.",
     "act5Body": "A journey, a name, a farewell. Bring it into the atelier — and let AI and culture forge it into silver you can wear.",
     "shopCollection": "Shop the Collection",
-    "shopCollectionHint": "Not customizing? Browse our finished pieces and inquire or buy →"
+    "shopCollectionHint": "Not customizing? Browse our finished pieces and inquire or buy →",
+    "act3StoryLink": "Want to hold one in your hands? Enter the digital gallery",
+    "footer3dStory": "3D Digital Gallery"
   },
   "globalDemand": {
     "studioEyebrow": "Global Design Studio",
