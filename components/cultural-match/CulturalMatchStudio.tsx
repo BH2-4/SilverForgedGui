@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
@@ -13,7 +13,6 @@ import {
   DESIGN_TRANSLATION_STORAGE_KEY,
 } from "@/lib/constants/storage";
 import { DnaSummary } from "./DnaSummary";
-import { GuardrailPanel } from "./GuardrailPanel";
 import { HeritageDirectionCard } from "./HeritageDirectionCard";
 import type { CulturalMatchApiResponse } from "@/types/cultural-match";
 
@@ -143,7 +142,7 @@ export function CulturalMatchStudio() {
           {MATCH_STAGE_KEYS.map((key, i) => (
             <li key={key} className="flex items-center gap-5">
               <span
-                className={`font-editorial text-[20px] leading-[1.2] tracking-[-0.005em] sm:text-[22px] ${i <= stage
+                className={`font-sans text-[18px] leading-[1.2] tracking-[-0.005em] sm:text-[20px] ${i <= stage
                   ? "text-[var(--color-ivory)]"
                   : "text-[var(--color-silver-600)]"
                   }`}
@@ -164,7 +163,7 @@ export function CulturalMatchStudio() {
     return (
       <div className="animate-fade-in flex flex-1 flex-col items-start justify-center gap-8 py-16">
         <SectionLabel>{t("culturalMatch.emptyLabel")}</SectionLabel>
-        <h2 className="font-editorial max-w-2xl text-4xl leading-[1.1] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-5xl">
+        <h2 className="font-sans max-w-2xl text-[28px] leading-[1.1] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[32px]">
           {t("culturalMatch.emptyTitle")}
         </h2>
         <p className="max-w-md text-[14px] leading-relaxed text-[var(--color-silver-400)]">
@@ -196,7 +195,7 @@ export function CulturalMatchStudio() {
             strokeWidth={1.5}
           />
           <div className="flex-1">
-            <div className="mb-1 text-[11px] tracking-[0.14em] text-red-300/70 uppercase">
+            <div className="mb-1 text-[12px] tracking-[0.14em] text-red-300/70 uppercase">
               {t("culturalMatch.errorInterrupted")}
             </div>
             <div>{tApiError(phase.code, phase.message)}</div>
@@ -225,7 +224,7 @@ export function CulturalMatchStudio() {
       <section className="flex flex-col gap-8">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <SectionLabel>{t("culturalMatch.heritageDirectionsLabel")}</SectionLabel>
-          <span className="text-[10px] tracking-[0.22em] text-[var(--color-silver-600)] uppercase">
+          <span className="text-[11px] tracking-[0.22em] text-[var(--color-silver-600)] uppercase">
             {t("culturalMatch.topOfRanked", { total: body.matches.length })}
           </span>
         </div>
@@ -245,13 +244,11 @@ export function CulturalMatchStudio() {
         </div>
       </section>
 
-      <GuardrailPanel guardrail={body.guardrail} />
-
       {/* Continue to Stage 3 — Design Translation */}
       <section className="glass-panel flex flex-col gap-8 rounded-[var(--radius-lg)] p-8 sm:p-10">
         <SectionLabel>{t("culturalMatch.whatComesNextLabel")}</SectionLabel>
         <div className="flex flex-col gap-4">
-          <h3 className="font-editorial text-3xl leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-4xl">
+          <h3 className="font-sans text-[24px] leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[28px]">
             {t("culturalMatch.whatComesNextTitle")}
           </h3>
           <p className="max-w-2xl text-[14px] leading-relaxed text-[var(--color-silver-300)]">
@@ -287,7 +284,7 @@ export function CulturalMatchStudio() {
             />
           </button>
         </div>
-        <div className="text-[10px] tracking-[0.22em] text-[var(--color-silver-600)] uppercase">
+        <div className="text-[11px] tracking-[0.22em] text-[var(--color-silver-600)] uppercase">
           {t("culturalMatch.stage3Available")}
         </div>
       </section>

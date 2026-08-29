@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "SILVER FUTURE — グローバルデザインスタジオ",
+    "title": "Silver Forged Gui — グローバルデザインスタジオ",
     "description": "AIが駆動する貴州銀細工のグローバル共同制作プラットフォーム。あなたの銀が語る物語を教えてください。"
   },
   "common": {
@@ -48,23 +48,43 @@
       "engineDerived": "エンジン生成 · 決定論的"
     },
     "stages": {
+      "interview": "00 · メモリーインタビュー",
       "globalDemand": "01 · グローバル需要",
       "culturalMatch": "02 · カルチュラルマッチ",
       "designTranslation": "03 · デザイン翻訳",
       "designProposal": "04 · オーダー提案",
       "designRender": "05 · デザインレンダー"
     },
-    "navAria": "パイプラインのステージ"
+    "navAria": "パイプラインのステージ",
+    "collectionLabel": "コレクション"
   },
   "home": {
     "coCreationNote": "グローバル共同制作 · V1",
     "chapterLabel": "銀の新章",
     "title1": "銀細工を世界に売るのではない。",
     "title2": "世界にデザインさせるのだ。",
-    "intro": "SILVER FUTURE は、AIが駆動する貴州銀細工の共同制作プラットフォームです。世界のセンスとミャオ族の伝統が出会い——知能あるデザインで再解釈されます。",
+    "intro": "Silver Future は、AIが駆動する貴州銀細工のデジタル工房です。世界のセンスとミャオ族の伝統が出会い——知能あるデザインで再解釈されます。",
     "engineNote": "グローバル需要エンジン · V1",
     "footer1": "貴州 · ミャオ族の銀 · 再解釈",
-    "footer2": "© 2026 SILVER FUTURE — プロトタイプ"
+    "footer2": "© 2026 Silver Future — プロトタイプ",
+    "exploreProcess": "プロセスを見る",
+    "processTitle": "五つの段階",
+    "processSub": "あなたの物語から、身につけられる銀へ。",
+    "stageEnter": "進む",
+    "act2Label": "第一章 · 伝承",
+    "act2Title": "伝承から、可能性へ。",
+    "act2Body": "貴州ミャオ族の銀——幾世紀にもわたる鍛造の技。博物館のガラスケースに留めるのではなく、現代デザインの対話へと引き込みます。",
+    "act3Label": "第二章 · 素材",
+    "act3Title": "銀は、記憶を持つ金属。",
+    "act3Body": "フィリグリー、彫金、鍛造——すべての技法が表面に痕跡を残します。近づけば、素材そのものがデザイン言語になります。",
+    "act4Label": "第三章 · 文化",
+    "act4Title": "文化は装飾ではない。",
+    "act4Body": "すべての文様に出所があり、すべての技に継承者がいます。私たちの文化データベースは創作を拒否します——記録され、検証された要素だけが、あなたのデザインに入ります。",
+    "act5Label": "第四章 · 記憶",
+    "act5Title": "あなたの記憶が、形になる。",
+    "act5Body": "ひとつの旅、ひとつの名前、ひとつの別れ。それを工房に托してください——AIと文化が、身につけられる銀へと鍛えます。",
+    "shopCollection": "コレクションを見る",
+    "shopCollectionHint": "オーダー以外のご希望は？ 既製の銀細工を直接お問い合わせ・ご購入いただけます →"
   },
   "globalDemand": {
     "studioEyebrow": "グローバルデザインスタジオ",
@@ -105,7 +125,7 @@
     "avoidLabel": "避ける",
     "whatComesNextLabel": "次のステップ",
     "whatComesNextTitle": "デザインブリーフが完成しました。",
-    "whatComesNextBody": "次に SILVER FUTURE はあなたの好みを貴州の文化知識ベースとつなぎ——あなたの意図に響くモチーフ、素材、系譜をマッチングします。",
+    "whatComesNextBody": "次に Silver Forged Gui はあなたの好みを貴州の文化知識ベースとつなぎ——あなたの意図に響くモチーフ、素材、系譜をマッチングします。",
     "stage2Ready": "ステージ 2 · カルチュラルマッチエンジン · 準備完了",
     "errors": {
       "analysisInterrupted": "分析が中断されました",

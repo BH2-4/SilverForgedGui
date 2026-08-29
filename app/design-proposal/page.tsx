@@ -5,8 +5,8 @@ export const dynamic = "force-dynamic";
 
 export default function DesignProposalPage() {
   return (
-    <main className="relative min-h-dvh">
-      <div className="mx-auto flex min-h-dvh max-w-6xl flex-col gap-14 px-6 py-8 sm:px-10 sm:py-12 lg:px-14">
+    <main className="stage-space relative min-h-dvh">
+      <div className="mx-auto flex min-h-dvh max-w-[1400px] flex-col gap-20 px-8 pb-24 sm:px-12 lg:px-16">
         <ProposalHeader />
         <ProposalStudio />
       </div>

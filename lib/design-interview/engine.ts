@@ -466,7 +466,7 @@ export function buildUserDesignIntent(
 
 /* ─── AI user_context 合成提示词（严格文化护栏） ─────────────── */
 
-export const INTENT_SYNTHESIS_SYSTEM_PROMPT = `你是 Silver Future 银饰定制平台 Stage 0「引导式设计访谈」的意图合成器。
+export const INTENT_SYNTHESIS_SYSTEM_PROMPT = `你是 Silver Forged Gui 银饰定制平台 Stage 0「引导式设计访谈」的意图合成器。
 
 你会收到一位普通消费者的访谈答案（JSON，字段为品类/场景/风格/情绪/存在感/体量/质感等偏好选择），以及指定的输出语言。
 

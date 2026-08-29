@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "银见未来 — 全球设计工作室",
+    "title": "银中贵 — 全球设计工作室",
     "description": "AI 驱动的贵州银饰全球共创设计平台。告诉我们，你想让银饰讲述怎样的故事。"
   },
   "common": {
@@ -48,23 +48,43 @@
       "engineDerived": "引擎推导 · 确定性"
     },
     "stages": {
+      "interview": "00 · 记忆访谈",
       "globalDemand": "01 · 全局需求",
       "culturalMatch": "02 · 文化匹配",
       "designTranslation": "03 · 设计翻译",
       "designProposal": "04 · 定制提案",
       "designRender": "05 · 设计效果图"
     },
-    "navAria": "流程阶段"
+    "navAria": "流程阶段",
+    "collectionLabel": "成品系列"
   },
   "home": {
     "coCreationNote": "全球共创 · V1",
     "chapterLabel": "银的新篇章",
     "title1": "不是把银饰卖给世界。",
     "title2": "而是让世界来设计它。",
-    "intro": "银见未来（SILVER FUTURE）是一个由 AI 驱动的贵州银饰共创平台。全球审美与苗族文化传承相遇——由智能设计重新演绎。",
+    "intro": "银中贵（Silver Future）是一个由 AI 驱动的贵州银饰共创平台。全球审美与苗族文化传承相遇——由智能设计重新演绎。",
     "engineNote": "全局需求引擎 · V1",
     "footer1": "贵州 · 苗银 · 重塑",
-    "footer2": "© 2026 SILVER FUTURE — 原型"
+    "footer2": "© 2026 银中贵 — 原型",
+    "exploreProcess": "探索流程",
+    "processTitle": "五段流程",
+    "processSub": "从你的故事，到一枚可佩戴的银。",
+    "stageEnter": "进入",
+    "act2Label": "第一章 · 传承",
+    "act2Title": "从传承，到可能。",
+    "act2Body": "贵州苗银，数百年的锻制技艺。我们不让它停留在博物馆的玻璃柜里——而是让它进入一场当代设计的对话。",
+    "act3Label": "第二章 · 材质",
+    "act3Title": "银，是有记忆的金属。",
+    "act3Body": "花丝、錾刻、锻打——每一道工艺都在银的表面留下痕迹。靠近一些，看材质本身如何成为设计语言。",
+    "act4Label": "第三章 · 文化",
+    "act4Title": "文化不是装饰。",
+    "act4Body": "每一个纹样都有出处，每一个工艺都有传承人。我们的文化数据库拒绝虚构——只有被记录、被验证的元素，才能进入你的设计。",
+    "act5Label": "第四章 · 记忆",
+    "act5Title": "你的记忆，成为形。",
+    "act5Body": "一段旅程、一个名字、一次告别。把它交给工坊——让 AI 与文化一起，把它锻成一件可以佩戴的银。",
+    "shopCollection": "直接选购成品",
+    "shopCollectionHint": "不想定制？浏览我们的已有银饰，直接询盘或购买 →"
   },
   "globalDemand": {
     "studioEyebrow": "全球设计工作室",
@@ -105,7 +125,7 @@
     "avoidLabel": "避免",
     "whatComesNextLabel": "接下来",
     "whatComesNextTitle": "你的设计简报已就绪。",
-    "whatComesNextBody": "接下来，SILVER FUTURE 会把你的偏好与贵州的文化知识库连接——匹配与你意图共鸣的纹样、材料与传承脉络。",
+    "whatComesNextBody": "接下来，Silver Forged Gui 会把你的偏好与贵州的文化知识库连接——匹配与你意图共鸣的纹样、材料与传承脉络。",
     "stage2Ready": "阶段 2 · 文化匹配引擎 · 就绪",
     "errors": {
       "analysisInterrupted": "分析已被打断",

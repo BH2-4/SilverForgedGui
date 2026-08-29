@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -244,7 +244,7 @@ export function StudioForm({ demoMode }: StudioFormProps) {
             strokeWidth={1.5}
           />
           <div className="flex-1">
-            <div className="mb-1 text-[11px] tracking-[0.14em] text-red-300/70 uppercase">
+            <div className="mb-1 text-[12px] tracking-[0.14em] text-red-300/70 uppercase">
               {t("errors.analysisInterrupted")}
             </div>
             <div>{tApiError(phase.code, phase.message)}</div>
@@ -253,10 +253,6 @@ export function StudioForm({ demoMode }: StudioFormProps) {
       )}
 
       <div className="flex flex-col items-start gap-6 border-t border-[var(--color-line)] pt-10 sm:flex-row sm:items-center sm:justify-between">
-        <div className="max-w-md text-[12px] leading-relaxed tracking-[0.02em] text-[var(--color-silver-500)]">
-          {demoMode ? t("globalDemand.disclaimerDemo") : t("globalDemand.disclaimerLive")}
-        </div>
-
         <button
           type="button"
           onClick={handleSubmit}

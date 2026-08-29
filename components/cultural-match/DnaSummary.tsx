@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { SectionLabel } from "@/components/shared/SectionLabel";
 import { useI18n } from "@/components/i18n/I18nProvider";
@@ -11,10 +11,10 @@ interface DnaSummaryProps {
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex flex-col gap-2 border-t border-[var(--color-line)] pt-4">
-      <span className="text-[10px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
+      <span className="text-[11px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
         {label}
       </span>
-      <span className="font-editorial text-[20px] leading-[1.2] tracking-[-0.005em] text-[var(--color-ivory)]">
+      <span className="font-sans text-[18px] leading-[1.2] tracking-[-0.005em] text-[var(--color-ivory)]">
         {value}
       </span>
     </div>
@@ -39,7 +39,7 @@ export function DnaSummary({ brief }: DnaSummaryProps) {
     <section className="flex flex-col gap-8">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <SectionLabel>{t("globalDemand.resultDnaLabel")}</SectionLabel>
-        <span className="text-[10px] tracking-[0.22em] text-[var(--color-silver-600)] uppercase">
+        <span className="text-[11px] tracking-[0.22em] text-[var(--color-silver-600)] uppercase">
           {t("common.badges.stage1AiInference")}
         </span>
       </div>

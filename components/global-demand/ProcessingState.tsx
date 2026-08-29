@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { Check } from "lucide-react";
@@ -75,7 +75,7 @@ export function ProcessingState({ done }: ProcessingStateProps) {
                 )}
               </span>
               <span
-                className={`font-editorial text-[20px] leading-[1.2] tracking-[-0.005em] transition-colors duration-500 sm:text-[22px] ${
+                className={`font-sans text-[18px] leading-[1.2] tracking-[-0.005em] transition-colors duration-500 sm:text-[20px] ${
                   state === "done"
                     ? "text-[var(--color-silver-300)]"
                     : state === "active"

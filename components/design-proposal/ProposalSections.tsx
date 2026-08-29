@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { ArrowUpRight } from "lucide-react";
 import { SectionLabel } from "@/components/shared/SectionLabel";
@@ -12,7 +12,7 @@ import type { DesignProposal, ProposalCulturalSource } from "@/lib/design/schema
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-2 border-t border-[var(--color-line)] pt-5">
-      <span className="text-[10px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
+      <span className="text-[11px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
         {label}
       </span>
       <div className="text-[14px] leading-relaxed text-[var(--color-silver-200)]">
@@ -24,7 +24,7 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
 
 function Chip({ children }: { children: React.ReactNode }) {
   return (
-    <span className="rounded-full border border-[var(--color-line)] px-2.5 py-0.5 text-[11px] tracking-[0.08em] text-[var(--color-silver-200)]">
+    <span className="rounded-full border border-[var(--color-line)] px-2.5 py-0.5 text-[12px] tracking-[0.08em] text-[var(--color-silver-200)]">
       {children}
     </span>
   );
@@ -32,7 +32,7 @@ function Chip({ children }: { children: React.ReactNode }) {
 
 function SourceChip({ id }: { id: string }) {
   return (
-    <span className="rounded-full border border-[var(--color-line)] px-2 py-0.5 font-mono text-[10px] tracking-[0.04em] text-[var(--color-silver-400)]">
+    <span className="rounded-full border border-[var(--color-line)] px-2 py-0.5 font-mono text-[11px] tracking-[0.04em] text-[var(--color-silver-400)]">
       {id}
     </span>
   );
@@ -63,26 +63,26 @@ export function ProposalHero({ proposal }: { proposal: DesignProposal }) {
     <section className="flex flex-col gap-8">
       <SectionLabel>{t("designProposal.section1Label")}</SectionLabel>
       <div className="flex flex-col gap-4">
-        <span className="text-[10px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
+        <span className="text-[11px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
           {t("designProposal.titleLabel")}
         </span>
-        <h2 className="font-editorial text-[30px] leading-[1.1] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[38px]">
+        <h2 className="font-sans text-[24px] leading-[1.1] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[28px]">
           {title}
         </h2>
       </div>
       <div className="flex flex-col gap-3">
-        <span className="text-[10px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
+        <span className="text-[11px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
           {t("designProposal.conceptLabel")}
         </span>
-        <p className="font-editorial max-w-2xl text-[18px] leading-[1.5] tracking-[0.01em] text-[var(--color-silver-100)] sm:text-[20px]">
+        <p className="font-sans max-w-2xl text-[18px] leading-[1.5] tracking-[0.01em] text-[var(--color-silver-100)] sm:text-[18px]">
           {t("designProposal.concept", { emotions, scene })}
         </p>
-        <p className="max-w-xl text-[11px] leading-relaxed text-[var(--color-silver-500)]">
+        <p className="max-w-xl text-[12px] leading-relaxed text-[var(--color-silver-500)]">
           {t("designProposal.conceptNote")}
         </p>
       </div>
       <div className="flex items-center gap-4 border-t border-[var(--color-line)] pt-5">
-        <span className="text-[10px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
+        <span className="text-[11px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
           {t("common.labels.confidence")}
         </span>
         <span className="text-[13px] text-[var(--color-silver-300)]">
@@ -141,7 +141,7 @@ export function ProposalReasoning({ proposal }: { proposal: DesignProposal }) {
   return (
     <section className="flex flex-col gap-8">
       <SectionLabel>{t("designProposal.section2Label")}</SectionLabel>
-      <h2 className="font-editorial max-w-2xl text-[26px] leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[32px]">
+      <h2 className="font-sans max-w-2xl text-[22px] leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[24px]">
         {t("designProposal.section2Title")}
       </h2>
       <p className="max-w-xl text-[12px] leading-relaxed text-[var(--color-silver-600)]">
@@ -150,13 +150,13 @@ export function ProposalReasoning({ proposal }: { proposal: DesignProposal }) {
 
       {/* What the customer actually asked for (Stage 0 verbatim tokens). */}
       <div className="flex flex-col gap-3">
-        <span className="text-[10px] tracking-[0.18em] text-[var(--color-silver-500)] uppercase">
+        <span className="text-[11px] tracking-[0.18em] text-[var(--color-silver-500)] uppercase">
           {t("designProposal.intentTitle")}
         </span>
         <div className="flex flex-col gap-3">
           {intentChips.map((group) => (
             <div key={group.label} className="flex flex-wrap items-center gap-2">
-              <span className="w-14 shrink-0 text-[11px] tracking-[0.06em] text-[var(--color-silver-500)]">
+              <span className="w-14 shrink-0 text-[12px] tracking-[0.06em] text-[var(--color-silver-500)]">
                 {group.label}
               </span>
               {group.nodes.map((node, i) => (
@@ -167,28 +167,6 @@ export function ProposalReasoning({ proposal }: { proposal: DesignProposal }) {
         </div>
       </div>
 
-      {/* The five-layer derivation chain. */}
-      <div className="flex flex-col gap-0">
-        {proposal.design_reasoning.map((step, i) => (
-          <div key={step.step} className="flex flex-col gap-2 border-t border-[var(--color-line)] py-5">
-            <div className="flex items-center gap-3">
-              <span className="font-mono text-[10px] text-[var(--color-silver-600)]">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <span className="text-[10px] tracking-[0.2em] text-[var(--color-silver-400)] uppercase">
-                {t(`designProposal.reasoning.step.${step.step}`)}
-              </span>
-            </div>
-            <ul className="flex flex-col gap-1.5">
-              {step.items.map((item, j) => (
-                <li key={j} className="text-[14px] leading-relaxed text-[var(--color-silver-300)]">
-                  {t(item.key, item.vars)}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
     </section>
   );
 }
@@ -203,7 +181,7 @@ export function ProposalFormSection({ proposal }: { proposal: DesignProposal }) 
   return (
     <section className="flex flex-col gap-6">
       <SectionLabel>{t("designProposal.section3Label")}</SectionLabel>
-      <h2 className="font-editorial max-w-2xl text-[26px] leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[32px]">
+      <h2 className="font-sans max-w-2xl text-[22px] leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[24px]">
         {t("designProposal.section3Title")}
       </h2>
       <div className="flex flex-col gap-5">
@@ -238,7 +216,7 @@ export function ProposalMotifSection({ proposal }: { proposal: DesignProposal })
   return (
     <section className="flex flex-col gap-6">
       <SectionLabel>{t("designProposal.section4Label")}</SectionLabel>
-      <h2 className="font-editorial max-w-2xl text-[26px] leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[32px]">
+      <h2 className="font-sans max-w-2xl text-[22px] leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[24px]">
         {t("designProposal.section4Title")}
       </h2>
       <div className="flex flex-col gap-5">
@@ -246,7 +224,7 @@ export function ProposalMotifSection({ proposal }: { proposal: DesignProposal })
           {motif ? (
             <span className="flex flex-wrap items-center gap-3">
               <span className="text-[var(--color-ivory)]">{motif.name}</span>
-              <span className="rounded-full border border-[var(--color-line-strong)] px-2 py-0.5 text-[10px] tracking-[0.12em] text-[var(--color-silver-400)] uppercase">
+              <span className="rounded-full border border-[var(--color-line-strong)] px-2 py-0.5 text-[11px] tracking-[0.12em] text-[var(--color-silver-400)] uppercase">
                 {tv("presentedAs", motif.presented_as)}
               </span>
             </span>
@@ -301,12 +279,11 @@ export function ProposalMotifSection({ proposal }: { proposal: DesignProposal })
 
 export function ProposalMaterialSection({ proposal }: { proposal: DesignProposal }) {
   const { t, tv } = useI18n();
-  const crafts = [proposal.craft.primary, ...proposal.craft.alternatives];
 
   return (
     <section className="flex flex-col gap-6">
       <SectionLabel>{t("designProposal.section5Label")}</SectionLabel>
-      <h2 className="font-editorial max-w-2xl text-[26px] leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[32px]">
+      <h2 className="font-sans max-w-2xl text-[22px] leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[24px]">
         {t("designProposal.section5Title")}
       </h2>
       <div className="flex flex-col gap-5">
@@ -325,7 +302,7 @@ export function ProposalMaterialSection({ proposal }: { proposal: DesignProposal
               {proposal.craft.primary.source_ids.map((id) => (
                 <SourceChip key={id} id={id} />
               ))}
-              <span className="text-[10px] tracking-[0.1em] text-[var(--color-silver-500)] uppercase">
+              <span className="text-[11px] tracking-[0.1em] text-[var(--color-silver-500)] uppercase">
                 {tv("evidenceLevel", proposal.craft.primary.evidence_level)}
               </span>
             </div>
@@ -337,7 +314,7 @@ export function ProposalMaterialSection({ proposal }: { proposal: DesignProposal
               {proposal.craft.alternatives.map((craft) => (
                 <span key={craft.id} className="flex flex-wrap items-center gap-2">
                   <span>{craft.name}</span>
-                  <span className="text-[10px] tracking-[0.1em] text-[var(--color-silver-500)] uppercase">
+                  <span className="text-[11px] tracking-[0.1em] text-[var(--color-silver-500)] uppercase">
                     {tv("evidenceLevel", craft.evidence_level)}
                   </span>
                 </span>
@@ -370,7 +347,7 @@ export function ProposalWearabilitySection({
   return (
     <section className="flex flex-col gap-6">
       <SectionLabel>{t("designProposal.section6Label")}</SectionLabel>
-      <h2 className="font-editorial max-w-2xl text-[26px] leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[32px]">
+      <h2 className="font-sans max-w-2xl text-[22px] leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[24px]">
         {t("designProposal.section6Title")}
       </h2>
       <div className="flex flex-col gap-5">
@@ -416,15 +393,15 @@ function SourceCard({ card }: { card: ProposalCulturalSource }) {
     <article className="flex flex-col gap-5 border-t border-[var(--color-line)] pt-6">
       <div className="flex flex-wrap items-baseline justify-between gap-3">
         <div className="flex flex-wrap items-baseline gap-3">
-          <h3 className="font-editorial text-[20px] tracking-[0.01em] text-[var(--color-ivory)]">
+          <h3 className="font-sans text-[18px] tracking-[0.01em] text-[var(--color-ivory)]">
             {card.entity_name}
           </h3>
-          <span className="font-mono text-[11px] text-[var(--color-silver-500)]">
+          <span className="font-mono text-[12px] text-[var(--color-silver-500)]">
             {card.entity_id}
           </span>
         </div>
         <span
-          className={`rounded-full border px-2.5 py-0.5 text-[10px] tracking-[0.16em] uppercase ${card.classification === "official_record"
+          className={`rounded-full border px-2.5 py-0.5 text-[11px] tracking-[0.16em] uppercase ${card.classification === "official_record"
             ? "border-[var(--color-line-strong)] text-[var(--color-accent)]"
             : "border-[var(--color-line)] text-[var(--color-silver-400)]"
             }`}
@@ -434,31 +411,31 @@ function SourceCard({ card }: { card: ProposalCulturalSource }) {
       </div>
 
       <div className="flex flex-wrap gap-x-6 gap-y-2">
-        <span className="text-[11px] tracking-[0.06em] text-[var(--color-silver-500)]">
+        <span className="text-[12px] tracking-[0.06em] text-[var(--color-silver-500)]">
           {t("designProposal.source.kind")} ·{" "}
           <span className="text-[var(--color-silver-300)]">
             {tv("matchType", card.entity_kind)}
           </span>
         </span>
         {card.region ? (
-          <span className="text-[11px] tracking-[0.06em] text-[var(--color-silver-500)]">
+          <span className="text-[12px] tracking-[0.06em] text-[var(--color-silver-500)]">
             {t("designProposal.source.region")} ·{" "}
             <span className="text-[var(--color-silver-300)]">{card.region}</span>
           </span>
         ) : null}
-        <span className="text-[11px] tracking-[0.06em] text-[var(--color-silver-500)]">
+        <span className="text-[12px] tracking-[0.06em] text-[var(--color-silver-500)]">
           {t("designProposal.source.evidence")} ·{" "}
           <span className="text-[var(--color-silver-300)]">
             {tv("evidenceLevel", card.evidence_level)}
           </span>
         </span>
-        <span className="text-[11px] tracking-[0.06em] text-[var(--color-silver-500)]">
+        <span className="text-[12px] tracking-[0.06em] text-[var(--color-silver-500)]">
           {t("designProposal.source.claimLevel")} ·{" "}
           <span className="text-[var(--color-silver-300)]">
             {tv("claimLevel", card.claim_level)}
           </span>
         </span>
-        <span className="text-[11px] tracking-[0.06em] text-[var(--color-silver-500)]">
+        <span className="text-[12px] tracking-[0.06em] text-[var(--color-silver-500)]">
           {t("designProposal.source.confidence")} ·{" "}
           <span className="text-[var(--color-silver-300)]">
             {t("designProposal.confidenceValue", {
@@ -470,7 +447,7 @@ function SourceCard({ card }: { card: ProposalCulturalSource }) {
 
       {/* Official evidence — verbatim knowledge-base strings. */}
       <div className="flex flex-col gap-3">
-        <span className="text-[10px] tracking-[0.18em] text-[var(--color-silver-500)] uppercase">
+        <span className="text-[11px] tracking-[0.18em] text-[var(--color-silver-500)] uppercase">
           {t("designProposal.source.facts")}
         </span>
         <ul className="flex flex-col gap-3">
@@ -483,7 +460,7 @@ function SourceCard({ card }: { card: ProposalCulturalSource }) {
                 {fact.source_ids.map((id) => (
                   <SourceChip key={id} id={id} />
                 ))}
-                <span className="text-[10px] tracking-[0.1em] text-[var(--color-silver-500)] uppercase">
+                <span className="text-[11px] tracking-[0.1em] text-[var(--color-silver-500)] uppercase">
                   {tv("evidenceLevel", fact.evidence_level)}
                 </span>
               </div>
@@ -495,7 +472,7 @@ function SourceCard({ card }: { card: ProposalCulturalSource }) {
       {/* Cited official records. */}
       {card.source_refs.length > 0 ? (
         <div className="flex flex-col gap-2">
-          <span className="text-[10px] tracking-[0.18em] text-[var(--color-silver-500)] uppercase">
+          <span className="text-[11px] tracking-[0.18em] text-[var(--color-silver-500)] uppercase">
             {t("designProposal.source.records")}
           </span>
           <ul className="flex flex-col gap-1.5">
@@ -507,7 +484,7 @@ function SourceCard({ card }: { card: ProposalCulturalSource }) {
                   rel="noreferrer noopener"
                   className="group inline-flex items-center gap-1.5 text-[12px] tracking-[0.04em] text-[var(--color-silver-400)] transition-colors hover:text-[var(--color-silver-200)]"
                 >
-                  <span className="font-mono text-[10px]">{ref.id}</span>
+                  <span className="font-mono text-[11px]">{ref.id}</span>
                   <span>{ref.title}</span>
                   <ArrowUpRight
                     className="h-3 w-3 shrink-0 opacity-50 transition-opacity group-hover:opacity-100"
@@ -533,7 +510,7 @@ export function ProposalCulturalSources({ proposal }: { proposal: DesignProposal
   return (
     <section className="flex flex-col gap-8">
       <SectionLabel>{t("designProposal.section7Label")}</SectionLabel>
-      <h2 className="font-editorial max-w-2xl text-[26px] leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[32px]">
+      <h2 className="font-sans max-w-2xl text-[22px] leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[24px]">
         {t("designProposal.section7Title")}
       </h2>
       <p className="max-w-xl text-[12px] leading-relaxed text-[var(--color-silver-600)]">
@@ -543,7 +520,7 @@ export function ProposalCulturalSources({ proposal }: { proposal: DesignProposal
       {/* The three-way legend: what is official, what is inferred, what is
           visual-only. Every cultural statement below maps to exactly one. */}
       <div className="flex flex-col gap-2">
-        <span className="text-[10px] tracking-[0.18em] text-[var(--color-silver-500)] uppercase">
+        <span className="text-[11px] tracking-[0.18em] text-[var(--color-silver-500)] uppercase">
           {t("designProposal.legend.title")}
         </span>
         <ul className="flex flex-col gap-1.5 text-[12px] leading-relaxed text-[var(--color-silver-400)]">
@@ -568,10 +545,10 @@ export function ProposalCulturalSources({ proposal }: { proposal: DesignProposal
       {/* Design interpretation — always labeled, never cultural fact. */}
       <div className="flex flex-col gap-4 border-t border-[var(--color-line)] pt-6">
         <div className="flex items-center gap-3">
-          <span className="text-[10px] tracking-[0.18em] text-[var(--color-silver-500)] uppercase">
+          <span className="text-[11px] tracking-[0.18em] text-[var(--color-silver-500)] uppercase">
             {t("designTranslation.interpretationLabel")}
           </span>
-          <span className="rounded-full border border-[var(--color-line)] px-2 py-0.5 text-[9px] tracking-[0.16em] text-[var(--color-silver-500)] uppercase">
+          <span className="rounded-full border border-[var(--color-line)] px-2 py-0.5 text-[10px] tracking-[0.16em] text-[var(--color-silver-500)] uppercase">
             {t("common.badges.aiRationale")}
           </span>
         </div>
@@ -590,34 +567,6 @@ export function ProposalCulturalSources({ proposal }: { proposal: DesignProposal
           ))}
         </ul>
       </div>
-
-      {/* Honest unknowns. */}
-      {proposal.uncertainties.length > 0 ? (
-        <div className="flex flex-col gap-3 border-t border-[var(--color-line)] pt-6">
-          <span className="text-[10px] tracking-[0.18em] text-[var(--color-silver-500)] uppercase">
-            {t("designProposal.uncertaintiesLabel")}
-          </span>
-          <ul className="flex flex-col gap-2.5">
-            {proposal.uncertainties.map((item, i) => (
-              <li
-                key={i}
-                className="flex gap-3 text-[12px] leading-relaxed text-[var(--color-silver-400)]"
-              >
-                <span
-                  aria-hidden
-                  className="mt-[6px] h-1 w-1 shrink-0 rounded-full bg-[var(--color-silver-500)]"
-                />
-                {t(`designDirections.${item.key}`, item.vars)}
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
-
-      {/* Guardrail seal. */}
-      <p className="text-[11px] tracking-[0.08em] text-[var(--color-silver-500)]">
-        {t("designProposal.guardrailPassed")}
-      </p>
     </section>
   );
 }

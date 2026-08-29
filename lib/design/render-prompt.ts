@@ -114,6 +114,74 @@ export type ImagePrompt = z.infer<typeof ImagePromptSchema>;
 export type PromptMotif = z.infer<typeof PromptMotifSchema>;
 
 /* -------------------------------------------------------------------------- */
+/*  Product-type to English noun mapping. DALL-E needs concrete terms.         */
+/* -------------------------------------------------------------------------- */
+const PRODUCT_NOUN: Record<string, string> = {
+  earrings: "a pair of silver earrings",
+  ring: "a silver ring",
+  bracelet: "a silver bracelet",
+  cuff: "a silver cuff bracelet",
+  anklet: "a silver anklet",
+  necklace: "a silver necklace",
+  pendant: "a silver pendant",
+  brooch: "a silver brooch pin",
+  hairpiece: "a silver hair ornament",
+  unknown: "a silver jewelry piece",
+};
+
+const REGION_ANCHOR: Record<string, string> = {
+  miao: "inspired by traditional Miao silver ornamentation from Guizhou, China",
+  dong: "inspired by traditional Dong silver ornamentation from Guizhou, China",
+  "guizhou-miao": "inspired by traditional Miao silver ornamentation from Guizhou, China",
+  guizhou: "inspired by traditional silver ornamentation from Guizhou, China",
+};
+
+/* -------------------------------------------------------------------------- */
+/*  Motif name translation (language only — no meaning is added)               */
+/*                                                                             */
+/*  The KB motif names are Chinese. Image models read English; a bare         */
+/*  Chinese name in the prompt is invisible to them, which produced           */
+/*  generic results. This map is pure LANGUAGE translation of the verbatim    */
+/*  KB name — the motif stays the same documented entity, no symbolic         */
+/*  meaning is introduced (RULE-007 untouched).                               */
+/* -------------------------------------------------------------------------- */
+const MOTIF_EN: Record<string, string> = {
+  "龙": "dragon",
+  "虎": "tiger",
+  "昆虫": "insect",
+  "花鸟": "flowers and birds",
+  "花草": "flowers and grasses",
+  "鸟雀": "small birds",
+  "龙鱼": "dragon-fish",
+  "蝴蝶": "butterfly",
+};
+
+/* -------------------------------------------------------------------------- */
+/*  Craft → visual language (design translation of documented crafts)         */
+/*                                                                             */
+/*  The crafts below are KB-verbatim (crafts.json). Translating a documented  */
+/*  craft into its rendering vocabulary is design translation, NOT cultural   */
+/*  invention — the same rule that lets Stage 3 describe a craft to the       */
+/*  customer. Unknown crafts fall back to the honest generic term.           */
+/* -------------------------------------------------------------------------- */
+const CRAFT_VISUAL: { match: RegExp; visual: string }[] = [
+  { match: /拉丝/, visual: "drawn-silver wire filigree openwork, delicate twisted-wire construction" },
+  { match: /錾花|錾刻/, visual: "chased and engraved surface detail, fine relief lines worked into the silver" },
+  { match: /捶打|锤錾/, visual: "hand-hammered surface texture with visible planishing marks" },
+  { match: /压花/, visual: "pressed relief pattern work" },
+  { match: /编结|编花/, visual: "woven and braided silver strands" },
+  { match: /焊接|焊花/, visual: "soldered granulation, tiny silver beads fused onto the surface" },
+  { match: /熔炼|铸炼/, visual: "cast silver body with solid sculptural weight" },
+  { match: /洗涤|洗亮/, visual: "brightly polished finish" },
+];
+
+function craftVisualLanguage(craftName: string): string {
+  for (const { match, visual } of CRAFT_VISUAL) {
+    if (match.test(craftName)) return visual;
+  }
+  return "traditional hand-forged silver workmanship";
+}
+/* -------------------------------------------------------------------------- */
 /*  Controlled visual vocabulary (design translation, NOT cultural claims)     */
 /* -------------------------------------------------------------------------- */
 
@@ -323,17 +391,26 @@ export function buildImagePrompt(
   /* ---- Assemble the prompt body (Layer 3) ----
      Order mirrors the data flow: the confirmed design first, the cultural
      boundary last, so the model reads the piece before its constraints. */
+  const productNoun = PRODUCT_NOUN[form.product_type] ?? form.product_type;
+  const regionAnchor = REGION_ANCHOR["miao"] ?? "";
+
   const segments: string[] = [
-    `${vision.camera}, ${ARRANGEMENT_TEXT[form.arrangement]} ${form.product_type} in ${FINISH_TEXT[material.finish]}`,
+    `${vision.camera}, ${ARRANGEMENT_TEXT[form.arrangement]} ${productNoun} in ${FINISH_TEXT[material.finish]}`,
+    `genuine metal silver surface with realistic metallic reflections and subtle tarnish accents`,
     `${THICKNESS_TEXT[form.thickness]}, ${SCALE_TEXT[form.scale]}`,
-    `${FINENESS_TEXT[craft.fineness]} showing ${craft.primary} craftsmanship`,
+    `${FINENESS_TEXT[craft.fineness]} — ${craftVisualLanguage(craft.primary)} (${craft.primary} in the Guizhou Miao silversmith tradition)`,
     `${TIER_VISUAL_LANGUAGE[vision.visual_style]}`,
   ];
 
+  if (regionAnchor) {
+    segments.push(regionAnchor);
+  }
+
   if (motif !== null) {
     const coverage = COVERAGE_TEXT[form.coverage];
+    const motifEn = MOTIF_EN[motif.name] ?? motif.name;
     segments.push(
-      `featuring the documented motif "${motif.name}" as its visual subject, ${coverage}`,
+      `featuring the documented motif "${motif.name}" (${motifEn}) as its single visual subject, ${coverage}, rendered in the same hand-wrought silver style`,
     );
   } else {
     segments.push("pure form-led design without any motif");

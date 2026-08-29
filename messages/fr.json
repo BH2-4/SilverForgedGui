@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "SILVER FUTURE — Studio de Design Global",
+    "title": "Silver Forged Gui — Studio de Design Global",
     "description": "Plateforme de co-création mondiale de bijoux en argent du Guizhou, propulsée par l'IA. Racontez-nous l'histoire que votre argent doit raconter."
   },
   "common": {
@@ -48,23 +48,43 @@
       "engineDerived": "Généré par le moteur · déterministe"
     },
     "stages": {
+      "interview": "00 · Entretien mémoire",
       "globalDemand": "01 · Demande Globale",
       "culturalMatch": "02 · Match Culturel",
       "designTranslation": "03 · Traduction de Design",
       "designProposal": "04 · Proposition personnalisée",
       "designRender": "05 · Rendu de design"
     },
-    "navAria": "Étapes du pipeline"
+    "navAria": "Étapes du pipeline",
+    "collectionLabel": "La Collection"
   },
   "home": {
     "coCreationNote": "Co-création mondiale · V1",
     "chapterLabel": "Un nouveau chapitre de l'argent",
     "title1": "Ne pas vendre l'argent au monde.",
     "title2": "Laisser le monde le dessiner.",
-    "intro": "SILVER FUTURE est une plateforme de co-création des bijoux en argent du Guizhou, propulsée par l'IA. Le goût mondial rencontre l'héritage Miao — réinventé par un design intelligent.",
+    "intro": "Silver Future est un atelier numérique de co-création des bijoux en argent du Guizhou, propulsé par l'IA. Le goût mondial rencontre l'héritage Miao — réinventé par un design intelligent.",
     "engineNote": "Moteur de Demande Globale · V1",
     "footer1": "Guizhou · Argent Miao · Réinventé",
-    "footer2": "© 2026 SILVER FUTURE — Prototype"
+    "footer2": "© 2026 Silver Future — Prototype",
+    "exploreProcess": "Explorer le processus",
+    "processTitle": "Les cinq étapes",
+    "processSub": "De votre histoire à un argent que vous porterez.",
+    "stageEnter": "Entrer",
+    "act2Label": "Chapitre un · Héritage",
+    "act2Title": "De l'héritage, à la possibilité.",
+    "act2Body": "L'argent Miao du Guizhou — des siècles de forge. Nous refusons de le laisser derrière la vitrine d'un musée. Nous l'invitons dans une conversation de design contemporain.",
+    "act3Label": "Chapitre deux · Matière",
+    "act3Title": "L'argent est un métal qui a une mémoire.",
+    "act3Body": "Filigrane, ciselure, martelage — chaque technique laisse sa trace sur la surface. Approchez-vous : la matière elle-même devient langage de design.",
+    "act4Label": "Chapitre trois · Culture",
+    "act4Title": "La culture n'est pas une décoration.",
+    "act4Body": "Chaque motif a une source. Chaque savoir-faire a un gardien. Notre base culturelle refuse l'invention — seuls les éléments enregistrés et vérifiés entrent dans votre design.",
+    "act5Label": "Chapitre quatre · Mémoire",
+    "act5Title": "Votre mémoire devient forme.",
+    "act5Body": "Un voyage, un nom, un adieu. Apportez-le à l'atelier — l'IA et la culture le forgeront en un argent que vous porterez.",
+    "shopCollection": "Voir la collection",
+    "shopCollectionHint": "Pas envie de personnaliser ? Découvrez nos pièces existantes — demande ou achat →"
   },
   "globalDemand": {
     "studioEyebrow": "Studio de Design Global",
@@ -105,7 +125,7 @@
     "avoidLabel": "Éviter",
     "whatComesNextLabel": "Prochaine étape",
     "whatComesNextTitle": "Votre brief de design est prêt.",
-    "whatComesNextBody": "Ensuite, SILVER FUTURE reliera vos préférences à la connaissance culturelle du Guizhou — en faisant correspondre motifs, matériaux et lignées qui résonnent avec votre intention.",
+    "whatComesNextBody": "Ensuite, Silver Forged Gui reliera vos préférences à la connaissance culturelle du Guizhou — en faisant correspondre motifs, matériaux et lignées qui résonnent avec votre intention.",
     "stage2Ready": "Étape 2 · Moteur de Match Culturel · Prêt",
     "errors": {
       "analysisInterrupted": "L'analyse a été interrompue",

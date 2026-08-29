@@ -1,136 +1,463 @@
 "use client";
 
+import { useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
-import { SectionLabel } from "@/components/shared/SectionLabel";
-import { MotionReveal } from "@/components/visual/MotionReveal";
+import { motion, useScroll, useTransform } from "motion/react";
 import { useI18n } from "@/components/i18n/I18nProvider";
+import { MotionReveal } from "@/components/visual/MotionReveal";
+import { COLLECTION_URL } from "@/lib/collection-url";
 
 /**
- * HOME — the entrance to the atelier.
+ * HOME — SILVER FUTURE · DIGITAL SILVER ATELIER
  *
- * Rebuilt as an asymmetric editorial composition (55 / 45 on desktop):
- * left column holds the type, right column holds a floating "spatial
- * signature" — a hairline diagram of the six-stage journey that reads
- * as an object in the space, not a decoration.
+ * 五幕滚动叙事：滚动不是"向下移动页面"，而是"控制设计过程"。
  *
- * The composition uses the shared spatial-motion primitives from
- * globals.css and MotionReveal; no business logic is touched.
+ *   ACT 1  SILVER FUTURE        银饰静置于黑暗展厅（视觉主角，45–65vh）
+ *   ACT 2  FROM HERITAGE        银饰靠近——scale 随滚动增长
+ *   ACT 3  MATERIAL & CRAFT     银的局部放大（花丝/錾刻质感）
+ *   ACT 4  CULTURE              文化来源（档案馆意象）
+ *   ACT 5  YOUR MEMORY          纯黑，记忆成为形——进入 Stage 0
+ *
+ * 每幕一个视觉主角（ONE HERO OBJECT），由 useScroll 驱动缓动
+ * transform；所有动效 slow / precise / cinematic。移动端与
+ * prefers-reduced-motion 自动退化为静态排版（MotionReveal 兜底）。
+ *
+ * 图片资产为博物馆展陈语境的贵州苗银摄影级呈现——只作为氛围与
+ * 品牌视觉，不代表任何具体文化结论。
  */
+
+const STAGES = [
+  {
+    code: "00",
+    href: "/design-interview",
+    titleKey: "common.stages.interview",
+    subKey: "interview.intro",
+  },
+  {
+    code: "01",
+    href: "/global-design",
+    titleKey: "common.stages.globalDemand",
+    subKey: "globalDemand.headerSubtitle",
+  },
+  {
+    code: "02",
+    href: "/cultural-match",
+    titleKey: "common.stages.culturalMatch",
+    subKey: "culturalMatch.headerSubtitle",
+  },
+  {
+    code: "03",
+    href: "/design-translation",
+    titleKey: "common.stages.designTranslation",
+    subKey: "designTranslation.headerSubtitle",
+  },
+  {
+    code: "04",
+    href: "/design-proposal",
+    titleKey: "common.stages.designProposal",
+    subKey: "designProposal.headerSubtitle",
+  },
+  {
+    code: "05",
+    href: "/design-render",
+    titleKey: "common.stages.designRender",
+    subKey: "designRender.headerSubtitle",
+  },
+] as const;
+
 export default function Home() {
   const { t } = useI18n();
 
   return (
-    <main className="relative min-h-dvh">
-      <div className="mx-auto flex min-h-dvh max-w-6xl flex-col px-6 py-8 sm:px-10 lg:px-14">
-        <header className="flex items-center justify-between">
-          <div className="flex items-baseline gap-3">
-            <span className="text-[13px] tracking-[0.32em] text-[var(--color-silver-200)]">
-              SILVER
-            </span>
-            <span className="text-[13px] tracking-[0.32em] text-[var(--color-silver-400)]">
-              FUTURE
-            </span>
-          </div>
-          <span className="eyebrow hidden sm:inline">{t("home.coCreationNote")}</span>
-        </header>
-
-        <section className="relative flex flex-1 flex-col justify-center py-20 lg:py-28">
-          <div className="grid gap-16 lg:grid-cols-[1.15fr_1fr] lg:items-center lg:gap-24">
-            {/* --- Left column: editorial title stack ------------------- */}
-            <MotionReveal
-              as="div"
-              className="flex max-w-2xl flex-col gap-8 lg:pr-4"
-            >
-              <SectionLabel>{t("home.chapterLabel")}</SectionLabel>
-              <h1 className="type-display">
-                {t("home.title1")}
-                <br />
-                <span className="text-[var(--color-silver-400)]">
-                  {t("home.title2")}
-                </span>
-              </h1>
-              <p className="type-body max-w-xl">{t("home.intro")}</p>
-
-              <div className="mt-6 flex flex-wrap items-center gap-5">
-                <Link
-                  href="/design-interview"
-                  className="group depth-lift inline-flex items-center gap-3 rounded-full border border-[var(--color-line-strong)] bg-[linear-gradient(180deg,var(--color-silver-100),var(--color-silver-300))] px-7 py-3.5 text-[13px] font-medium tracking-[0.14em] text-[var(--color-bg)] uppercase hover:brightness-105 active:scale-[0.98]"
-                >
-                  {t("common.actions.enterStudio")}
-                  <ArrowUpRight
-                    className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                    strokeWidth={1.5}
-                  />
-                </Link>
-                <span className="eyebrow">{t("home.engineNote")}</span>
-              </div>
-            </MotionReveal>
-
-            {/* --- Right column: the spatial signature -----------------
-                A hairline object that "floats" beside the title. It is
-                the six-stage journey, drawn as one continuous vertical
-                spine so the eye reads it as a diagram in the space,
-                not decoration. All labels come from i18n. */}
-            <MotionReveal
-              as="aside"
-              delay={220}
-              className="relative hidden lg:block"
-            >
-              <div
-                className="glass-panel depth-object relative overflow-hidden rounded-[var(--radius-lg)] px-9 py-10"
-                aria-hidden
-              >
-                {/* Soft top rim + vertical spine — the only ornamentation. */}
-                <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-[var(--color-line-strong)] to-transparent" />
-                <span
-                  className="absolute top-16 bottom-16 left-9 w-px bg-gradient-to-b from-transparent via-[var(--color-line-strong)] to-transparent"
-                  aria-hidden
-                />
-                <ol className="relative flex flex-col gap-6 pl-10">
-                  {[
-                    { i: "01", key: "common.stages.globalDemand" },
-                    { i: "02", key: "common.stages.culturalMatch" },
-                    { i: "03", key: "common.stages.designTranslation" },
-                    { i: "04", key: "common.stages.designProposal" },
-                    { i: "05", key: "common.stages.designRender" },
-                  ].map((row, index) => (
-                    <li
-                      key={row.i}
-                      className="relative flex items-center gap-6"
-                    >
-                      <span
-                        aria-hidden
-                        className="absolute -left-[41px] top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-[var(--color-silver-500)]"
-                        style={{
-                          background:
-                            index === 4
-                              ? "var(--color-accent)"
-                              : "var(--color-silver-500)",
-                        }}
-                      />
-                      <span className="font-mono text-[10px] tracking-[0.22em] text-[var(--color-silver-600)] uppercase">
-                        {row.i}
-                      </span>
-                      <span className="text-[13px] tracking-[0.06em] text-[var(--color-silver-200)]">
-                        {t(row.key).replace(/^\d+\s*·\s*/, "")}
-                      </span>
-                    </li>
-                  ))}
-                </ol>
-                <div className="mt-10 flex items-center gap-3 pt-6 border-t border-[var(--color-line)]">
-                  <span className="type-meta">{t("home.footer1")}</span>
-                </div>
-              </div>
-            </MotionReveal>
-          </div>
-        </section>
-
-        <footer className="flex flex-col gap-4 border-t border-[var(--color-line)] pt-6 text-[11px] tracking-[0.14em] text-[var(--color-silver-500)] uppercase sm:flex-row sm:items-center sm:justify-between">
-          <span>{t("home.footer1")}</span>
-          <span>{t("home.footer2")}</span>
-        </footer>
-      </div>
+    <main className="relative">
+      <ActOne />
+      <ActTwo />
+      <ActThree />
+      <ActFour />
+      <ActFive />
+      <ProcessIndex />
+      <AtelierFooter />
+      <span className="sr-only">{t("home.coCreationNote")}</span>
     </main>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*  ACT 1 — SILVER FUTURE · 银饰静置于黑暗展厅                                */
+/* -------------------------------------------------------------------------- */
+
+function ActOne() {
+  const { t } = useI18n();
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+
+  /* 滚动 → 银饰靠近（scale 1→1.3）+ 标题退场 */
+  const pieceScale = useTransform(scrollYProgress, [0, 1], [1, 1.3]);
+  const pieceY = useTransform(scrollYProgress, [0, 1], ["0%", "10%"]);
+  const titleOpacity = useTransform(scrollYProgress, [0, 0.55], [1, 0]);
+  const titleY = useTransform(scrollYProgress, [0, 0.55], [0, -40]);
+  const glowOpacity = useTransform(scrollYProgress, [0, 1], [1, 0.4]);
+
+  return (
+    <section ref={ref} className="relative h-[165vh]">
+      <div className="sticky top-0 flex h-dvh flex-col items-center justify-center overflow-hidden">
+        {/* 展厅光 —— 银饰周围的极微弱空间光 */}
+        <motion.div
+          aria-hidden
+          style={{ opacity: glowOpacity }}
+          className="pointer-events-none absolute inset-0"
+        >
+          <div
+            className="absolute left-1/2 top-1/2 h-[70vmin] w-[70vmin] -translate-x-1/2 -translate-y-1/2"
+            style={{
+              background:
+                "radial-gradient(closest-side, rgba(231,226,211,0.09), transparent 72%)",
+            }}
+          />
+        </motion.div>
+
+        {/* 视觉主角 —— 贵州苗银项圈，占 viewport 45–65% */}
+        <motion.div
+          data-motion-scroll=""
+          style={{ scale: pieceScale, y: pieceY }}
+          className="exhibition-plinth relative z-10"
+        >
+          <div
+            className="relative h-[52vmin] w-[52vmin] sm:h-[58vmin] sm:w-[58vmin]"
+            style={{
+              maskImage:
+                "radial-gradient(closest-side, black 62%, transparent 98%)",
+              WebkitMaskImage:
+                "radial-gradient(closest-side, black 62%, transparent 98%)",
+            }}
+          >
+            <Image
+              src="/atelier/hero-silver.jpg"
+              alt={t("home.chapterLabel")}
+              fill
+              priority
+              sizes="(min-width: 1024px) 60vmin, 90vw"
+              className="object-contain"
+            />
+          </div>
+        </motion.div>
+
+        {/* 标题 —— 巨字沉在银饰之后 */}
+        <motion.div
+          style={{ opacity: titleOpacity, y: titleY }}
+          className="pointer-events-none absolute inset-0 z-0 flex flex-col items-center justify-end pb-16 sm:pb-20"
+        >
+          <h1 className="type-display text-center">
+            Silver
+            <br />
+            Future
+          </h1>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*  ACT 2 — FROM HERITAGE, TO POSSIBILITY · 银饰靠近                            */
+/* -------------------------------------------------------------------------- */
+
+function ActTwo() {
+  const { t } = useI18n();
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+
+  const imgScale = useTransform(scrollYProgress, [0.1, 0.9], [1.14, 1.34]);
+  const imgX = useTransform(scrollYProgress, [0.1, 0.9], ["8%", "-6%"]);
+  const textOpacity = useTransform(scrollYProgress, [0.22, 0.45, 0.75, 0.95], [0, 1, 1, 0]);
+  const textY = useTransform(scrollYProgress, [0.22, 0.95], [40, -40]);
+
+  return (
+    <section ref={ref} className="relative h-[170vh]">
+      <div className="sticky top-0 flex h-dvh items-center overflow-hidden">
+        {/* 银饰持续放大 —— 已进入局部 */}
+        <motion.div
+          data-motion-scroll=""
+          style={{ scale: imgScale, x: imgX }}
+          className="absolute inset-0 flex items-center justify-center"
+        >
+          <div
+            className="relative h-[86vmin] w-[86vmin]"
+            style={{
+              maskImage:
+                "radial-gradient(closest-side, black 46%, transparent 96%)",
+              WebkitMaskImage:
+                "radial-gradient(closest-side, black 46%, transparent 96%)",
+            }}
+          >
+            <Image
+              src="/atelier/hero-silver.jpg"
+              alt=""
+              aria-hidden
+              fill
+              sizes="90vw"
+              className="object-cover"
+            />
+          </div>
+        </motion.div>
+
+        {/* 左侧文字 —— 不对称排版 */}
+        <motion.div
+          style={{ opacity: textOpacity, y: textY }}
+          className="relative z-10 mx-auto w-full max-w-[1400px] px-8 sm:px-12 lg:px-16"
+        >
+          <div className="max-w-xl">
+            <span className="act-label">{t("home.act2Label")}</span>
+            <h2 className="act-title mt-5">{t("home.act2Title")}</h2>
+            <p className="act-body mt-6 max-w-md">{t("home.act2Body")}</p>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*  ACT 3 — MATERIAL & CRAFT · 银的局部（花丝 / 錾刻 / 锻打）                   */
+/* -------------------------------------------------------------------------- */
+
+function ActThree() {
+  const { t } = useI18n();
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+
+  const imgScale = useTransform(scrollYProgress, [0.1, 0.9], [1.06, 1.18]);
+  const imgOpacity = useTransform(scrollYProgress, [0.05, 0.3, 0.8, 0.98], [0, 1, 1, 0.2]);
+  const textOpacity = useTransform(scrollYProgress, [0.28, 0.5, 0.78, 0.95], [0, 1, 1, 0]);
+
+  return (
+    <section ref={ref} className="relative h-[170vh]">
+      <div className="sticky top-0 h-dvh overflow-hidden">
+        {/* 材质局部 —— 全幅，慢速放大 */}
+        <motion.div data-motion-scroll="" style={{ scale: imgScale, opacity: imgOpacity }} className="absolute inset-0">
+          <div
+            className="absolute inset-0"
+            style={{
+              maskImage:
+                "radial-gradient(120% 90% at 50% 50%, black 40%, transparent 92%)",
+              WebkitMaskImage:
+                "radial-gradient(120% 90% at 50% 50%, black 40%, transparent 92%)",
+            }}
+          >
+            <Image
+              src="/atelier/detail-silver.jpg"
+              alt=""
+              aria-hidden
+              fill
+              sizes="100vw"
+              className="object-cover"
+            />
+          </div>
+          {/* 压暗层 —— 保证文字可读 */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,0.78),rgba(0,0,0,0.25)_55%,rgba(0,0,0,0.55))]" />
+        </motion.div>
+
+        {/* 文字 —— 居中沉底 */}
+        <motion.div
+          style={{ opacity: textOpacity }}
+          className="relative z-10 mx-auto flex h-full max-w-[1400px] flex-col items-start justify-end px-8 pb-24 sm:px-12 lg:px-16"
+        >
+          <div className="max-w-xl">
+            <span className="act-label">{t("home.act3Label")}</span>
+            <h2 className="act-title mt-5">{t("home.act3Title")}</h2>
+            <p className="act-body mt-6 max-w-md">{t("home.act3Body")}</p>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*  ACT 4 — CULTURE IS NOT DECORATION · 文化档案馆                             */
+/* -------------------------------------------------------------------------- */
+
+function ActFour() {
+  const { t } = useI18n();
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+
+  const imgX = useTransform(scrollYProgress, [0.1, 0.9], ["-6%", "6%"]);
+  const imgOpacity = useTransform(scrollYProgress, [0.05, 0.3, 0.8, 0.98], [0, 1, 1, 0.2]);
+  const textOpacity = useTransform(scrollYProgress, [0.28, 0.5, 0.78, 0.95], [0, 1, 1, 0]);
+
+  return (
+    <section ref={ref} className="relative h-[170vh]">
+      <div className="sticky top-0 h-dvh overflow-hidden">
+        {/* 文化银冠 —— 侧向缓移（视差） */}
+        <motion.div data-motion-scroll="" style={{ x: imgX, opacity: imgOpacity }} className="absolute inset-0">
+          <div
+            className="absolute inset-0"
+            style={{
+              maskImage:
+                "radial-gradient(110% 85% at 50% 50%, black 42%, transparent 94%)",
+              WebkitMaskImage:
+                "radial-gradient(110% 85% at 50% 50%, black 42%, transparent 94%)",
+            }}
+          >
+            <Image
+              src="/atelier/culture-silver.jpg"
+              alt=""
+              aria-hidden
+              fill
+              sizes="100vw"
+              className="object-cover"
+            />
+          </div>
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.82),rgba(0,0,0,0.3)_50%,rgba(0,0,0,0.66))]" />
+        </motion.div>
+
+        {/* 文字 —— 右侧 */}
+        <motion.div
+          style={{ opacity: textOpacity }}
+          className="relative z-10 mx-auto flex h-full max-w-[1400px] items-center px-8 sm:px-12 lg:px-16"
+        >
+          <div className="ml-auto max-w-xl text-left">
+            <span className="act-label">{t("home.act4Label")}</span>
+            <h2 className="act-title mt-5">{t("home.act4Title")}</h2>
+            <p className="act-body mt-6 max-w-md">{t("home.act4Body")}</p>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*  ACT 5 — YOUR MEMORY BECOMES FORM · 进入工坊                                */
+/* -------------------------------------------------------------------------- */
+
+function ActFive() {
+  const { t } = useI18n();
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end end"],
+  });
+
+  const textOpacity = useTransform(scrollYProgress, [0.15, 0.45], [0, 1]);
+  const textY = useTransform(scrollYProgress, [0.15, 0.6], [60, 0]);
+  const textScale = useTransform(scrollYProgress, [0.15, 0.6], [0.97, 1]);
+
+  return (
+    <section ref={ref} className="relative flex min-h-dvh items-center">
+      <motion.div
+        data-motion-scroll=""
+        style={{ opacity: textOpacity, y: textY, scale: textScale }}
+        className="mx-auto w-full max-w-[1400px] px-8 py-32 sm:px-12 lg:px-16"
+      >
+        <div className="mx-auto flex max-w-2xl flex-col items-center text-center">
+          <span className="act-label">{t("home.act5Label")}</span>
+          <h2 className="act-title mt-6">{t("home.act5Title")}</h2>
+          <p className="act-body mt-7 max-w-md">{t("home.act5Body")}</p>
+          <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
+            <Link href="/design-interview" className="btn-pill btn-pill-primary">
+              {t("common.actions.enterStudio")}
+              <ArrowUpRight className="h-4 w-4" strokeWidth={1.5} />
+            </Link>
+            {/* 成品直购线 —— 跳转独立站，与定制线并行 */}
+            <a
+              href={COLLECTION_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-pill btn-pill-secondary"
+            >
+              {t("home.shopCollection")}
+              <ArrowUpRight className="h-4 w-4" strokeWidth={1.5} />
+            </a>
+          </div>
+          <a
+            href="#process"
+            className="mt-8 text-[12px] tracking-[0.18em] text-[var(--color-silver-500)] uppercase underline decoration-[var(--color-line-strong)] underline-offset-8 transition-colors duration-300 hover:text-[var(--color-silver-300)]"
+          >
+            {t("home.exploreProcess")}
+          </a>
+        </div>
+      </motion.div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*  PROCESS INDEX · 五段流程索引（编辑式目录，非卡片）                          */
+/* -------------------------------------------------------------------------- */
+
+function ProcessIndex() {
+  const { t } = useI18n();
+
+  return (
+    <section
+      id="process"
+      className="mx-auto max-w-[1400px] px-8 pb-32 sm:px-12 lg:px-16"
+    >
+      <MotionReveal as="div" className="flex flex-col gap-6 pb-16">
+        <span className="act-label">{t("home.processTitle")}</span>
+        <h2 className="act-title max-w-3xl">{t("home.processSub")}</h2>
+      </MotionReveal>
+
+      <div className="flex flex-col">
+        {STAGES.map((s, i) => (
+          <MotionReveal key={s.code} as="div" delay={i * 60}>
+            <Link
+              href={s.href}
+              className="group relative flex flex-col gap-3 border-t border-[var(--color-line)] py-9 transition-colors duration-500 last:border-b hover:border-[var(--color-line-strong)] sm:flex-row sm:items-center sm:justify-between sm:py-10"
+            >
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:gap-10">
+                <span className="font-mono text-[13px] tracking-[0.14em] text-[var(--color-silver-600)] transition-colors duration-500 group-hover:text-[var(--color-silver-300)]">
+                  {s.code}
+                </span>
+                <h3 className="text-[24px] font-semibold tracking-[-0.02em] text-[var(--color-ivory)] transition-transform duration-500 group-hover:translate-x-1.5 sm:text-[30px]">
+                  {t(s.titleKey).replace(/^\d+\s*·\s*/, "")}
+                </h3>
+              </div>
+              <div className="flex items-center gap-8 sm:gap-12">
+                <p className="hidden max-w-sm text-[13px] leading-relaxed text-[var(--color-silver-500)] lg:block">
+                  {t(s.subKey)}
+                </p>
+                <ArrowUpRight
+                  className="h-4 w-4 shrink-0 text-[var(--color-silver-500)] transition-all duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[var(--color-ivory)]"
+                  strokeWidth={1.5}
+                />
+              </div>
+            </Link>
+          </MotionReveal>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*  FOOTER                                                                     */
+/* -------------------------------------------------------------------------- */
+
+function AtelierFooter() {
+  const { t } = useI18n();
+  return (
+    <footer className="border-t border-[var(--color-line)]">
+      <div className="mx-auto flex max-w-[1400px] flex-col gap-3 px-8 py-10 text-[12px] tracking-[0.08em] text-[var(--color-silver-600)] sm:flex-row sm:items-center sm:justify-between sm:px-12 lg:px-16">
+        <span>{t("home.footer1")}</span>
+        <span>{t("home.footer2")}</span>
+      </div>
+    </footer>
   );
 }

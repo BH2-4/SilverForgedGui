@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { ArrowRight, MessageCircleQuestion } from "lucide-react";
@@ -38,7 +38,7 @@ export function ClarificationDialog({
         <SectionLabel>{t("globalDemand.clarificationLabel")}</SectionLabel>
       </div>
 
-      <h2 className="font-editorial max-w-2xl text-4xl leading-[1.1] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-5xl">
+      <h2 className="font-sans max-w-2xl text-[28px] leading-[1.1] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[32px]">
         {question.question}
       </h2>
 

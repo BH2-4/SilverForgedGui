@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
@@ -169,7 +169,7 @@ export function ProposalStudio() {
           {ASSEMBLING_STAGE_KEYS.map((key, i) => (
             <li key={key} className="flex items-center gap-5">
               <span
-                className={`font-editorial text-[20px] leading-[1.2] tracking-[-0.005em] sm:text-[22px] ${i <= stage
+                className={`font-sans text-[18px] leading-[1.2] tracking-[-0.005em] sm:text-[20px] ${i <= stage
                   ? "text-[var(--color-ivory)]"
                   : "text-[var(--color-silver-600)]"
                   }`}
@@ -190,7 +190,7 @@ export function ProposalStudio() {
     return (
       <div className="animate-fade-in flex flex-1 flex-col items-start justify-center gap-8 py-16">
         <SectionLabel>{t("designProposal.emptyLabel")}</SectionLabel>
-        <h2 className="font-editorial max-w-2xl text-4xl leading-[1.1] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-5xl">
+        <h2 className="font-sans max-w-2xl text-[28px] leading-[1.1] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[32px]">
           {t("designProposal.emptyTitle")}
         </h2>
         <p className="max-w-md text-[14px] leading-relaxed text-[var(--color-silver-400)]">
@@ -222,7 +222,7 @@ export function ProposalStudio() {
             strokeWidth={1.5}
           />
           <div className="flex-1">
-            <div className="mb-1 text-[11px] tracking-[0.14em] text-red-300/70 uppercase">
+            <div className="mb-1 text-[12px] tracking-[0.14em] text-red-300/70 uppercase">
               {t("designProposal.errorInterrupted")}
             </div>
             <div>{tApiError(phase.code, phase.message)}</div>

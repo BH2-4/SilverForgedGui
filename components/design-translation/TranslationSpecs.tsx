@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { SectionLabel } from "@/components/shared/SectionLabel";
 import { useI18n } from "@/components/i18n/I18nProvider";
@@ -73,7 +73,7 @@ export function TranslationSpecs({ brief }: TranslationSpecsProps) {
     <section className="flex flex-col gap-8">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <SectionLabel>{t("designTranslation.specsLabel")}</SectionLabel>
-        <span className="text-[10px] tracking-[0.22em] text-[var(--color-silver-600)] uppercase">
+        <span className="text-[11px] tracking-[0.22em] text-[var(--color-silver-600)] uppercase">
           {t("common.badges.engineDerived")}
         </span>
       </div>
@@ -85,15 +85,15 @@ export function TranslationSpecs({ brief }: TranslationSpecsProps) {
               key={row.label}
               className="grid grid-cols-1 gap-3 px-8 py-6 sm:grid-cols-[180px_1fr] sm:gap-8 sm:px-10"
             >
-              <dt className="text-[10px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase sm:pt-1">
+              <dt className="text-[11px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase sm:pt-1">
                 {row.label}
               </dt>
               <dd className="flex flex-col gap-2">
-                <span className="font-editorial text-[19px] leading-[1.3] tracking-[-0.005em] text-[var(--color-ivory)]">
+                <span className="font-sans text-[19px] leading-[1.3] tracking-[-0.005em] text-[var(--color-ivory)]">
                   {row.value}
                 </span>
                 {row.note && (
-                  <span className="text-[11px] leading-relaxed text-[var(--color-silver-500)]">
+                  <span className="text-[12px] leading-relaxed text-[var(--color-silver-500)]">
                     {row.note}
                   </span>
                 )}

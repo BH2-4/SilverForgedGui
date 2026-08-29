@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -53,10 +53,10 @@ export function ProposalActions({
 
   if (confirmed) {
     return (
-      <section className="glass-panel flex flex-col gap-8 rounded-[var(--radius-lg)] p-8 sm:p-10">
+      <section className="exhibition-emerge flex flex-col gap-8 border-t border-[var(--color-line-strong)] py-10">
         <SectionLabel>{t("designProposal.confirmedLabel")}</SectionLabel>
         <div className="flex flex-col gap-4">
-          <h3 className="font-editorial text-3xl leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-4xl">
+          <h3 className="font-sans text-[24px] leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[28px]">
             {t("designProposal.confirmedTitle")}
           </h3>
           <p className="max-w-2xl text-[14px] leading-relaxed text-[var(--color-silver-300)]">
@@ -78,7 +78,7 @@ export function ProposalActions({
           <button
             type="button"
             onClick={() => router.push("/design-render")}
-            className="group inline-flex items-center gap-3 rounded-full border border-[var(--color-line-strong)] bg-[linear-gradient(180deg,var(--color-silver-100),var(--color-silver-300))] px-6 py-3 text-[12px] font-medium tracking-[0.14em] text-[var(--color-bg)] uppercase transition-all duration-300 hover:brightness-105 active:scale-[0.97]"
+            className="btn-pill btn-pill-primary px-7 py-3 text-[12px]"
           >
             {t("designProposal.actions.continueToRender")}
             <ArrowRight
@@ -92,10 +92,10 @@ export function ProposalActions({
   }
 
   return (
-    <section className="glass-panel flex flex-col gap-8 rounded-[var(--radius-lg)] p-8 sm:p-10">
+    <section className="exhibition-emerge flex flex-col gap-8 border-t border-[var(--color-line-strong)] py-10">
       <SectionLabel>{t("designProposal.actionsLabel")}</SectionLabel>
       <div className="flex flex-col gap-4">
-        <h3 className="font-editorial text-3xl leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-4xl">
+        <h3 className="font-sans text-[24px] leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[28px]">
           {t("designProposal.actionsTitle")}
         </h3>
       </div>
@@ -103,18 +103,18 @@ export function ProposalActions({
         <button
           type="button"
           onClick={onConfirm}
-          className="group inline-flex items-center justify-between gap-3 rounded-full border border-[var(--color-line-strong)] bg-[rgba(231,226,211,0.06)] px-7 py-4 text-left transition-colors hover:border-[var(--color-accent)]"
+          className="group inline-flex items-center justify-between gap-3 rounded-[2px] border border-[rgba(245,245,247,0.38)] bg-[var(--color-ivory)] px-7 py-4 text-left transition-all duration-500 hover:bg-[var(--color-silver-200)]"
         >
           <span className="flex flex-col gap-1">
-            <span className="text-[13px] font-medium tracking-[0.1em] text-[var(--color-ivory)]">
+            <span className="text-[13px] font-medium tracking-[0.1em] text-[var(--color-bg)]">
               {t("designProposal.actions.confirm")}
             </span>
-            <span className="text-[11px] leading-relaxed text-[var(--color-silver-500)]">
+            <span className="text-[12px] leading-relaxed text-[var(--color-silver-500)]">
               {t("designProposal.actions.confirmHint")}
             </span>
           </span>
           <ArrowRight
-            className="h-4 w-4 shrink-0 text-[var(--color-silver-400)] transition-colors group-hover:text-[var(--color-accent)]"
+            className="h-4 w-4 shrink-0 text-[var(--color-silver-600)] transition-transform duration-500 group-hover:translate-x-0.5"
             strokeWidth={1.5}
           />
         </button>
@@ -122,7 +122,7 @@ export function ProposalActions({
           <button
             type="button"
             onClick={() => router.push("/design-translation")}
-            className="group inline-flex flex-1 items-center gap-3 rounded-full border border-[var(--color-line)] px-6 py-3.5 text-left transition-colors hover:border-[var(--color-silver-400)]"
+            className="group inline-flex flex-1 items-center gap-3 rounded-[2px] border border-[var(--color-line)] px-6 py-3.5 text-left transition-colors duration-500 hover:border-[rgba(245,245,247,0.22)] hover:bg-[rgba(245,245,247,0.03)]"
           >
             <SlidersHorizontal
               className="h-4 w-4 shrink-0 text-[var(--color-silver-500)]"
@@ -132,7 +132,7 @@ export function ProposalActions({
               <span className="text-[12px] font-medium tracking-[0.1em] text-[var(--color-silver-200)]">
                 {t("designProposal.actions.adjust")}
               </span>
-              <span className="text-[11px] leading-relaxed text-[var(--color-silver-500)]">
+              <span className="text-[12px] leading-relaxed text-[var(--color-silver-500)]">
                 {t("designProposal.actions.adjustHint")}
               </span>
             </span>
@@ -147,7 +147,7 @@ export function ProposalActions({
               }
               router.push("/cultural-match");
             }}
-            className="group inline-flex flex-1 items-center gap-3 rounded-full border border-[var(--color-line)] px-6 py-3.5 text-left transition-colors hover:border-[var(--color-silver-400)]"
+            className="group inline-flex flex-1 items-center gap-3 rounded-[2px] border border-[var(--color-line)] px-6 py-3.5 text-left transition-colors duration-500 hover:border-[rgba(245,245,247,0.22)] hover:bg-[rgba(245,245,247,0.03)]"
           >
             <RotateCcw
               className="h-4 w-4 shrink-0 text-[var(--color-silver-500)]"
@@ -157,14 +157,14 @@ export function ProposalActions({
               <span className="text-[12px] font-medium tracking-[0.1em] text-[var(--color-silver-200)]">
                 {t("designProposal.actions.reexplore")}
               </span>
-              <span className="text-[11px] leading-relaxed text-[var(--color-silver-500)]">
+              <span className="text-[12px] leading-relaxed text-[var(--color-silver-500)]">
                 {t("designProposal.actions.reexploreHint")}
               </span>
             </span>
           </button>
         </div>
       </div>
-      <p className="text-[10px] tracking-[0.22em] text-[var(--color-silver-600)] uppercase">
+      <p className="text-[11px] tracking-[0.22em] text-[var(--color-silver-600)] uppercase">
         {t("designProposal.noImageNote")}
       </p>
     </section>

@@ -1,28 +1,28 @@
 @import "tailwindcss";
 
 @theme {
-  /* Surface */
-  --color-bg: #0a0a0b;
-  --color-surface: #111114;
-  --color-surface-2: #16161a;
-  --color-surface-3: #1c1c22;
+  /* Surface — 纯黑为底，多黑少白。 */
+  --color-bg: #000000;
+  --color-surface: #0a0a0b;
+  --color-surface-2: #131315;
+  --color-surface-3: #1d1d1f;
 
-  /* Silver ramp */
-  --color-silver-100: #f2f2f4;
-  --color-silver-200: #d8d8de;
-  --color-silver-300: #b6b6bf;
-  --color-silver-400: #8a8a93;
-  --color-silver-500: #5c5c66;
-  --color-silver-600: #3c3c42;
-  --color-silver-700: #26262b;
+  /* Apple-style neutral ramp（白→灰）。文字主用 #f5f5f7，辅助 #86868b。 */
+  --color-silver-100: #f5f5f7;
+  --color-silver-200: #e8e8ed;
+  --color-silver-300: #d2d2d7;
+  --color-silver-400: #a1a1a6;
+  --color-silver-500: #86868b;
+  --color-silver-600: #6e6e73;
+  --color-silver-700: #424245;
 
-  --color-ivory: #f5f1e8;
-  --color-highlight: #c9ccd1;
-  --color-accent: #e7e2d3;
+  --color-ivory: #f5f5f7;
+  --color-highlight: #ffffff;
+  --color-accent: #f5f5f7;
 
   /* Borders */
   --color-line: rgba(255, 255, 255, 0.08);
-  --color-line-strong: rgba(255, 255, 255, 0.16);
+  --color-line-strong: rgba(255, 255, 255, 0.14);
 
   /* Fonts */
   --font-sans: var(--font-inter), "Inter", system-ui, -apple-system, "Segoe UI",
@@ -85,12 +85,12 @@
   html {
     background-image: radial-gradient(
         1200px 600px at 80% -10%,
-        rgba(231, 226, 211, 0.06),
+        rgba(231, 226, 211, 0.1),
         transparent 60%
       ),
       radial-gradient(
         900px 500px at -10% 110%,
-        rgba(201, 204, 209, 0.05),
+        rgba(201, 204, 209, 0.08),
         transparent 60%
       );
   }
@@ -109,9 +109,9 @@
   h1,
   h2,
   h3 {
-    font-family: var(--font-editorial);
-    font-weight: 300;
-    letter-spacing: -0.01em;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    letter-spacing: -0.022em;
   }
 }
 
@@ -135,66 +135,108 @@
 
   .glass-panel {
     position: relative;
-    background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.028),
-      rgba(255, 255, 255, 0)
-    );
+    background: var(--color-surface);
     border: 1px solid var(--color-line);
-    backdrop-filter: blur(6px);
-    box-shadow: var(--shadow-object-1);
+    border-radius: 20px;
+    box-shadow: 0 2px 0 rgba(255, 255, 255, 0.04) inset,
+      0 8px 24px -16px rgba(0, 0, 0, 0.85);
     transition:
       transform var(--dur-hover) var(--ease-atelier),
       box-shadow var(--dur-hover) var(--ease-atelier),
-      border-color var(--dur-hover) var(--ease-atelier);
+      border-color var(--dur-hover) var(--ease-atelier),
+      background-color var(--dur-hover) var(--ease-atelier);
     will-change: transform;
   }
-  /* Interactive glass panels (buttons, cards with hover states) lift on
-     hover. Static content panels stay put — driven by the parent's
-     :hover / group-hover behaviour existing components already use. */
   a.glass-panel:hover,
   button.glass-panel:hover,
   label.glass-panel:hover,
   .glass-panel[data-hoverable="true"]:hover {
-    transform: translate3d(0, -2px, 0);
-    box-shadow: var(--shadow-object-2);
+    transform: translate3d(0, -3px, 0);
     border-color: var(--color-line-strong);
+    background-color: var(--color-surface-2);
+    box-shadow: 0 2px 0 rgba(255, 255, 255, 0.06) inset,
+      0 20px 48px -24px rgba(0, 0, 0, 0.95),
+      0 1px 0 rgba(255, 255, 255, 0.05);
   }
 
   .chip {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 7px 14px;
-    font-size: 12px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    padding: 9px 16px;
+    font-size: 14px;
+    letter-spacing: -0.01em;
     color: var(--color-silver-200);
-    border: 1px solid var(--color-line);
-    border-radius: 999px;
+    border: 1px solid var(--color-line-strong);
+    border-radius: 980px;
     background: transparent;
-    transition: all 220ms var(--ease-editorial);
+    transition: all 220ms var(--ease-atelier);
     cursor: pointer;
   }
 
   .chip:hover {
-    border-color: var(--color-line-strong);
+    border-color: var(--color-silver-500);
     color: var(--color-ivory);
   }
 
   .chip[data-selected="true"] {
     color: var(--color-bg);
-    background: linear-gradient(
-      180deg,
-      var(--color-silver-100),
-      var(--color-silver-300)
-    );
-    border-color: var(--color-silver-200);
+    background: var(--color-ivory);
+    border-color: var(--color-ivory);
   }
 
   .chip:active {
     transform: scale(0.97);
   }
+}
+
+/* Atelier 按钮 —— 编辑级克制：细边、银白、箭头位移。禁止巨大 pill。 */
+.btn-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 22px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border-radius: 2px;
+  background: transparent;
+  color: var(--color-ivory);
+  border: 1px solid var(--color-line-strong);
+  transition:
+    transform var(--dur-hover) var(--ease-atelier),
+    background-color var(--dur-hover) var(--ease-atelier),
+    color var(--dur-hover) var(--ease-atelier),
+    border-color var(--dur-hover) var(--ease-atelier);
+  cursor: pointer;
+}
+.btn-pill:active {
+  transform: scale(0.98);
+}
+.btn-pill svg {
+  transition: transform var(--dur-hover) var(--ease-atelier);
+}
+.btn-pill:hover svg {
+  transform: translateX(4px);
+}
+.btn-pill-primary {
+  color: var(--color-bg);
+  background: var(--color-ivory);
+  border-color: var(--color-ivory);
+}
+.btn-pill-primary:hover {
+  background: var(--color-silver-200);
+  border-color: var(--color-silver-200);
+}
+.btn-pill-secondary {
+  background: transparent;
+  color: var(--color-ivory);
+  border-color: var(--color-line-strong);
+}
+.btn-pill-secondary:hover {
+  border-color: var(--color-silver-300);
+  background: rgba(245, 245, 247, 0.05);
 }
 
 @keyframes fade-slide-up {
@@ -239,43 +281,56 @@
  * data attribute at the wrapper level.
  * --------------------------------------------------------------------*/
 
-/* Typography hierarchy — five deliberate steps, editorial cadence.
-   Applied via .type-display / .type-h1 / .type-h2 / .type-body / .type-meta.
-   Base <h1..h3> rules above are untouched. */
+/* Typography hierarchy — Apple-style extreme contrast.
+   Hero display is 100–180px on desktop (the "product shot" replacement
+   when you don't have product imagery). Body stays small at 17px. This
+   10x size ratio is what makes the page feel like an ad, not a doc. */
 .type-display {
-  font-family: var(--font-editorial);
-  font-weight: 300;
-  font-size: clamp(3rem, 5.4vw, 5.4rem);
-  line-height: 1.02;
-  letter-spacing: -0.025em;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: clamp(4rem, 10vw, 10rem);
+  line-height: 0.95;
+  letter-spacing: -0.035em;
   color: var(--color-ivory);
 }
 .type-h1 {
-  font-family: var(--font-editorial);
-  font-weight: 300;
-  font-size: clamp(2rem, 3.2vw, 3.25rem);
-  line-height: 1.08;
-  letter-spacing: -0.015em;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.028em;
   color: var(--color-ivory);
 }
 .type-h2 {
-  font-family: var(--font-editorial);
-  font-weight: 300;
-  font-size: clamp(1.35rem, 2.1vw, 2rem);
-  line-height: 1.15;
-  letter-spacing: -0.01em;
-  color: var(--color-silver-100);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: clamp(1.75rem, 3vw, 2.75rem);
+  line-height: 1.1;
+  letter-spacing: -0.022em;
+  color: var(--color-ivory);
 }
 .type-body {
-  font-size: 15px;
-  line-height: 1.65;
+  font-size: 17px;
+  line-height: 1.55;
   color: var(--color-silver-300);
 }
 .type-meta {
-  font-size: 11px;
-  letter-spacing: 0.22em;
+  font-size: 12px;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--color-silver-500);
+}
+
+/* 品牌字标 — 苹果风纯净白字，无渐变无特效。 */
+.brand-mark-text {
+  color: var(--color-ivory);
+  transition: opacity var(--dur-hover) var(--ease-atelier);
+}
+.brand-mark:hover .brand-mark-text {
+  opacity: 0.72;
+}
+.brand-grain::after {
+  content: none;
 }
 
 /* Depth object — a spatial container the eye reads as "floating".
@@ -327,18 +382,34 @@
    changing anything about the routing itself. */
 @keyframes atelier-wash {
   0% {
+    opacity: 0;
+    transform: scale(0.32);
+  }
+  34% {
     opacity: 1;
+    transform: scale(0.9);
   }
   100% {
     opacity: 0;
+    transform: scale(1.18);
   }
 }
+/* 立体转场遮罩 — 黑色从视口中心向外径向扩散，先吞没旧页面（缩小
+   到中点的体感），再淡出；新页面则从缩小状态立体展开。径向渐变让
+   边缘自然过渡，避免硬边。 */
 .atelier-wash {
   position: fixed;
   inset: 0;
   z-index: 30;
   pointer-events: none;
-  background: #050506;
+  transform-origin: center center;
+  background: radial-gradient(
+    circle at center,
+    #050506 0%,
+    #050506 36%,
+    rgba(5, 5, 6, 0.82) 58%,
+    transparent 78%
+  );
   opacity: 0;
   animation: atelier-wash var(--dur-wash) var(--ease-atelier) both;
 }
@@ -349,16 +420,22 @@
 @keyframes atelier-page-enter {
   from {
     opacity: 0;
-    transform: translate3d(0, 18px, 0);
+    transform: perspective(1400px) scale(0.945) translate3d(0, 22px, 0);
+    filter: blur(10px);
   }
   to {
     opacity: 1;
-    transform: translate3d(0, 0, 0);
+    transform: perspective(1400px) scale(1) translate3d(0, 0, 0);
+    filter: blur(0);
   }
 }
+/* 页面立体入场 — 从中点略缩的透视状态展开，配合 wash 的中心扩散，
+   读作「旧页面收进中点，新页面从中立体浮现」。transform-origin 偏
+   向视觉重心，缩放更自然。 */
 .atelier-page {
+  transform-origin: center 38%;
   animation: atelier-page-enter var(--dur-transition) var(--ease-atelier) both;
-  animation-delay: 80ms;
+  animation-delay: 140ms;
 }
 
 /* Per-stage atmosphere accents. Each stage gets one very weak radial
@@ -444,6 +521,280 @@ html[data-stage="render"]::before {
     );
 }
 
+/* --------------------------------------------------------------------
+ * DIGITAL SILVER ATELIER · 展厅系统
+ * Stage 5 及首页叙事共用的"黑暗展厅"语言。
+ * --------------------------------------------------------------------*/
+
+/* 展厅画框 —— 图像不再是卡片，而是一件被光照亮的展品：
+   无圆角、无边框盒子，四周由极暗的 vignette 收束。 */
+.exhibition-frame {
+  position: relative;
+  background: #050506;
+}
+.exhibition-frame::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  pointer-events: none;
+  background: radial-gradient(
+    120% 90% at 50% 38%,
+    transparent 42%,
+    rgba(0, 0, 0, 0.5) 100%
+  );
+  z-index: 1;
+}
+/* 展厅底光 —— 画框下方极弱的银色地台辉光，读作"放在展台上"。 */
+.exhibition-plinth {
+  position: relative;
+}
+.exhibition-plinth::after {
+  content: "";
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  bottom: -2px;
+  height: 56px;
+  pointer-events: none;
+  background: radial-gradient(
+    50% 100% at 50% 100%,
+    rgba(231, 226, 211, 0.1),
+    transparent 70%
+  );
+  z-index: -1;
+}
+
+/* 展品入场 —— 缓慢浮出：scale(1.04)→1 + 轻微景深模糊消退。 */
+@keyframes exhibition-emerge {
+  from {
+    opacity: 0;
+    transform: scale(1.045);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+}
+.exhibition-emerge {
+  animation: exhibition-emerge 1.4s var(--ease-atelier) both;
+}
+
+/* 展厅标注轨 —— 图像两侧的 DESIGN/CULTURE/MATERIAL/CRAFT 竖排标注。 */
+.exhibition-caption {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-silver-500);
+  writing-mode: vertical-rl;
+}
+
+/* --------------------------------------------------------------------
+ * PARTICLE DEMOTION · 粒子降级
+ * 粒子只是氛围层。在银饰视觉主导的场景（首页叙事、Stage 5 展厅）
+ * 粒子退场或大幅调暗，绝不与展品争夺注意力。
+ * --------------------------------------------------------------------*/
+#particle-field {
+  transition: opacity 1.2s var(--ease-atelier);
+}
+html[data-stage="render"] #particle-field,
+html[data-stage="home"] #particle-field {
+  opacity: 0.25;
+}
+
+/* --------------------------------------------------------------------
+ * SCROLL NARRATIVE · 滚动叙事（首页五幕）
+ * 由 motion 的 useScroll 驱动；此处只提供文本渐显与叙事排版。
+ * --------------------------------------------------------------------*/
+.act-label {
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--color-silver-500);
+}
+.act-title {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: clamp(2rem, 4.6vw, 4rem);
+  line-height: 1.06;
+  letter-spacing: -0.024em;
+  color: var(--color-ivory);
+}
+.act-body {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--color-silver-400);
+}
+
+/* --------------------------------------------------------------------
+ * STAGE SYSTEM · Stage 1–5 统一视觉语言（第二阶段重构）
+ * 每一页共享的编辑级排版、展签、输入控件与空间深度。
+ * --------------------------------------------------------------------*/
+
+/* Stage 编号水印 —— 巨大的数字沉在页面右上角，读作"展厅编号"。
+   极低透明度，永远不与内容争夺注意力。 */
+.stage-numeral {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 0;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: clamp(9rem, 20vw, 18rem);
+  line-height: 0.82;
+  letter-spacing: -0.05em;
+  color: rgba(245, 245, 247, 0.028);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Stage 眉标 —— "02 / CULTURE" 式的编号与名称。 */
+.stage-index {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 14px;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-silver-500);
+}
+.stage-index::before {
+  content: "";
+  width: 32px;
+  height: 1px;
+  background: var(--color-line-strong);
+  align-self: center;
+}
+
+/* Stage hero 视觉 —— 博物馆图像容器：黑色空间中一张图，
+   mask 渐隐入黑暗，hover 极轻微靠近（scale 1.02，慢）。 */
+.stage-hero-visual {
+  position: relative;
+  overflow: hidden;
+  transition: transform 1200ms var(--ease-atelier);
+  will-change: transform;
+}
+.stage-hero-visual img {
+  transition: transform 1600ms var(--ease-atelier);
+}
+a.stage-hero-visual:hover img,
+.stage-hero-visual[data-hoverable="true"]:hover img {
+  transform: scale(1.02);
+}
+
+/* 展签 —— 博物馆式信息条目：细线分隔、小号大写标签、宽字距。
+   替代卡片：无背景、无圆角、无阴影。 */
+.exhibit-label {
+  font-size: 10px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--color-silver-600);
+}
+.exhibit-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-block: 18px;
+  border-top: 1px solid var(--color-line);
+}
+
+/* 编辑级输入 —— 黑底、细银边、focus 时一道极细银光。
+   用于 Stage 1 的所有输入控件。 */
+.editorial-input {
+  background: rgba(8, 8, 8, 0.72);
+  border: 1px solid var(--color-line);
+  border-radius: 2px;
+  color: var(--color-ivory);
+  transition:
+    border-color var(--dur-hover) var(--ease-atelier),
+    box-shadow var(--dur-hover) var(--ease-atelier),
+    background-color var(--dur-hover) var(--ease-atelier);
+}
+.editorial-input::placeholder {
+  color: var(--color-silver-600);
+}
+.editorial-input:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(13, 13, 14, 0.86);
+}
+.editorial-input:focus {
+  outline: none;
+  border-color: rgba(245, 245, 247, 0.38);
+  box-shadow: 0 1px 0 0 rgba(245, 245, 247, 0.28);
+  background: rgba(16, 16, 17, 0.92);
+}
+
+/* 生成中的银饰轮廓 —— Stage 5 generating 状态：
+   从 blur 20px + scale 1.04 缓慢对焦成型。 */
+@keyframes atelier-develop {
+  0% {
+    opacity: 0;
+    filter: blur(20px);
+    transform: scale(1.04);
+  }
+  60% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1);
+  }
+}
+.atelier-develop {
+  animation: atelier-develop 2.8s var(--ease-atelier) both;
+}
+
+/* --------------------------------------------------------------------*/
+/* STAGE SPACE · Stage 页面共享的空间氛围层                              */
+/* 与首页同一空间语言：黑色不是空白，而是有光的展厅。两层极弱径向银光    */
+/* （顶部展灯 + 中部漂浮光）+ 顶部渐晕，随 data-stage 各自偏移。        */
+/* --------------------------------------------------------------------*/
+.stage-space {
+  position: relative;
+  isolation: isolate;
+}
+.stage-space::before,
+.stage-space::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+/* 顶部展灯 —— 极弱银光，模拟展厅顶光 */
+.stage-space::before {
+  background: radial-gradient(
+    90% 46% at 50% -8%,
+    rgba(231, 226, 211, 0.055),
+    transparent 68%
+  );
+}
+/* 中部漂浮光 —— 更弱、偏移，形成前后景深差 */
+.stage-space::after {
+  background: radial-gradient(
+    52% 40% at 68% 34%,
+    rgba(231, 226, 211, 0.028),
+    transparent 72%
+  );
+}
+/* 各 Stage 光位偏移 —— 同一展厅，不同展位 */
+html[data-stage="global-design"] .stage-space::after {
+  background: radial-gradient(
+    52% 40% at 32% 38%,
+    rgba(231, 226, 211, 0.028),
+    transparent 72%
+  );
+}
+html[data-stage="design-render"] .stage-space::after {
+  background: radial-gradient(
+    60% 46% at 50% 44%,
+    rgba(231, 226, 211, 0.04),
+    transparent 74%
+  );
+}
+
 /* Accessibility — respect reduced motion strictly. Fade stays (opacity
    is not motion), transforms/parallax/wash animation are neutralized. */
 @media (prefers-reduced-motion: reduce) {
@@ -451,13 +802,23 @@ html[data-stage="render"]::before {
   .atelier-wash,
   [data-reveal],
   .depth-object,
-  .depth-lift {
+  .depth-lift,
+  .brand-mark-text,
+  .brand-grain::after,
+  .nav-stage[aria-current="page"] .nav-stage-line,
+  .exhibition-emerge,
+  .atelier-develop {
     animation: none !important;
     transition: opacity var(--dur-reveal) linear !important;
     transform: none !important;
+    filter: none !important;
   }
   [data-reveal] {
     opacity: 1 !important;
+    transform: none !important;
+  }
+  /* motion 库滚动驱动动效 —— 内联 transform 也被强制归零。 */
+  [data-motion-scroll] {
     transform: none !important;
   }
   html[data-stage]::before {

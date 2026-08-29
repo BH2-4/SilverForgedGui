@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { SectionLabel } from "@/components/shared/SectionLabel";
 import { useI18n } from "@/components/i18n/I18nProvider";
@@ -33,12 +33,12 @@ export function OrientationPanel({ brief, orientation }: OrientationPanelProps) 
     <section className="flex flex-col gap-8">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <SectionLabel>{t("designDirections.section1Label")}</SectionLabel>
-        <span className="text-[10px] tracking-[0.22em] text-[var(--color-silver-600)] uppercase">
+        <span className="text-[11px] tracking-[0.22em] text-[var(--color-silver-600)] uppercase">
           {t("designDirections.section1Note")}
         </span>
       </div>
 
-      <p className="font-editorial max-w-3xl text-[28px] leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[36px]">
+      <p className="font-sans max-w-3xl text-[22px] leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[28px]">
         {summary}
       </p>
 
@@ -52,7 +52,7 @@ export function OrientationPanel({ brief, orientation }: OrientationPanelProps) 
         ) : (
           <span>{t("designDirections.orientationNoMatch")}</span>
         )}
-        <span className="text-[11px] tracking-[0.08em] text-[var(--color-silver-600)]">
+        <span className="text-[12px] tracking-[0.08em] text-[var(--color-silver-600)]">
           {t("designDirections.orientationPool", {
             count: String(orientation.match_count),
           })}

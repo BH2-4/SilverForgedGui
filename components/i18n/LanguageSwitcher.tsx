@@ -17,16 +17,16 @@ export function LanguageSwitcher({ className }: { className?: string }) {
   return (
     <nav
       aria-label="Language"
-      className={`flex items-center gap-2.5 text-[11px] tracking-[0.14em] uppercase ${className ?? ""}`}
+      className={`flex items-center gap-3 text-[13px] tracking-[0.14em] uppercase ${className ?? ""}`}
     >
       {LOCALES.map((loc, i) => {
         const active = locale === loc;
         return (
-          <span key={loc} className="flex items-center gap-2.5">
+          <span key={loc} className="flex items-center gap-3">
             {i > 0 && (
               <span
                 aria-hidden
-                className="h-px w-2 bg-[var(--color-line-strong)]"
+                className="h-px w-2.5 bg-[var(--color-line-strong)]"
               />
             )}
             <button

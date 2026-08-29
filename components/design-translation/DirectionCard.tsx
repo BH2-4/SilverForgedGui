@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Check } from "lucide-react";
 import { useI18n } from "@/components/i18n/I18nProvider";
@@ -29,7 +29,7 @@ function Field({
 }) {
   return (
     <div className="flex flex-col gap-1.5 border-t border-[var(--color-line)] pt-4">
-      <span className="text-[10px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
+      <span className="text-[11px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
         {label}
       </span>
       <div className="text-[14px] leading-relaxed text-[var(--color-silver-200)]">
@@ -71,15 +71,15 @@ export function DirectionCard({
       {/* 1 名称 + 2 一句话描述 + 14 置信度 */}
       <header className="flex flex-col gap-3">
         <div className="flex items-baseline justify-between gap-4">
-          <span className="text-[10px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
+          <span className="text-[11px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
             {t("designDirections.directionLetter", { letter })}
           </span>
-          <span className="text-[10px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
+          <span className="text-[11px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
             {t("designDirections.fields.confidence")}{" "}
             {t("designDirections.confidenceValue", { value: String(confidencePct) })}
           </span>
         </div>
-        <h3 className="font-editorial text-[30px] leading-[1.1] tracking-[-0.01em] text-[var(--color-ivory)]">
+        <h3 className="font-sans text-[24px] leading-[1.1] tracking-[-0.01em] text-[var(--color-ivory)]">
           {t(`designDirections.direction.name.${tier}`)}
         </h3>
         <p className="text-[14px] leading-relaxed text-[var(--color-silver-300)]">
@@ -143,7 +143,7 @@ export function DirectionCard({
 
       {/* 11 为什么适合你 — AI 推断，模板化 */}
       <div className="flex flex-col gap-2 border-t border-[var(--color-line)] pt-4">
-        <span className="text-[10px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
+        <span className="text-[11px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
           {t("designDirections.fields.why")}
         </span>
         <ul className="flex flex-col gap-1.5 text-[13px] leading-relaxed text-[var(--color-silver-400)]">
@@ -157,7 +157,7 @@ export function DirectionCard({
 
       {/* 12 文化来源 + 13 官方证据 */}
       <div className="flex flex-col gap-2 border-t border-[var(--color-line)] pt-4">
-        <span className="text-[10px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
+        <span className="text-[11px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
           {t("designDirections.fields.source")}
         </span>
         {direction.heritage_reference ? (
@@ -168,7 +168,7 @@ export function DirectionCard({
                 ? ` · ${direction.heritage_reference.region}`
                 : ""}
             </span>
-            <span className="text-[11px] text-[var(--color-silver-500)]">
+            <span className="text-[12px] text-[var(--color-silver-500)]">
               {t(`designDirections.values.meaning.${direction.meaning_status}`)} ·{" "}
               {t(`designDirections.values.evidenceLevel.${direction.evidence_level}`)}
               {direction.origin_match_score !== null
@@ -176,7 +176,7 @@ export function DirectionCard({
                 : ""}
             </span>
             {direction.source_refs.length > 0 ? (
-              <span className="text-[11px] text-[var(--color-silver-600)]">
+              <span className="text-[12px] text-[var(--color-silver-600)]">
                 {t("designDirections.fields.evidence")}:{" "}
                 {direction.source_refs.map((ref) => ref.title).join(" · ")}
               </span>
@@ -191,20 +191,6 @@ export function DirectionCard({
             />
           </div>
         )}
-      </div>
-
-      {/* 15 风险提示 */}
-      <div className="flex flex-col gap-2 border-t border-[var(--color-line)] pt-4">
-        <span className="text-[10px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
-          {t("designDirections.fields.risk")}
-        </span>
-        <ul className="flex flex-col gap-1.5 text-[12px] leading-relaxed text-[var(--color-silver-500)]">
-          {direction.uncertainties.map((item, i) => (
-            <li key={i}>
-              <TemplateLine item={item} />
-            </li>
-          ))}
-        </ul>
       </div>
 
       {/* 选择动作 */}

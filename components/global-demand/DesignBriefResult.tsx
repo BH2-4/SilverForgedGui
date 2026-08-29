@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { ArrowRight, RotateCcw } from "lucide-react";
 import { SectionLabel } from "@/components/shared/SectionLabel";
@@ -14,10 +14,10 @@ interface DesignBriefResultProps {
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex flex-col gap-2 border-t border-[var(--color-line)] pt-4">
-      <span className="text-[10px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
+      <span className="text-[11px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
         {label}
       </span>
-      <span className="font-editorial text-[22px] leading-[1.15] tracking-[-0.005em] text-[var(--color-ivory)]">
+      <span className="font-sans text-[20px] leading-[1.15] tracking-[-0.005em] text-[var(--color-ivory)]">
         {value}
       </span>
     </div>
@@ -55,15 +55,15 @@ export function DesignBriefResult({
             <SectionLabel className="mb-6">
               {t("globalDemand.resultDnaLabel")}
             </SectionLabel>
-            <h2 className="font-editorial text-4xl leading-[1.05] tracking-[-0.02em] text-[var(--color-ivory)] sm:text-5xl">
+            <h2 className="font-sans text-[28px] leading-[1.05] tracking-[-0.02em] text-[var(--color-ivory)] sm:text-[32px]">
               {t("globalDemand.resultTitle")}
             </h2>
           </div>
           <div className="text-right">
-            <div className="text-[10px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
+            <div className="text-[11px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
               {t("common.labels.confidence")}
             </div>
-            <div className="font-editorial text-3xl text-[var(--color-ivory)]">
+            <div className="font-sans text-[24px] text-[var(--color-ivory)]">
               {confidencePct}
               <span className="text-[var(--color-silver-500)]">%</span>
             </div>
@@ -113,7 +113,7 @@ export function DesignBriefResult({
             value={tv("shared", brief.price_sensitivity)}
           />
           <div className="col-span-2 flex flex-col gap-2 border-t border-[var(--color-line)] pt-4 sm:col-span-3 lg:col-span-1">
-            <span className="text-[10px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
+            <span className="text-[11px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
               {t("common.labels.consumerProfile")}
             </span>
             <span className="text-[14px] leading-relaxed text-[var(--color-silver-200)]">
@@ -126,7 +126,7 @@ export function DesignBriefResult({
       {/* ─────────────────  AI Interpretation  ───────────────── */}
       <section className="flex flex-col gap-6">
         <SectionLabel>{t("globalDemand.aiInterpretationLabel")}</SectionLabel>
-        <p className="font-editorial max-w-3xl text-[26px] leading-[1.35] text-[var(--color-ivory)] sm:text-[30px]">
+        <p className="font-sans max-w-3xl text-[22px] leading-[1.35] text-[var(--color-ivory)] sm:text-[24px]">
           {brief.reasoning}
         </p>
         {brief.cultural_interest && brief.cultural_interest !== "unknown" && (
@@ -154,14 +154,14 @@ export function DesignBriefResult({
         </div>
         {brief.avoid.length > 0 && (
           <div className="flex flex-col gap-3 pt-4">
-            <span className="text-[10px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
+            <span className="text-[11px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
               {t("globalDemand.avoidLabel")}
             </span>
             <div className="flex flex-wrap gap-2.5">
               {brief.avoid.map((a) => (
                 <span
                   key={a}
-                  className="rounded-full border border-dashed border-[var(--color-line-strong)] px-3.5 py-1.5 text-[11px] tracking-[0.08em] text-[var(--color-silver-400)] uppercase"
+                  className="rounded-full border border-dashed border-[var(--color-line-strong)] px-3.5 py-1.5 text-[12px] tracking-[0.08em] text-[var(--color-silver-400)] uppercase"
                 >
                   {a.replace(/[-_]/g, " ")}
                 </span>
@@ -175,7 +175,7 @@ export function DesignBriefResult({
       <section className="glass-panel flex flex-col gap-8 rounded-[var(--radius-lg)] p-8 sm:p-10">
         <SectionLabel>{t("globalDemand.whatComesNextLabel")}</SectionLabel>
         <div className="flex flex-col gap-4">
-          <h3 className="font-editorial text-3xl leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-4xl">
+          <h3 className="font-sans text-[24px] leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[28px]">
             {t("globalDemand.whatComesNextTitle")}
           </h3>
           <p className="max-w-2xl text-[14px] leading-relaxed text-[var(--color-silver-300)]">
@@ -201,7 +201,7 @@ export function DesignBriefResult({
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" strokeWidth={1.5} />
           </button>
         </div>
-        <div className="text-[10px] tracking-[0.22em] text-[var(--color-silver-600)] uppercase">
+        <div className="text-[11px] tracking-[0.22em] text-[var(--color-silver-600)] uppercase">
           {t("globalDemand.stage2Ready")}
         </div>
       </section>

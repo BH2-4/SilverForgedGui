@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { ArrowUpRight, Bot, Landmark } from "lucide-react";
 import { SectionLabel } from "@/components/shared/SectionLabel";
@@ -25,7 +25,7 @@ export function DesignBriefPanel({ brief }: DesignBriefPanelProps) {
     <section className="flex flex-col gap-8">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <SectionLabel>{t("designTranslation.briefLabel")}</SectionLabel>
-        <span className="text-[10px] tracking-[0.22em] text-[var(--color-silver-600)] uppercase">
+        <span className="text-[11px] tracking-[0.22em] text-[var(--color-silver-600)] uppercase">
           {t("common.labels.confidence")}{" "}
           {Math.round(brief.confidence * 100)}%
         </span>
@@ -34,7 +34,7 @@ export function DesignBriefPanel({ brief }: DesignBriefPanelProps) {
       <article className="glass-panel flex flex-col gap-10 rounded-[var(--radius-lg)] p-8 sm:p-10">
         {/* Title + positioning */}
         <div className="flex flex-col gap-5">
-          <h3 className="font-editorial text-3xl leading-[1.08] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-4xl">
+          <h3 className="font-sans text-[24px] leading-[1.08] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[28px]">
             {brief.design_title}
           </h3>
           <p className="max-w-2xl text-[13px] leading-relaxed text-[var(--color-silver-300)]">
@@ -44,7 +44,7 @@ export function DesignBriefPanel({ brief }: DesignBriefPanelProps) {
             {brief.style_direction.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full border border-[var(--color-line)] px-3 py-1 text-[10px] tracking-[0.14em] text-[var(--color-silver-300)] uppercase"
+                className="rounded-full border border-[var(--color-line)] px-3 py-1 text-[11px] tracking-[0.14em] text-[var(--color-silver-300)] uppercase"
               >
                 {tv("style", tag)}
               </span>
@@ -55,10 +55,10 @@ export function DesignBriefPanel({ brief }: DesignBriefPanelProps) {
         {/* Documented cultural evidence */}
         <div className="flex flex-col gap-4 border-t border-[var(--color-line)] pt-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <span className="text-[10px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
+            <span className="text-[11px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
               {t("designTranslation.briefDocumentedLabel")}
             </span>
-            <span className="inline-flex items-center gap-1.5 text-[9px] tracking-[0.18em] text-[var(--color-accent)] uppercase">
+            <span className="inline-flex items-center gap-1.5 text-[10px] tracking-[0.18em] text-[var(--color-accent)] uppercase">
               <Landmark className="h-3 w-3" strokeWidth={1.5} aria-hidden />
               {t("designTranslation.briefNeverAi")}
             </span>
@@ -73,7 +73,7 @@ export function DesignBriefPanel({ brief }: DesignBriefPanelProps) {
                   <span className="text-[13px] leading-relaxed text-[var(--color-silver-200)]">
                     {fact.fact}
                   </span>
-                  <span className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[10px] tracking-[0.1em] text-[var(--color-silver-500)] uppercase">
+                  <span className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] tracking-[0.1em] text-[var(--color-silver-500)] uppercase">
                     <span className="font-mono">
                       {tv("evidenceLevel", fact.evidence_level)}
                     </span>
@@ -103,10 +103,10 @@ export function DesignBriefPanel({ brief }: DesignBriefPanelProps) {
         {/* AI design interpretation — visually segregated */}
         <div className="flex flex-col gap-4 border-t border-dashed border-[var(--color-line-strong)] pt-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <span className="text-[10px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
+            <span className="text-[11px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
               {t("designTranslation.interpretationLabel")}
             </span>
-            <span className="inline-flex items-center gap-1.5 text-[9px] tracking-[0.18em] text-[var(--color-silver-400)] uppercase">
+            <span className="inline-flex items-center gap-1.5 text-[10px] tracking-[0.18em] text-[var(--color-silver-400)] uppercase">
               <Bot className="h-3 w-3" strokeWidth={1.5} aria-hidden />
               {t("designTranslation.interpretationNote")}
             </span>
@@ -122,7 +122,7 @@ export function DesignBriefPanel({ brief }: DesignBriefPanelProps) {
             ))}
           </ul>
           {brief.discarded_symbolic_inputs.length > 0 && (
-            <p className="text-[11px] leading-relaxed text-[var(--color-silver-500)]">
+            <p className="text-[12px] leading-relaxed text-[var(--color-silver-500)]">
               {t("designTranslation.discardedNote", {
                 items: brief.discarded_symbolic_inputs.join(", "),
               })}
@@ -130,62 +130,28 @@ export function DesignBriefPanel({ brief }: DesignBriefPanelProps) {
           )}
         </div>
 
-        {/* Constraints + avoid */}
-        <div className="grid grid-cols-1 gap-8 border-t border-[var(--color-line)] pt-6 lg:grid-cols-2">
-          <div className="flex flex-col gap-3">
-            <span className="text-[10px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
-              {t("designTranslation.constraintsLabel")}
-            </span>
-            <ul className="flex flex-col gap-2">
-              {brief.cultural_constraints.map((constraint, i) => (
-                <li
-                  key={i}
-                  className="text-[12px] leading-relaxed text-[var(--color-silver-400)]"
-                >
-                  {constraint}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="flex flex-col gap-3">
-            <span className="text-[10px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
-              {t("designTranslation.avoidLabel")}
-            </span>
-            <div className="flex flex-wrap gap-2">
-              {brief.avoid_elements.map((element) => (
-                <span
-                  key={element}
-                  className="rounded-full border border-red-400/20 bg-red-500/[0.05] px-3 py-1 text-[10px] tracking-[0.1em] text-red-200/70"
-                >
-                  {element}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-
         {/* Prompts for the next stage */}
         <div className="flex flex-col gap-5 border-t border-[var(--color-line)] pt-6">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
+            <span className="text-[11px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
               {t("designTranslation.generationPromptLabel")}
             </span>
-            <span className="text-[9px] tracking-[0.18em] text-[var(--color-silver-600)] uppercase">
+            <span className="text-[10px] tracking-[0.18em] text-[var(--color-silver-600)] uppercase">
               {t("designTranslation.generationPromptNote")}
             </span>
           </div>
-          <pre className="overflow-x-auto rounded-[var(--radius-md)] border border-[var(--color-line)] bg-[rgba(0,0,0,0.3)] p-5 font-mono text-[11px] leading-relaxed whitespace-pre-wrap text-[var(--color-silver-300)]">
+          <pre className="overflow-x-auto rounded-[var(--radius-md)] border border-[var(--color-line)] bg-[rgba(0,0,0,0.3)] p-5 font-mono text-[12px] leading-relaxed whitespace-pre-wrap text-[var(--color-silver-300)]">
             {brief.generation_prompt}
           </pre>
           <div className="flex items-center justify-between pt-2">
-            <span className="text-[10px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
+            <span className="text-[11px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
               {t("designTranslation.negativePromptLabel")}
             </span>
-            <span className="text-[9px] tracking-[0.18em] text-[var(--color-silver-600)] uppercase">
+            <span className="text-[10px] tracking-[0.18em] text-[var(--color-silver-600)] uppercase">
               {t("designTranslation.negativePromptNote")}
             </span>
           </div>
-          <pre className="overflow-x-auto rounded-[var(--radius-md)] border border-[var(--color-line)] bg-[rgba(0,0,0,0.3)] p-5 font-mono text-[11px] leading-relaxed whitespace-pre-wrap text-[var(--color-silver-400)]">
+          <pre className="overflow-x-auto rounded-[var(--radius-md)] border border-[var(--color-line)] bg-[rgba(0,0,0,0.3)] p-5 font-mono text-[12px] leading-relaxed whitespace-pre-wrap text-[var(--color-silver-400)]">
             {brief.negative_prompt}
           </pre>
         </div>

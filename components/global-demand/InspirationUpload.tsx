@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useRef, useState } from "react";
 import Image from "next/image";
@@ -114,7 +114,7 @@ export function InspirationUpload({
               <div className="truncate text-[13px] text-[var(--color-ivory)]">
                 {value.name}
               </div>
-              <div className="mt-1 text-[11px] tracking-[0.06em] text-[var(--color-silver-500)] uppercase">
+              <div className="mt-1 text-[12px] tracking-[0.06em] text-[var(--color-silver-500)] uppercase">
                 {(value.size / 1024).toFixed(0)} {t("globalDemand.uploadPreviewNote")}
               </div>
             </div>
@@ -133,10 +133,10 @@ export function InspirationUpload({
         ) : (
           <div className="flex flex-col items-center gap-3 text-[var(--color-silver-400)]">
             <ImagePlus className="h-6 w-6" strokeWidth={1.2} />
-            <div className="font-editorial text-[18px] text-[var(--color-silver-200)]">
+            <div className="font-sans text-[18px] text-[var(--color-silver-200)]">
               {t("globalDemand.uploadDropTitle")}
             </div>
-            <div className="text-[11px] tracking-[0.14em] text-[var(--color-silver-500)] uppercase">
+            <div className="text-[12px] tracking-[0.14em] text-[var(--color-silver-500)] uppercase">
               {t("globalDemand.uploadDropHint")}
             </div>
           </div>

@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "SILVER FUTURE — Global Design Studio",
+    "title": "Silver Forged Gui — Global Design Studio",
     "description": "AI-driven global co-creation platform for Guizhou silver jewelry. Tell us the story you want your silver to tell."
   },
   "common": {
@@ -48,23 +48,43 @@
       "engineDerived": "Engine-derived · deterministic"
     },
     "stages": {
+      "interview": "00 · Memory Interview",
       "globalDemand": "01 · Global Demand",
       "culturalMatch": "02 · Cultural Match",
       "designTranslation": "03 · Design Translation",
       "designProposal": "04 · Custom Proposal",
       "designRender": "05 · Design Render"
     },
-    "navAria": "Pipeline stages"
+    "navAria": "Pipeline stages",
+    "collectionLabel": "The Collection"
   },
   "home": {
     "coCreationNote": "Global Co-Creation · V1",
     "chapterLabel": "A New Chapter of Silver",
     "title1": "Not selling silver to the world.",
     "title2": "Letting the world design it.",
-    "intro": "SILVER FUTURE is an AI-powered co-creation platform for Guizhou silver jewelry. Global taste meets Miao heritage — reimagined by intelligent design.",
+    "intro": "Silver Future is an AI-powered co-creation atelier for Guizhou silver jewelry. Global taste meets Miao heritage — reimagined by intelligent design.",
     "engineNote": "Global Demand Engine · V1",
     "footer1": "Guizhou · Miao Silver · Reimagined",
-    "footer2": "© 2026 SILVER FUTURE — Prototype"
+    "footer2": "© 2026 Silver Future — Prototype",
+    "exploreProcess": "Explore the process",
+    "processTitle": "The Five Stages",
+    "processSub": "From your story to a piece of silver you can wear.",
+    "stageEnter": "Enter",
+    "act2Label": "Chapter One · Heritage",
+    "act2Title": "From heritage, to possibility.",
+    "act2Body": "Guizhou Miao silver — centuries of forging. We refuse to leave it behind museum glass. Instead, we bring it into a contemporary design conversation.",
+    "act3Label": "Chapter Two · Material",
+    "act3Title": "Silver is a metal with memory.",
+    "act3Body": "Filigree, chasing, hammering — every technique leaves its trace on the surface. Move closer, and watch the material itself become the design language.",
+    "act4Label": "Chapter Three · Culture",
+    "act4Title": "Culture is not decoration.",
+    "act4Body": "Every motif has a source. Every craft has a keeper. Our cultural database refuses invention — only recorded, verified elements may enter your design.",
+    "act5Label": "Chapter Four · Memory",
+    "act5Title": "Your memory becomes form.",
+    "act5Body": "A journey, a name, a farewell. Bring it into the atelier — and let AI and culture forge it into silver you can wear.",
+    "shopCollection": "Shop the Collection",
+    "shopCollectionHint": "Not customizing? Browse our finished pieces and inquire or buy →"
   },
   "globalDemand": {
     "studioEyebrow": "Global Design Studio",
@@ -105,7 +125,7 @@
     "avoidLabel": "Avoid",
     "whatComesNextLabel": "What Comes Next",
     "whatComesNextTitle": "Your design brief is ready.",
-    "whatComesNextBody": "Next, SILVER FUTURE will connect your preferences with Guizhou's heritage knowledge — matching motifs, materials, and lineages that resonate with your intent.",
+    "whatComesNextBody": "Next, Silver Forged Gui will connect your preferences with Guizhou's heritage knowledge — matching motifs, materials, and lineages that resonate with your intent.",
     "stage2Ready": "Stage 2 · Cultural Match Engine · Ready",
     "errors": {
       "analysisInterrupted": "Something interrupted the analysis",

@@ -39,3 +39,10 @@ next-env.d.ts
 # ide
 .vscode/
 .idea/
+
+# local test artifacts
+.test-render/
+_patch_render.mjs
+test-*.png
+test-*.json
+.DS_Store

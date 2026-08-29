@@ -1,8 +1,7 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import {
   type DesignIntentResponse,
   type InterviewAnswers,
@@ -146,51 +145,33 @@ export function InterviewFlow({ demoMode }: InterviewFlowProps) {
   const question = currentId ? QUESTIONS[currentId] : null;
 
   return (
-    <main className="relative min-h-dvh">
-      <div className="mx-auto flex min-h-dvh max-w-3xl flex-col px-6 py-8 sm:px-10 sm:py-12">
-        <header className="flex flex-col gap-6">
-          <div className="flex items-center justify-between">
-            <Link
-              href="/"
-              className="flex items-baseline gap-3 transition-opacity hover:opacity-80"
-            >
-              <span className="text-[13px] tracking-[0.32em] text-[var(--color-silver-200)]">
-                SILVER
-              </span>
-              <span className="text-[13px] tracking-[0.32em] text-[var(--color-silver-400)]">
-                FUTURE
-              </span>
-            </Link>
-            <div className="flex items-center gap-4">
-              {demoMode && (
-                <span className="inline-flex items-center gap-2 rounded-full border border-[var(--color-line-strong)] bg-[rgba(231,226,211,0.06)] px-3 py-1 text-[10px] tracking-[0.18em] text-[var(--color-accent)] uppercase">
-                  <span
-                    aria-hidden
-                    className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]"
-                  />
-                  {t("common.badges.demoMode")}
-                </span>
-              )}
-              <span className="eyebrow hidden sm:inline">
-                {t("interview.stageLabel")}
-              </span>
-            </div>
+    <main className="stage-space relative min-h-dvh">
+      <div className="mx-auto flex min-h-dvh max-w-3xl flex-col px-6 pb-24 sm:px-10">
+        <header className="relative flex flex-col gap-10 pt-16 sm:pt-24">
+          {/* 展厅编号水印 —— 工作室入口 */}
+          <span aria-hidden className="stage-numeral">
+            00
+          </span>
+          <div className="flex items-center justify-end">
+            <span className="eyebrow hidden sm:inline">
+              {t("interview.stageLabel")}
+            </span>
           </div>
 
           <div className="hairline" aria-hidden />
 
-          <div className="flex flex-col gap-6 pt-4">
-            <span className="text-[11px] tracking-[0.22em] text-[var(--color-silver-400)] uppercase">
+          <div className="relative z-10 flex flex-col gap-8 pt-2">
+            <span className="stage-index">
               {t("interview.pageEyebrow")}
             </span>
-            <h1 className="font-editorial text-4xl leading-[1.1] tracking-[-0.02em] text-[var(--color-ivory)] sm:text-5xl">
+            <h1 className="act-title">
               {t("interview.title1")}
               <br />
               <span className="text-[var(--color-silver-400)]">
                 {t("interview.title2")}
               </span>
             </h1>
-            <p className="max-w-xl text-[14px] leading-relaxed text-[var(--color-silver-300)]">
+            <p className="act-body max-w-xl">
               {t("interview.intro")}
             </p>
           </div>
@@ -198,7 +179,7 @@ export function InterviewFlow({ demoMode }: InterviewFlowProps) {
 
         {phase.kind !== "summary" && (
           <div className="mt-12 flex items-center gap-4">
-            <span className="font-mono text-[11px] tracking-[0.14em] text-[var(--color-silver-400)]">
+            <span className="font-mono text-[12px] tracking-[0.14em] text-[var(--color-silver-400)]">
               {String(Math.min(progressCurrent, progressTotal)).padStart(2, "0")}{" "}
               / {String(progressTotal).padStart(2, "0")}
             </span>
@@ -232,7 +213,7 @@ export function InterviewFlow({ demoMode }: InterviewFlowProps) {
                 role="status"
                 aria-label={t("interview.synthesizing")}
               />
-              <p className="font-editorial text-[15px] tracking-[0.06em] text-[var(--color-silver-400)]">
+              <p className="font-sans text-[15px] tracking-[0.06em] text-[var(--color-silver-400)]">
                 {t("interview.synthesizing")}
               </p>
             </div>

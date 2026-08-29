@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
@@ -275,7 +275,7 @@ export function RenderStudio() {
     return (
       <div className="animate-fade-in flex flex-1 flex-col items-start justify-center gap-8 py-16">
         <SectionLabel>{t("designRender.emptyLabel")}</SectionLabel>
-        <h2 className="font-editorial max-w-2xl text-4xl leading-[1.1] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-5xl">
+        <h2 className="font-sans max-w-2xl text-[28px] leading-[1.1] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[32px]">
           {t("designRender.emptyTitle")}
         </h2>
         <p className="max-w-md text-[14px] leading-relaxed text-[var(--color-silver-400)]">
@@ -301,34 +301,68 @@ export function RenderStudio() {
 
   if (phase.kind === "generating") {
     return (
-      <div className="animate-fade-in flex flex-col gap-10 py-16">
-        <SectionLabel>{t("designRender.generatingLabel")}</SectionLabel>
-        <h2 className="font-editorial max-w-2xl text-3xl leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-4xl">
-          {t("designRender.generatingTitle")}
-        </h2>
-        <p className="max-w-xl text-[14px] leading-relaxed text-[var(--color-silver-400)]">
-          {t("designRender.generatingBody")}
-        </p>
-        <ol className="flex flex-col gap-4">
-          {GENERATING_STAGE_KEYS.map((key, i) => (
-            <li key={key} className="flex items-center gap-5">
-              <span
-                className={`font-editorial text-[20px] leading-[1.2] tracking-[-0.005em] sm:text-[22px] ${i <= generatingStage
-                  ? "text-[var(--color-ivory)]"
-                  : "text-[var(--color-silver-600)]"
-                  }`}
+      <div className="animate-fade-in relative flex min-h-[60vh] flex-col justify-center gap-12 py-16">
+        {/* 黑暗中的银饰轮廓 —— 设计正在成型：blur 20px → 0，缓 2.8s */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 flex items-center justify-center"
+        >
+          <div
+            className="atelier-develop relative h-[54vmin] w-[54vmin] opacity-[0.12]"
+            style={{
+              maskImage:
+                "radial-gradient(closest-side, black 58%, transparent 98%)",
+              WebkitMaskImage:
+                "radial-gradient(closest-side, black 58%, transparent 98%)",
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element — ambient decorative layer */}
+            <img
+              src="/atelier/hero-silver.jpg"
+              alt=""
+              className="h-full w-full object-cover"
+            />
+          </div>
+        </div>
+
+        <div className="relative z-10 flex flex-col gap-10">
+          <SectionLabel>{t("designRender.generatingLabel")}</SectionLabel>
+          <h2 className="act-title max-w-2xl">
+            {t("designRender.generatingTitle")}
+          </h2>
+          <p className="act-body max-w-xl">
+            {t("designRender.generatingBody")}
+          </p>
+          <ol className="flex max-w-2xl flex-col">
+            {GENERATING_STAGE_KEYS.map((key, i) => (
+              <li
+                key={key}
+                className={`exhibit-row flex items-center gap-5 ${i <= generatingStage
+                  ? ""
+                  : "opacity-40"
+                  } transition-opacity duration-700`}
               >
-                {t(key)}
-              </span>
-              {i === generatingStage && (
-                <span className="ml-auto h-px w-24 shimmer" aria-hidden />
-              )}
-            </li>
-          ))}
-        </ol>
-        <p className="text-[11px] leading-relaxed text-[var(--color-silver-600)]">
-          {t("designRender.generatingNote")}
-        </p>
+                <span className="exhibit-label w-8 shrink-0">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span
+                  className={`font-sans text-[18px] leading-[1.3] tracking-[-0.005em] sm:text-[18px] ${i <= generatingStage
+                    ? "text-[var(--color-ivory)]"
+                    : "text-[var(--color-silver-500)]"
+                    }`}
+                >
+                  {t(key)}
+                </span>
+                {i === generatingStage && (
+                  <span className="ml-auto h-px w-24 shimmer" aria-hidden />
+                )}
+              </li>
+            ))}
+          </ol>
+          <p className="text-[12px] leading-relaxed text-[var(--color-silver-600)]">
+            {t("designRender.generatingNote")}
+          </p>
+        </div>
       </div>
     );
   }
@@ -349,11 +383,11 @@ export function RenderStudio() {
             strokeWidth={1.5}
           />
           <div className="flex-1">
-            <div className="mb-1 text-[11px] tracking-[0.14em] text-red-300/70 uppercase">
+            <div className="mb-1 text-[12px] tracking-[0.14em] text-red-300/70 uppercase">
               {t("designRender.errorInterrupted")}
             </div>
             <div>{t("designRender.errorBody")}</div>
-            <div className="mt-2 text-[11px] leading-relaxed text-red-200/60">
+            <div className="mt-2 text-[12px] leading-relaxed text-red-200/60">
               {tApiError(phase.code, phase.message)}
             </div>
           </div>
@@ -388,9 +422,9 @@ export function RenderStudio() {
   const prompt: ImagePrompt = render.image_prompt;
 
   return (
-    <div className="animate-fade-in flex flex-col gap-16 pb-24">
+    <div className="animate-fade-in flex flex-col gap-24 pb-32">
       <MotionReveal>
-        <RenderImage imageUrl={render.image.data_url} prompt={prompt} />
+        <RenderImage imageUrl={render.image.data_url} prompt={prompt} model={render.image.model} />
       </MotionReveal>
       <MotionReveal delay={140}>
         <RenderWhy prompt={prompt} />
@@ -433,7 +467,7 @@ function RenderActions({ confirmed, onRegenerate, onBack, onConfirm }: RenderAct
       <section className="glass-panel flex flex-col gap-8 rounded-[var(--radius-lg)] p-8 sm:p-10">
         <SectionLabel>{t("designRender.confirmedLabel")}</SectionLabel>
         <div className="flex flex-col gap-4">
-          <h3 className="font-editorial text-3xl leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-4xl">
+          <h3 className="font-sans text-[24px] leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[28px]">
             {t("designRender.confirmedTitle")}
           </h3>
           <p className="max-w-2xl text-[14px] leading-relaxed text-[var(--color-silver-300)]">
@@ -452,7 +486,7 @@ function RenderActions({ confirmed, onRegenerate, onBack, onConfirm }: RenderAct
             <RotateCcw className="h-3.5 w-3.5" strokeWidth={1.5} />
             {t("common.actions.startOver")}
           </button>
-          <span className="text-[10px] tracking-[0.22em] text-[var(--color-silver-600)] uppercase">
+          <span className="text-[11px] tracking-[0.22em] text-[var(--color-silver-600)] uppercase">
             {t("designRender.customizationComingSoon")}
           </span>
         </div>
@@ -464,7 +498,7 @@ function RenderActions({ confirmed, onRegenerate, onBack, onConfirm }: RenderAct
     <section className="glass-panel flex flex-col gap-8 rounded-[var(--radius-lg)] p-8 sm:p-10">
       <SectionLabel>{t("designRender.actionsLabel")}</SectionLabel>
       <div className="flex flex-col gap-4">
-        <h3 className="font-editorial text-3xl leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-4xl">
+        <h3 className="font-sans text-[24px] leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[28px]">
           {t("designRender.actionsTitle")}
         </h3>
       </div>
@@ -478,7 +512,7 @@ function RenderActions({ confirmed, onRegenerate, onBack, onConfirm }: RenderAct
             <span className="text-[13px] font-medium tracking-[0.1em] text-[var(--color-ivory)]">
               {t("designRender.actions.love")}
             </span>
-            <span className="text-[11px] leading-relaxed text-[var(--color-silver-500)]">
+            <span className="text-[12px] leading-relaxed text-[var(--color-silver-500)]">
               {t("designRender.actions.loveHint")}
             </span>
           </span>
@@ -501,7 +535,7 @@ function RenderActions({ confirmed, onRegenerate, onBack, onConfirm }: RenderAct
               <span className="text-[12px] font-medium tracking-[0.1em] text-[var(--color-silver-200)]">
                 {t("designRender.actions.regenerate")}
               </span>
-              <span className="text-[11px] leading-relaxed text-[var(--color-silver-500)]">
+              <span className="text-[12px] leading-relaxed text-[var(--color-silver-500)]">
                 {t("designRender.actions.regenerateHint")}
               </span>
             </span>
@@ -519,14 +553,14 @@ function RenderActions({ confirmed, onRegenerate, onBack, onConfirm }: RenderAct
               <span className="text-[12px] font-medium tracking-[0.1em] text-[var(--color-silver-200)]">
                 {t("designRender.actions.back")}
               </span>
-              <span className="text-[11px] leading-relaxed text-[var(--color-silver-500)]">
+              <span className="text-[12px] leading-relaxed text-[var(--color-silver-500)]">
                 {t("designRender.actions.backHint")}
               </span>
             </span>
           </button>
         </div>
       </div>
-      <p className="text-[10px] tracking-[0.22em] text-[var(--color-silver-600)] uppercase">
+      <p className="text-[11px] tracking-[0.22em] text-[var(--color-silver-600)] uppercase">
         {t("designRender.regenerateNote")}
       </p>
     </section>

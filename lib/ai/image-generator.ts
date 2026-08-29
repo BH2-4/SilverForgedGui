@@ -18,9 +18,12 @@
  * documented NAME appears only in the information strip, verbatim.
  */
 
+import { promises as fs } from "node:fs";
+import path from "node:path";
+import { OpenAI, toFile } from "openai";
 import type { ImagePrompt } from "@/lib/design/render-prompt";
 
-export type ImageProvider = "mock";
+export type ImageProvider = "mock" | "openai-dalle3" | "openai-gpt-image";
 
 export interface DesignImageRequest {
   /** The structured prompt built from the confirmed proposal. */
@@ -32,18 +35,23 @@ export interface DesignImageRequest {
 export interface DesignImageResult {
   /** Self-contained image the browser can render directly. */
   dataUrl: string;
-  mime: "image/svg+xml";
+  mime: "image/svg+xml" | "image/png";
   provider: ImageProvider;
   model: string;
   generatedAt: string;
 }
 
-/** Reads the provider selector; V1 only knows "mock". */
+/** Reads the provider selector; unknown values fall back to mock. */
 function resolveProvider(): ImageProvider {
-  const configured = process.env.IMAGE_PROVIDER;
-  if (configured && configured !== "mock") {
-    // Unknown future provider — fail closed to mock rather than crash.
-    return "mock";
+  const configured = process.env.IMAGE_PROVIDER?.toLowerCase();
+  if (configured === "openai-dalle3" || configured === "openai-gpt-image") {
+    if (!process.env.OPENAI_API_KEY) {
+      console.warn(
+        `[image-generator] IMAGE_PROVIDER=${configured} but OPENAI_API_KEY is not set — falling back to mock.`,
+      );
+      return "mock";
+    }
+    return configured;
   }
   return "mock";
 }
@@ -52,17 +60,221 @@ export async function generateDesignImage(
   request: DesignImageRequest,
 ): Promise<DesignImageResult> {
   const provider = resolveProvider();
-  if (provider === "mock") {
+  if (provider === "openai-gpt-image") {
+    return generateViaGptImage(request);
+  }
+  if (provider === "openai-dalle3") {
+    return generateViaDalle3(request);
+  }
+  return {
+    dataUrl: renderMockSvg(request),
+    mime: "image/svg+xml",
+    provider: "mock",
+    model: "mock-concept-renderer-v1",
+    generatedAt: new Date().toISOString(),
+  };
+}
+
+/* -------------------------------------------------------------------------- */
+/*  OpenAI gpt-image-1 provider — reference-grounded generation                */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * REFERENCE-GROUNDED GENERATION (the fix for "generic web-image" renders).
+ *
+ * Text-only prompts cannot convey what Guizhou Miao silver looks like — a
+ * bare motif name like "花鸟" is invisible to an image model, so results came
+ * back as generic modern jewelry. This provider feeds the model REAL photos
+ * of documented Miao silver pieces from the project's own collection
+ * database (public/collection/assets/images) as visual references, and asks
+ * it to design a NEW piece that inherits the material, craft and form
+ * language of those references.
+ *
+ * CULTURAL SAFETY — this stays inside every existing guardrail:
+ *   · the references are REAL documented artifacts (not invented patterns);
+ *   · the prompt explicitly forbids replicating any reference piece;
+ *   · the motif itself still comes only from the confirmed Stage 4 proposal.
+ */
+const REFERENCE_IMAGE_DIR = path.join(process.cwd(), "public", "collection", "assets", "images");
+
+/** product_type → collection categories that share its form language.
+ *  `craftsmanship` (26 craft close-ups) is appended to every mapping so the
+ *  model also sees the hand-work texture of the documented crafts. */
+const PRODUCT_REFERENCE_CATEGORIES: Record<string, string[]> = {
+  earrings: ["earrings", "craftsmanship"],
+  ring: ["hand-jewelry", "craftsmanship"],
+  bracelet: ["hand-jewelry", "craftsmanship"],
+  cuff: ["hand-jewelry", "craftsmanship"],
+  anklet: ["hand-jewelry", "craftsmanship"],
+  necklace: ["necklaces", "craftsmanship"],
+  pendant: ["necklaces", "craftsmanship"],
+  brooch: ["chest", "craftsmanship"],
+  hairpiece: ["headwear", "craftsmanship"],
+  unknown: ["necklaces", "craftsmanship"],
+};
+
+/**
+ * Picks reference photos for the product category. Deterministic per seed so
+ * "regenerate" varies the references too; missing files degrade silently to
+ * fewer references (never to an error).
+ */
+async function pickReferenceImages(
+  productType: string,
+  seed: number,
+): Promise<string[]> {
+  const categories =
+    PRODUCT_REFERENCE_CATEGORIES[productType] ?? PRODUCT_REFERENCE_CATEGORIES.unknown;
+
+  const candidates: string[] = [];
+  for (const category of categories) {
+    const dir = path.join(REFERENCE_IMAGE_DIR, category);
+    let files: string[] = [];
+    try {
+      files = (await fs.readdir(dir)).filter((f) => /\.(jpe?g|png|webp)$/i.test(f));
+    } catch {
+      continue;
+    }
+    candidates.push(...files.map((f) => path.join(dir, f)));
+  }
+
+  if (candidates.length === 0) return [];
+
+  /* Deterministic rotation: seed spreads which references each render sees. */
+  const count = Math.min(3, candidates.length);
+  const start = seed % candidates.length;
+  const picked: string[] = [];
+  for (let i = 0; i < count; i++) {
+    picked.push(candidates[(start + i * 3) % candidates.length]);
+  }
+  return picked;
+}
+
+async function generateViaGptImage(
+  request: DesignImageRequest,
+): Promise<DesignImageResult> {
+  const { prompt } = request;
+
+  const referenceIntro = [
+    "The attached reference photos show real, documented Miao silver pieces from Guizhou, China.",
+    "Inherit their material quality, hand-wrought craft texture and construction style — but do NOT replicate or copy any reference piece.",
+    "Design an ORIGINAL contemporary piece that clearly belongs to this silver tradition:",
+  ].join(" ");
+
+  const safetySuffix = [
+    "Do not invent any ethnic, tribal, or traditional patterns not specified below.",
+    `Do not add these elements: ${prompt.negative_prompt}.`,
+  ].join(" ");
+
+  const fullPrompt = `${referenceIntro} ${prompt.prompt} ${safetySuffix}`;
+
+  const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+    baseURL: process.env.OPENAI_BASE_URL || undefined,
+    timeout: 180_000,
+  });
+
+  const referencePaths = await pickReferenceImages(
+    prompt.form.product_type,
+    request.seed,
+  );
+
+  /* No readable references → pure text generation (same model). */
+  if (referencePaths.length === 0) {
+    const response = await openai.images.generate({
+      model: "gpt-image-2",
+      prompt: fullPrompt,
+      n: 1,
+      size: "1024x1024",
+    });
+    const b64 = response.data?.[0]?.b64_json;
+    if (!b64) throw new Error("gpt-image-2 returned no image data.");
     return {
-      dataUrl: renderMockSvg(request),
-      mime: "image/svg+xml",
-      provider,
-      model: "mock-concept-renderer-v1",
+      dataUrl: `data:image/png;base64,${b64}`,
+      mime: "image/png",
+      provider: "openai-gpt-image",
+      model: "gpt-image-2",
       generatedAt: new Date().toISOString(),
     };
   }
-  // Exhaustive: provider is typed as "mock" only.
-  throw new Error(`Unsupported image provider: ${provider satisfies never}`);
+
+  const files = await Promise.all(
+    referencePaths.map(async (p) =>
+      toFile(await fs.readFile(p), path.basename(p)),
+    ),
+  );
+
+  const response = await openai.images.edit({
+    model: "gpt-image-2",
+    image: files,
+    prompt: fullPrompt,
+    n: 1,
+    size: "1024x1024",
+  });
+
+  const b64 = response.data?.[0]?.b64_json;
+  if (!b64) {
+    throw new Error(
+      "gpt-image-2 returned no image data — the content may have been filtered by the safety layer.",
+    );
+  }
+
+  return {
+    dataUrl: `data:image/png;base64,${b64}`,
+    mime: "image/png",
+    provider: "openai-gpt-image",
+    model: "gpt-image-2",
+    generatedAt: new Date().toISOString(),
+  };
+}
+
+
+
+async function generateViaDalle3(
+  request: DesignImageRequest,
+): Promise<DesignImageResult> {
+  const { prompt } = request;
+
+  const systemPrefix = [
+    "A single piece of fine jewelry as a professional product photograph.",
+    "The design is a contemporary custom piece. No historical artifacts or replicas.",
+    "Silver metal must look like real polished/brushed sterling silver with specular highlights.",
+  ].join(" ");
+
+  const safetySuffix = [
+    "Do not invent any ethnic, tribal, or traditional patterns not specified below.",
+    `Do not add these elements: ${prompt.negative_prompt}.`,
+  ].join(" ");
+
+  const fullPrompt = `${systemPrefix} ${prompt.prompt} ${safetySuffix}`;
+
+  const dalle = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+    baseURL: process.env.OPENAI_BASE_URL || undefined,
+    timeout: 45_000,
+  });
+  const response = await dalle.images.generate({
+    model: "dall-e-3",
+    prompt: fullPrompt,
+    n: 1,
+    size: "1024x1024",
+    response_format: "b64_json",
+    quality: "standard",
+  });
+
+  const b64 = response.data?.[0]?.b64_json;
+  if (!b64) {
+    throw new Error(
+      "DALL·E 3 returned no image data — the content may have been filtered by the safety layer.",
+    );
+  }
+
+  return {
+    dataUrl: `data:image/png;base64,${b64}`,
+    mime: "image/png",
+    provider: "openai-dalle3",
+    model: "dall-e-3",
+    generatedAt: new Date().toISOString(),
+  };
 }
 
 /* -------------------------------------------------------------------------- */

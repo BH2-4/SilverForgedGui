@@ -609,6 +609,7 @@ export function ParticleField() {
   return (
     <canvas
       ref={canvasRef}
+      id="particle-field"
       aria-hidden
       className="pointer-events-none fixed inset-0 z-0 h-full w-full"
     />

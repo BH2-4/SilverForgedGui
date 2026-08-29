@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { SectionLabel } from "@/components/shared/SectionLabel";
 import { useI18n } from "@/components/i18n/I18nProvider";
@@ -52,7 +52,7 @@ function ChipGroup({
 
   return (
     <div className="flex flex-col gap-3">
-      <span className="text-[10px] tracking-[0.22em] text-[var(--color-silver-400)] uppercase">
+      <span className="text-[11px] tracking-[0.22em] text-[var(--color-silver-400)] uppercase">
         {label}
       </span>
       <div className="flex flex-wrap gap-2">

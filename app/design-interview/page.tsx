@@ -3,7 +3,7 @@ import { InterviewFlow } from "@/components/design-interview/InterviewFlow";
 import { isDemoMode } from "@/lib/env";
 
 export const metadata: Metadata = {
-  title: "Stage 0 · Guided Design Interview — Silver Future",
+  title: "Stage 0 · Guided Design Interview — Silver Forged Gui",
   description:
     "几个轻问题，帮我们看清你的审美与生活。在谈论银饰之前，先聊聊你自己。",
 };

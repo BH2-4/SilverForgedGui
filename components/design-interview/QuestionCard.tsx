@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { Check } from "lucide-react";
@@ -78,25 +78,21 @@ export function QuestionCard({
 
   return (
     <section
-      className="animate-fade-in flex flex-col gap-7"
+      className="animate-fade-in flex flex-col gap-9"
       aria-label={t("interview.questionLabel", { step })}
     >
       <div className="flex flex-col gap-2">
-        <span className="font-mono text-[11px] tracking-[0.2em] text-[var(--color-silver-500)] uppercase">
+        <span className="stage-index">
           {t("interview.questionLabel", { step })}
         </span>
-        <h2 className="font-editorial text-2xl leading-[1.4] tracking-[0.01em] text-[var(--color-ivory)] sm:text-3xl">
-          {title}
-        </h2>
+        <h2 className="act-title max-w-2xl">{title}</h2>
         {hasSubtitle && (
-          <p className="text-[13px] text-[var(--color-silver-500)]">
-            {subtitle}
-          </p>
+          <p className="act-body mt-1 max-w-lg">{subtitle}</p>
         )}
       </div>
 
       <div
-        className="grid grid-cols-1 gap-2.5 sm:grid-cols-2"
+        className="grid grid-cols-1 gap-2 sm:grid-cols-2"
         role={isMulti ? "group" : "radiogroup"}
         aria-label={title}
       >
@@ -113,9 +109,9 @@ export function QuestionCard({
               onClick={() =>
                 isMulti ? toggleMulti(option.id) : selectSingle(option.id)
               }
-              className={`flex flex-col gap-1.5 rounded-[var(--radius-md)] border p-4 text-left transition-all duration-200 sm:p-5 ${selected
-                  ? "border-[var(--color-silver-300)] bg-[rgba(201,204,209,0.08)] shadow-[0_0_0_1px_rgba(201,204,209,0.25)]"
-                  : "border-[var(--color-line)] bg-[rgba(255,255,255,0.02)] hover:-translate-y-0.5 hover:border-[var(--color-line-strong)] hover:bg-[rgba(255,255,255,0.04)]"
+              className={`flex flex-col gap-2 rounded-[2px] border p-5 text-left transition-all duration-500 ${selected
+                  ? "border-[rgba(245,245,247,0.38)] bg-[rgba(245,245,247,0.05)] shadow-[0_1px_0_0_rgba(245,245,247,0.22)]"
+                  : "border-[var(--color-line)] bg-transparent hover:border-[rgba(245,245,247,0.22)] hover:bg-[rgba(245,245,247,0.03)]"
                 }`}
             >
               <span className="flex items-center gap-2 text-[14px] tracking-[0.01em] text-[var(--color-silver-100)]">
@@ -139,7 +135,7 @@ export function QuestionCard({
 
       {isMulti && (
         <div className="flex items-center gap-4">
-          <span className="font-mono text-[11px] tracking-[0.14em] text-[var(--color-silver-400)]">
+          <span className="font-mono text-[12px] tracking-[0.14em] text-[var(--color-silver-400)]">
             {t("interview.selectedCount", {
               count: pending.length,
               max: maxSelect,
@@ -150,7 +146,7 @@ export function QuestionCard({
             type="button"
             disabled={pending.length === 0}
             onClick={() => onAnswer(question.id, pending)}
-            className="rounded-full border border-[var(--color-line-strong)] bg-[linear-gradient(180deg,var(--color-silver-100),var(--color-silver-300))] px-6 py-2.5 text-[12px] font-medium tracking-[0.18em] text-[var(--color-bg)] uppercase transition-all duration-300 hover:brightness-105 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:brightness-100"
+            className="rounded-[2px] border border-[var(--color-ivory)] bg-[var(--color-ivory)] px-6 py-2.5 text-[12px] font-medium tracking-[0.18em] text-[var(--color-bg)] uppercase transition-all duration-300 hover:bg-[var(--color-silver-200)] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
           >
             {t("interview.confirm")}
           </button>
@@ -170,13 +166,13 @@ export function QuestionCard({
           <span />
         )}
         <span className="flex-1" />
-        <span className="text-[11px] text-[var(--color-silver-600)]">
+        <span className="text-[12px] text-[var(--color-silver-600)]">
           {t("interview.skipHint")}
         </span>
         <button
           type="button"
           onClick={() => onSkip(question.id)}
-          className="rounded-full border border-[var(--color-line)] px-5 py-2 text-[11px] tracking-[0.18em] text-[var(--color-silver-400)] uppercase transition-all duration-200 hover:border-[var(--color-line-strong)] hover:text-[var(--color-silver-200)]"
+          className="rounded-[2px] border border-[var(--color-line)] px-5 py-2 text-[12px] tracking-[0.18em] text-[var(--color-silver-400)] uppercase transition-all duration-300 hover:border-[rgba(245,245,247,0.22)] hover:text-[var(--color-silver-200)]"
         >
           {t("interview.skip")}
         </button>

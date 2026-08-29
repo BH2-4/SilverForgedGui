@@ -21,7 +21,7 @@ import type { ImageProvider } from "@/lib/ai/image-generator";
  */
 export interface RenderedImage {
   data_url: string;
-  mime: "image/svg+xml";
+  mime: "image/svg+xml" | "image/png";
   provider: ImageProvider;
   model: string;
   generated_at: string;

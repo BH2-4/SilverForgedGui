@@ -1,10 +1,9 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { AlertCircle, ArrowLeft, ArrowRight, RotateCcw } from "lucide-react";
 import { DnaSummary } from "@/components/cultural-match/DnaSummary";
-import { GuardrailPanel } from "@/components/cultural-match/GuardrailPanel";
 import { SectionLabel } from "@/components/shared/SectionLabel";
 import { useI18n } from "@/components/i18n/I18nProvider";
 import { DESIGN_TRANSLATION_STORAGE_KEY, STAGE3_BRIEF_STORAGE_KEY } from "@/lib/constants/storage";
@@ -16,7 +15,6 @@ import { TranslationSpecs } from "./TranslationSpecs";
 import { DesignBriefPanel } from "./DesignBriefPanel";
 import { ReadyToCreate } from "./ReadyToCreate";
 import { OrientationPanel } from "./OrientationPanel";
-import { ReasoningPanel } from "./ReasoningPanel";
 import { DirectionsGallery } from "./DirectionsGallery";
 import type {
   BriefApiResponse,
@@ -298,7 +296,7 @@ export function DesignTranslationStudio() {
           {TRANSLATION_STAGE_KEYS.map((key, i) => (
             <li key={key} className="flex items-center gap-5">
               <span
-                className={`font-editorial text-[20px] leading-[1.2] tracking-[-0.005em] sm:text-[22px] ${i <= stage
+                className={`font-sans text-[18px] leading-[1.2] tracking-[-0.005em] sm:text-[20px] ${i <= stage
                   ? "text-[var(--color-ivory)]"
                   : "text-[var(--color-silver-600)]"
                   }`}
@@ -319,7 +317,7 @@ export function DesignTranslationStudio() {
     return (
       <div className="animate-fade-in flex flex-1 flex-col items-start justify-center gap-8 py-16">
         <SectionLabel>{t("designTranslation.emptyLabel")}</SectionLabel>
-        <h2 className="font-editorial max-w-2xl text-4xl leading-[1.1] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-5xl">
+        <h2 className="font-sans max-w-2xl text-[28px] leading-[1.1] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[32px]">
           {t("designTranslation.emptyTitle")}
         </h2>
         <p className="max-w-md text-[14px] leading-relaxed text-[var(--color-silver-400)]">
@@ -351,7 +349,7 @@ export function DesignTranslationStudio() {
             strokeWidth={1.5}
           />
           <div className="flex-1">
-            <div className="mb-1 text-[11px] tracking-[0.14em] text-red-300/70 uppercase">
+            <div className="mb-1 text-[12px] tracking-[0.14em] text-red-300/70 uppercase">
               {t("designTranslation.errorInterrupted")}
             </div>
             <div>{tApiError(phase.code, phase.message)}</div>
@@ -378,9 +376,6 @@ export function DesignTranslationStudio() {
 
         {/* SECTION 01 — 你的方向 */}
         <OrientationPanel brief={phase.brief} orientation={phase.body.orientation} />
-
-        {/* SECTION 02 — 为什么是这些方向 */}
-        <ReasoningPanel chain={phase.body.reasoning_chain} />
 
         {/* SECTION 03 — 为你生成的 3 个设计方向 */}
         <DirectionsGallery
@@ -420,7 +415,7 @@ export function DesignTranslationStudio() {
       {/* The direction you chose */}
       <section className="flex flex-col gap-4 border-t border-[var(--color-line)] pt-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <span className="text-[10px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
+          <span className="text-[11px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
             {t("designDirections.briefBarLabel")}
           </span>
           <button
@@ -432,7 +427,7 @@ export function DesignTranslationStudio() {
             {t("designDirections.backToDirections")}
           </button>
         </div>
-        <p className="font-editorial text-[24px] leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)]">
+        <p className="font-sans text-[20px] leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)]">
           {t(`designDirections.direction.name.${body.design_brief.selected_direction.tier}`)}
           <span className="ml-3 text-[14px] tracking-[0] text-[var(--color-silver-500)]">
             {body.design_brief.selected_direction.origin_match_name ??
@@ -453,9 +448,6 @@ export function DesignTranslationStudio() {
 
       {/* DESIGN BRIEF */}
       <DesignBriefPanel brief={body.design_brief} />
-
-      {/* Guardrail still active on Stage 3 */}
-      <GuardrailPanel guardrail={body.verification} />
 
       {/* Ready to Create */}
       <ReadyToCreate brief={body.design_brief} onRestart={handleRestart} />

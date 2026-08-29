@@ -30,6 +30,9 @@ import type { RenderApiResponse } from "@/types/design-render";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+// 生图（gpt-image-2 含参考图编辑）实测 30-90 秒；Vercel 默认 10s 会超时。
+// 60s 在所有计划（含 Hobby）内均合法。
+export const maxDuration = 60;
 
 const RenderRequestSchema = ProposalHandoffSchema.extend({
   /** Regeneration seed — different seeds vary the mock's decorative layout. */

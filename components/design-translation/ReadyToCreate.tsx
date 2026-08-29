@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { ArrowRight, RotateCcw } from "lucide-react";
@@ -24,7 +24,7 @@ export function ReadyToCreate({ brief, onRestart }: ReadyToCreateProps) {
     <section className="glass-panel flex flex-col gap-8 rounded-[var(--radius-lg)] p-8 sm:p-10">
       <SectionLabel>{t("designTranslation.readyLabel")}</SectionLabel>
       <div className="flex flex-col gap-4">
-        <h3 className="font-editorial text-3xl leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-4xl">
+        <h3 className="font-sans text-[24px] leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[28px]">
           {brief.heritage_reference
             ? t("designTranslation.readyTitleGrounded")
             : t("designTranslation.readyTitlePlain")}
@@ -53,7 +53,7 @@ export function ReadyToCreate({ brief, onRestart }: ReadyToCreateProps) {
           />
         </Link>
       </div>
-      <div className="text-[10px] tracking-[0.22em] text-[var(--color-silver-600)] uppercase">
+      <div className="text-[11px] tracking-[0.22em] text-[var(--color-silver-600)] uppercase">
         {t("designTranslation.readyNextTitle")}
       </div>
     </section>

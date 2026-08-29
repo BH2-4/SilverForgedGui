@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { ArrowRight, RotateCcw } from "lucide-react";
 import { useI18n } from "@/components/i18n/I18nProvider";
@@ -52,7 +52,7 @@ export function IntentSummary({
     dim?: boolean;
   }) => (
     <div className="flex flex-col gap-1.5 border-t border-l border-[var(--color-line)] p-4 first:border-l-0 sm:p-5">
-      <span className="font-mono text-[10px] tracking-[0.18em] text-[var(--color-silver-500)] uppercase">
+      <span className="font-mono text-[11px] tracking-[0.18em] text-[var(--color-silver-500)] uppercase">
         {label}
       </span>
       <span
@@ -65,15 +65,15 @@ export function IntentSummary({
 
   return (
     <section className="animate-fade-in flex flex-col gap-8">
-      <h2 className="font-editorial text-3xl leading-[1.2] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-4xl">
+      <h2 className="font-sans text-[24px] leading-[1.2] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[28px]">
         {t("interview.summaryTitle")}
       </h2>
 
       <blockquote className="rounded-[0_var(--radius-md)_var(--radius-md)_0] border-l-2 border-[var(--color-silver-300)] bg-[rgba(255,255,255,0.03)] px-6 py-5">
-        <p className="font-editorial text-[15px] leading-[1.9] text-[var(--color-silver-200)]">
+        <p className="font-sans text-[15px] leading-[1.9] text-[var(--color-silver-200)]">
           {intent.user_context}
         </p>
-        <span className="mt-3 block font-mono text-[10px] tracking-[0.16em] text-[var(--color-silver-500)] uppercase">
+        <span className="mt-3 block font-mono text-[11px] tracking-[0.16em] text-[var(--color-silver-500)] uppercase">
           {t("interview.userContextLabel")} ·{" "}
           {source === "ai"
             ? t("interview.sourceAi")
@@ -136,7 +136,7 @@ export function IntentSummary({
       </div>
 
       <div className="flex items-center gap-4">
-        <span className="font-mono text-[10px] tracking-[0.18em] text-[var(--color-silver-500)] uppercase">
+        <span className="font-mono text-[11px] tracking-[0.18em] text-[var(--color-silver-500)] uppercase">
           {t("interview.confidenceLabel")}
         </span>
         <div className="h-0.5 flex-1 overflow-hidden rounded-full bg-[rgba(255,255,255,0.08)]">
@@ -171,7 +171,7 @@ export function IntentSummary({
         <button
           type="button"
           onClick={onRestart}
-          className="inline-flex items-center gap-2 text-[11px] tracking-[0.16em] text-[var(--color-silver-500)] uppercase transition-colors duration-200 hover:text-[var(--color-silver-300)]"
+          className="inline-flex items-center gap-2 text-[12px] tracking-[0.16em] text-[var(--color-silver-500)] uppercase transition-colors duration-200 hover:text-[var(--color-silver-300)]"
         >
           <RotateCcw className="h-3.5 w-3.5" strokeWidth={1.5} />
           {t("interview.restart")}
