@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { SectionLabel } from "@/components/shared/SectionLabel";
 import { useI18n } from "@/components/i18n/I18nProvider";
@@ -8,13 +8,15 @@ interface TranslationSpecsProps {
   brief: DesignBrief;
 }
 
+type Provenance = "user" | "ai";
+
 /**
- * DESIGN TRANSLATION — the product spec grid (Spree-style: clean rows,
- * hairlines, restrained surfaces). Every value is engine-derived from the
- * Design Brief; motif rows carry their source provenance inline.
+ * EXPERIENCE LAYER · DESIGN SPEC
  *
- * Spec enum values (form / scale / weight / …) are localized via the
- * values.* dictionary layer for display only — the brief stays untouched.
+ * 规格不再以表格行铺开，而是图纸标注式的展签网格：小号大写标签 +
+ * 细线 + 大数值。每个值仍由引擎从 Design Brief 推导；每行携带来源徽章
+ * ——「你的选择」与「AI 建议」严格区分，用户没有填写的内容永远以
+ * AI SUGGESTED 标注，绝不冒充用户选择。
  */
 export function TranslationSpecs({ brief }: TranslationSpecsProps) {
   const { t, tv } = useI18n();
@@ -29,15 +31,22 @@ export function TranslationSpecs({ brief }: TranslationSpecsProps) {
         .join(" / ")
       : t("designTranslation.specsMotifNone");
 
-  const rows: Array<{ label: string; value: string; note?: string }> = [
+  const rows: Array<{
+    label: string;
+    value: string;
+    note?: string;
+    provenance: Provenance;
+  }> = [
     {
       label: t("designTranslation.formLabel"),
       value: brief.form_language.map((v) => tv("form", v)).join(" · "),
+      provenance: "ai",
     },
     {
       label: t("designTranslation.materialLabel"),
       value: `${tv("material", brief.material.primary)} · ${tv("finish", brief.material.finish)}`,
       note: brief.material.notes ?? undefined,
+      provenance: "ai",
     },
     {
       label: t("designTranslation.motifLabel"),
@@ -46,26 +55,32 @@ export function TranslationSpecs({ brief }: TranslationSpecsProps) {
         brief.motif_elements.length > 0
           ? t("designTranslation.specsMotifNote")
           : undefined,
+      provenance: "ai",
     },
     {
       label: t("designTranslation.scaleLabel"),
       value: tv("size", brief.size),
+      provenance: brief.spec_provenance.size,
     },
     {
       label: t("designTranslation.weightLabel"),
       value: tv("weight", brief.weight),
+      provenance: brief.spec_provenance.weight,
     },
     {
       label: t("designTranslation.complexityLabel"),
       value: tv("complexity", brief.complexity),
+      provenance: "ai",
     },
     {
       label: t("designTranslation.culturalVisibilityLabel"),
       value: tv("culturalVisibility", brief.cultural_visibility),
+      provenance: brief.spec_provenance.cultural_visibility,
     },
     {
       label: t("designTranslation.wearabilityLabel"),
       value: tv("wearability", brief.wearability),
+      provenance: brief.spec_provenance.wearability,
     },
   ];
 
@@ -78,29 +93,31 @@ export function TranslationSpecs({ brief }: TranslationSpecsProps) {
         </span>
       </div>
 
-      <div className="glass-panel overflow-hidden rounded-[var(--radius-lg)]">
-        <dl className="divide-y divide-[var(--color-line)]">
-          {rows.map((row) => (
-            <div
-              key={row.label}
-              className="grid grid-cols-1 gap-3 px-8 py-6 sm:grid-cols-[180px_1fr] sm:gap-8 sm:px-10"
-            >
-              <dt className="text-[11px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase sm:pt-1">
-                {row.label}
-              </dt>
-              <dd className="flex flex-col gap-2">
-                <span className="font-sans text-[19px] leading-[1.3] tracking-[-0.005em] text-[var(--color-ivory)]">
-                  {row.value}
-                </span>
-                {row.note && (
-                  <span className="text-[12px] leading-relaxed text-[var(--color-silver-500)]">
-                    {row.note}
-                  </span>
-                )}
-              </dd>
-            </div>
-          ))}
-        </dl>
+      <div className="grid grid-cols-1 gap-x-10 gap-y-2 sm:grid-cols-2 lg:grid-cols-3">
+        {rows.map((row) => (
+          <div key={row.label} className="design-attr">
+            <span className="design-attr-label">
+              {row.label}
+              <span
+                className={`ml-2 align-middle font-mono text-[9px] tracking-[0.18em] uppercase ${
+                  row.provenance === "user"
+                    ? "text-[var(--color-silver-400)]"
+                    : "text-[var(--color-silver-600)]"
+                }`}
+              >
+                {row.provenance === "user"
+                  ? t("common.badges.userSelected")
+                  : t("common.badges.aiSuggested")}
+              </span>
+            </span>
+            <span className="design-attr-value">{row.value}</span>
+            {row.note && (
+              <span className="mt-1 max-w-md text-[12px] leading-relaxed text-[var(--color-silver-500)]">
+                {row.note}
+              </span>
+            )}
+          </div>
+        ))}
       </div>
     </section>
   );

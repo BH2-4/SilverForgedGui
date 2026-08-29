@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -121,6 +121,8 @@ export function StudioForm({ demoMode }: StudioFormProps) {
       image: image
         ? { name: image.name, type: image.type, size: image.size }
         : undefined,
+      // Actual pixels — the vision analysis reads the image itself.
+      imageData: image ? image.dataUrl : undefined,
       history: extraHistory.length > 0 ? extraHistory : undefined,
     }),
     [story, prefs, image],
@@ -257,13 +259,11 @@ export function StudioForm({ demoMode }: StudioFormProps) {
           type="button"
           onClick={handleSubmit}
           disabled={!hasInput}
-          className="group inline-flex items-center gap-3 rounded-full border border-[var(--color-line-strong)] bg-[linear-gradient(180deg,var(--color-silver-100),var(--color-silver-300))] px-8 py-4 text-[12px] font-medium tracking-[0.18em] text-[var(--color-bg)] uppercase transition-all duration-300 hover:brightness-105 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:brightness-100"
+          data-variant="solid"
+          className="journey-cta"
         >
           {t("common.actions.understandMyStory")}
-          <ArrowRight
-            className="h-4 w-4 transition-transform duration-300 group-enabled:group-hover:translate-x-0.5"
-            strokeWidth={1.5}
-          />
+          <ArrowRight className="h-4 w-4" strokeWidth={1.5} />
         </button>
       </div>
     </div>

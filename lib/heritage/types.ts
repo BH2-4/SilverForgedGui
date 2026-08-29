@@ -51,6 +51,18 @@ export const ClaimLevelSchema = z.enum([
 export type ClaimLevel = z.infer<typeof ClaimLevelSchema>;
 
 /* -------------------------------------------------------------------------- */
+/*  Product compatibility (Stage 2 hard constraint)                            */
+/* -------------------------------------------------------------------------- */
+
+export const ProductCompatibilitySchema = z.enum([
+  "exact",
+  "compatible",
+  "incompatible",
+]);
+
+export type ProductCompatibility = z.infer<typeof ProductCompatibilitySchema>;
+
+/* -------------------------------------------------------------------------- */
 /*  Cultural evidence — the traceable unit of every cultural fact              */
 /* -------------------------------------------------------------------------- */
 
@@ -248,12 +260,12 @@ export type MatchEntityKind = (typeof MATCH_ENTITY_KINDS)[number];
  * and every component score is 0–1 before weighting. Sum = 100.
  */
 export const MATCH_WEIGHTS = {
-  visual_style_fit: 25,
-  product_fit: 15,
-  wearability_fit: 15,
-  regional_fit: 20,
-  keyword_fit: 10,
-  evidence_confidence: 15,
+  visual_style_fit: 22,
+  product_fit: 30,
+  wearability_fit: 12,
+  regional_fit: 12,
+  keyword_fit: 12,
+  evidence_confidence: 12,
 } as const;
 
 export type ScoreDimension = keyof typeof MATCH_WEIGHTS;
@@ -268,6 +280,14 @@ export interface CulturalMatchResult {
   name: string;
   type: MatchEntityKind;
   region: string | null;
+  /**
+   * Product-type compatibility (Stage 2 hard constraint):
+   *   exact        — the dataset documents this very form
+   *   compatible   — translatable structure / design language, never
+   *                  presented as the requested product itself
+   *   incompatible — filtered out before ranking; never reaches the client
+   */
+  product_compatibility: ProductCompatibility;
   /** 0–100, integer. Σ(weight × component). */
   match_score: number;
   score_breakdown: ScoreBreakdown;

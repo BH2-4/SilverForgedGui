@@ -16,6 +16,10 @@
       "continueToAiSilverDesign": "Passer au Design Argent IA",
       "useThisDirection": "Choisir cette direction",
       "selectedForTranslation": "Sélectionné pour la traduction",
+      "collapseDetails": "Réduire",
+      "viewDesignStory": "Voir l'histoire du design",
+      "readDesignLog": "Lire le journal de design complet",
+      "viewFullDna": "Voir l'ADN design complet",
       "tryExample": "Essayer un exemple →",
       "generateConcepts": "Générer des concepts de design argent",
       "viewProposal": "Voir la proposition de design personnalisée",
@@ -45,7 +49,9 @@
       "officialRecord": "Registre officiel",
       "aiRationale": "Raisonnement IA",
       "stage1AiInference": "Étape 1 · Inférence IA",
-      "engineDerived": "Généré par le moteur · déterministe"
+      "engineDerived": "Généré par le moteur · déterministe",
+      "userSelected": "Votre choix",
+      "aiSuggested": "Suggestion IA"
     },
     "stages": {
       "interview": "00 · Entretien mémoire",
@@ -56,18 +62,55 @@
       "designRender": "05 · Rendu de design"
     },
     "navAria": "Étapes du pipeline",
-    "collectionLabel": "La Collection"
+    "collectionLabel": "La Collection",
+    "navJourney": "Parcours",
+    "navAbout": "À propos"
+  },
+  "journey": {
+    "railAria": "Navigation du parcours de design",
+    "eyebrow": "LE PARCOURS",
+    "title": "De la mémoire, à l'argent.",
+    "subtitle": "Un parcours continu — votre histoire, portée par la culture, le design et la forge, devient un argent que l'on porte.",
+    "prologueLabel": "Prologue · Optionnel",
+    "enter": "Entrer",
+    "stations": {
+      "s0": {
+        "name": "Entretien mémoire",
+        "desc": "Quelques questions douces pour comprendre votre goût et votre vie."
+      },
+      "s1": {
+        "name": "Votre histoire",
+        "desc": "Dites-nous ce que votre argent doit retenir pour vous."
+      },
+      "s2": {
+        "name": "Mémoire culturelle",
+        "desc": "Découvrez où votre histoire rencontre le Guizhou."
+      },
+      "s3": {
+        "name": "Traduction du design",
+        "desc": "Regardez la mémoire devenir langage de design."
+      },
+      "s4": {
+        "name": "Votre proposition",
+        "desc": "Façonnez la pièce qui vous appartient."
+      },
+      "s5": {
+        "name": "Voir votre argent",
+        "desc": "Enfin, voyez ce que vous avez imaginé."
+      }
+    }
   },
   "home": {
     "coCreationNote": "Co-création mondiale · V1",
     "chapterLabel": "Un nouveau chapitre de l'argent",
-    "title1": "Ne pas vendre l'argent au monde.",
-    "title2": "Laisser le monde le dessiner.",
+    "title1": "L'artisanat de l'argent du Guizhou vers le monde.",
+    "title2": "Que le monde rencontre son propre argent.",
     "intro": "Silver Future est un atelier numérique de co-création des bijoux en argent du Guizhou, propulsé par l'IA. Le goût mondial rencontre l'héritage Miao — réinventé par un design intelligent.",
     "engineNote": "Moteur de Demande Globale · V1",
     "footer1": "Guizhou · Argent Miao · Réinventé",
     "footer2": "© 2026 Silver Future — Prototype",
     "exploreProcess": "Explorer le processus",
+    "scrollHint": "Défilez pour explorer",
     "processTitle": "Les cinq étapes",
     "processSub": "De votre histoire à un argent que vous porterez.",
     "stageEnter": "Entrer",
@@ -147,7 +190,11 @@
       "stage3": "Vérification des sources et des garde-fous"
     },
     "heritageDirectionsLabel": "Directions patrimoniales",
-    "topOfRanked": "{total} directions classées · source d'abord",
+    "topOfRanked": "{pool} directions culturelles dans la base · Top {total} selon vos choix",
+    "selectionSource": {
+      "user": "Votre choix",
+      "recommended": "Recommandation n°1"
+    },
     "emptyLabel": "Aucun ADN de design trouvé",
     "emptyTitle": "D'abord, dites-nous ce que vous souhaitez porter.",
     "emptyBody": "Le Match Culturel part d'un brief de design. Complétez l'Étape 1 dans le Studio de Design Global, puis continuez ici.",
@@ -176,7 +223,15 @@
       "claimLevelLabel": "Niveau d'affirmation",
       "suggestionLabel": "Suggestion de design",
       "boundaryLabel": "Limite culturelle",
-      "regionFallback": "Argent miao du Guizhou — langage visuel apparenté"
+      "regionFallback": "Argent miao du Guizhou — langage visuel apparenté",
+      "whyThisMatch": "Pourquoi cette correspondance",
+      "carryForward": "Emporter cette culture",
+      "archiveImageNote": "Image d'archive · véritable argent miao",
+      "fitLabel": "Affinité",
+      "compatibility": {
+        "exact": "Correspondance exacte",
+        "compatible": "Traduction compatible"
+      }
     },
     "why": {
       "visualAffinity": "Le langage formel de « {motif} » s'accorde fortement avec vos préférences visuelles — une affinité esthétique uniquement, non un sens culturel.",
@@ -214,8 +269,6 @@
     "errorInterrupted": "La traduction a été interrompue",
     "directionLabel": "Direction culturelle",
     "directionMetaLabel": "Étape 2 · Match Patrimonial",
-    "evidenceLabel": "Preuve culturelle",
-    "verifiedSourcesLabel": "Sources vérifiées",
     "noDirectionTitle": "Aucune direction culturelle sélectionnée.",
     "noDirectionBody": "Ce brief est traduit sans référence patrimoniale. Il ne formule aucune revendication culturelle — et sa couche d'interprétation a l'interdiction d'en inventer.",
     "specsLabel": "Traduction de Design",
@@ -230,9 +283,6 @@
     "specsMotifNote": "Les sujets de motifs proviennent uniquement de la base de connaissance — leur signification documentée est citée mot pour mot, jamais étendue.",
     "specsMotifNone": "Aucun — design mené par la forme",
     "briefLabel": "Brief de Design",
-    "briefDocumentedLabel": "Preuve culturelle documentée",
-    "briefNeverAi": "Registre officiel · jamais rédigé par l'IA",
-    "briefNoFacts": "Aucun fait culturel documenté ne s'applique à ce brief.",
     "interpretationLabel": "Interprétation de design",
     "interpretationNote": "Interprétation de design IA · pas un fait culturel",
     "discardedNote": "Écartés de votre ADN car aucun registre officiel ne les soutient : {items}.",
@@ -252,10 +302,10 @@
   "designDirections": {
     "section1Label": "01 · Votre direction",
     "section1Note": "Lecture de préférences par l'IA · non un fait culturel",
-    "orientationSummary": "D'après vos choix, vous vous orientez vers un {product} {style} — à ce stade, {count} directions culturelles de la base de connaissances méritent peut-être votre exploration.",
+    "orientationSummary": "D'après vos choix, vous vous orientez vers un {product} {style} — nous filtrons la base de données culturelle du Guizhou pour en dégager les pistes culturelles les plus pertinentes pour vous.",
     "orientationNoMatch": "Vous n'avez pas encore retenu de direction culturelle ; les directions ci-dessous s'appuient davantage sur le langage de la forme.",
     "orientationSelected": "La direction explorée à l'étape 2 : {name}",
-    "orientationPool": "{count} directions culturelles entrées dans cette traduction",
+    "orientationPool": "Après filtrage par produit et préférences, les {count} pistes culturelles les plus pertinentes sont retenues pour cette traduction",
     "section2Label": "02 · Pourquoi ces directions",
     "section2Title": "Comment vos préférences deviennent des directions de design, étape par étape.",
     "layerPreferences": "Vos préférences",
@@ -519,7 +569,8 @@
       "claimLevel": "Niveau d'affirmation",
       "confidence": "Confiance",
       "facts": "Faits documentés",
-      "records": "Registres officiels"
+      "records": "Registres officiels",
+      "trustNote": "Source vérifiée — cette entrée {kind} provient de la base officielle du patrimoine immatériel du Guizhou ; le dossier documentaire complet est archivé et disponible sur demande."
     },
     "sources": {
       "none": "Cette proposition ne référence aucune entité culturelle — c'est un design purement formel qui ne formule aucune affirmation culturelle."

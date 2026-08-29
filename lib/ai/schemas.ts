@@ -47,6 +47,80 @@ const OCCASIONS = [
   "unknown",
 ] as const;
 
+/**
+ * Structured visual analysis of the user's optional inspiration image.
+ *
+ * TRUTH BOUNDARY (hard rules):
+ *  - The image is evidence of what the user LIKES visually — nothing more.
+ *  - It is never a cultural source: no Guizhou/Miao cultural origin may be
+ *    inferred from it.
+ *  - `observed_product_type` records what the image appears to show, but it
+ *    NEVER overrides the user's explicit product choice.
+ *  - null when no image was uploaded — no analysis is ever fabricated.
+ */
+export const InspirationAnalysisSchema = z.object({
+  form: z
+    .string()
+    .min(1)
+    .max(120)
+    .describe(
+      "Overall form of the piece shown, e.g. 'layered chain with a drop pendant'.",
+    ),
+  silhouette: z
+    .string()
+    .min(1)
+    .max(120)
+    .describe("Dominant outline, e.g. 'soft circular', 'long vertical drop'."),
+  proportion: z
+    .string()
+    .min(1)
+    .max(120)
+    .describe(
+      "Scale relationship of parts, e.g. 'small pendant on fine chain', 'wide cuff band'.",
+    ),
+  material_impression: z
+    .string()
+    .min(1)
+    .max(120)
+    .describe("Perceived material, e.g. 'matte silver', 'polished metal with enamel'."),
+  ornament_density: z
+    .enum(["minimal", "restrained", "moderate", "rich", "maximal"])
+    .describe("How densely ornamented the piece appears."),
+  pattern: z
+    .string()
+    .min(1)
+    .max(160)
+    .describe("Surface pattern observed, e.g. 'fine dot texture', 'woven links'."),
+  geometry: z
+    .string()
+    .min(1)
+    .max(120)
+    .describe("Structural geometry, e.g. 'interlocking circles', 'asymmetric form'."),
+  finish: z
+    .string()
+    .min(1)
+    .max(120)
+    .describe("Surface finish, e.g. 'high polish', 'brushed satin', 'oxidized recesses'."),
+  mood: z
+    .string()
+    .min(1)
+    .max(120)
+    .describe("Overall mood the image conveys, e.g. 'quiet and architectural'."),
+  visual_keywords: z
+    .array(z.string().min(1))
+    .max(8)
+    .describe(
+      "Short lower-case visual tokens for downstream prompt building, e.g. ['fluid-chain', 'matte-silver'].",
+    ),
+  observed_product_type: z
+    .enum(PRODUCT_TYPES)
+    .describe(
+      "What product the image appears to show. Visual observation only — never overrides the user's stated product_type.",
+    ),
+});
+
+export type InspirationAnalysis = z.infer<typeof InspirationAnalysisSchema>;
+
 export const GlobalDesignBriefSchema = z.object({
   market: z
     .string()
@@ -137,6 +211,14 @@ export const GlobalDesignBriefSchema = z.object({
     .describe(
       "Concise editorial explanation of how the AI understood the user's intent. 1–3 sentences.",
     ),
+
+  /**
+   * Visual analysis of the user's uploaded inspiration image.
+   * null when no image was uploaded — never fabricated. The image is a
+   * statement of aesthetic preference only: never cultural evidence, and
+   * its observed product type never overrides the user's choice.
+   */
+  inspiration_analysis: InspirationAnalysisSchema.nullable().default(null),
 });
 
 export type GlobalDesignBrief = z.infer<typeof GlobalDesignBriefSchema>;
@@ -206,6 +288,12 @@ export const GlobalDemandInputSchema = z.object({
   emotions: z.array(z.string().max(40)).max(10).optional(),
   culturalVisibility: z.string().max(20).optional(),
   image: InspirationImageMetaSchema.optional(),
+  /**
+   * Base64 data URL of the inspiration image (the actual pixels) when the
+   * user uploaded one. Optional — absent means no image was attached and
+   * the brief's inspiration_analysis must be null.
+   */
+  imageData: z.string().max(9_000_000).optional(),
   history: z.array(ConversationTurnSchema).max(12).optional(),
 });
 

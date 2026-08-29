@@ -408,6 +408,9 @@ function compose(signals: Signals, input: GlobalDemandInput): GlobalDesignBrief 
     avoid: [...avoid].slice(0, 10),
     confidence: Number(confidence.toFixed(2)),
     reasoning,
+    // Demo Mode performs no vision analysis — a real analysis is never
+    // fabricated (the demo provider has no image understanding).
+    inspiration_analysis: null,
   };
 }
 

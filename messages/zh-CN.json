@@ -16,6 +16,10 @@
       "continueToAiSilverDesign": "进入 AI 银饰设计",
       "useThisDirection": "选用此方向",
       "selectedForTranslation": "已选用于设计翻译",
+      "collapseDetails": "收起",
+      "viewDesignStory": "查看设计故事",
+      "readDesignLog": "阅读完整设计日志",
+      "viewFullDna": "查看完整设计基因",
       "tryExample": "试试示例 →",
       "generateConcepts": "生成银饰设计概念",
       "viewProposal": "查看定制设计提案",
@@ -45,7 +49,9 @@
       "officialRecord": "官方记录",
       "aiRationale": "AI 推理",
       "stage1AiInference": "阶段 1 · AI 推断",
-      "engineDerived": "引擎推导 · 确定性"
+      "engineDerived": "引擎推导 · 确定性",
+      "userSelected": "你的选择",
+      "aiSuggested": "AI 建议"
     },
     "stages": {
       "interview": "00 · 记忆访谈",
@@ -56,18 +62,55 @@
       "designRender": "05 · 设计效果图"
     },
     "navAria": "流程阶段",
-    "collectionLabel": "成品系列"
+    "collectionLabel": "成品系列",
+    "navJourney": "旅程",
+    "navAbout": "关于"
+  },
+  "journey": {
+    "railAria": "设计旅程导航",
+    "eyebrow": "THE JOURNEY",
+    "title": "从记忆，到银。",
+    "subtitle": "一次连续的定制旅程——你的故事，经文化、设计与锻造，成为一件可佩戴的银。",
+    "prologueLabel": "序 · 可选",
+    "enter": "进入",
+    "stations": {
+      "s0": {
+        "name": "记忆访谈",
+        "desc": "几个轻问题，帮我们看清你的审美与生活。"
+      },
+      "s1": {
+        "name": "你的故事",
+        "desc": "告诉我们，你想让银饰替你记住什么。"
+      },
+      "s2": {
+        "name": "文化记忆",
+        "desc": "在贵州真实的文化中，寻找与你相遇的线索。"
+      },
+      "s3": {
+        "name": "设计转译",
+        "desc": "看记忆如何成为设计语言。"
+      },
+      "s4": {
+        "name": "定制提案",
+        "desc": "塑造那件真正属于你的银饰。"
+      },
+      "s5": {
+        "name": "看见银饰",
+        "desc": "最终，看见你想象中的那件银。"
+      }
+    }
   },
   "home": {
     "coCreationNote": "全球共创 · V1",
     "chapterLabel": "银的新篇章",
-    "title1": "不是把银饰卖给世界。",
-    "title2": "而是让世界来设计它。",
+    "title1": "让贵州银艺走向世界。",
+    "title2": "让世界遇见属于自己的银饰。",
     "intro": "银中贵（Silver Future）是一个由 AI 驱动的贵州银饰共创平台。全球审美与苗族文化传承相遇——由智能设计重新演绎。",
     "engineNote": "全局需求引擎 · V1",
     "footer1": "贵州 · 苗银 · 重塑",
     "footer2": "© 2026 银中贵 — 原型",
     "exploreProcess": "探索流程",
+    "scrollHint": "向下探索",
     "processTitle": "五段流程",
     "processSub": "从你的故事，到一枚可佩戴的银。",
     "stageEnter": "进入",
@@ -147,7 +190,11 @@
       "stage3": "正在校验来源与文化护栏"
     },
     "heritageDirectionsLabel": "文化方向",
-    "topOfRanked": "已排序 {total} 个方向 · 来源优先",
+    "topOfRanked": "数据库 {pool} 个文化方向 · 基于你的选择推荐 Top {total}",
+    "selectionSource": {
+      "user": "你的选择",
+      "recommended": "推荐第一"
+    },
     "emptyLabel": "未找到设计基因",
     "emptyTitle": "首先，告诉我们你想佩戴什么。",
     "emptyBody": "文化匹配从设计简报出发。请先在全球设计工作室完成阶段 1，再回到这里继续。",
@@ -176,7 +223,15 @@
       "claimLevelLabel": "证据等级",
       "suggestionLabel": "设计建议",
       "boundaryLabel": "文化边界",
-      "regionFallback": "贵州苗族银饰相关视觉语言"
+      "regionFallback": "贵州苗族银饰相关视觉语言",
+      "whyThisMatch": "为何是这个匹配",
+      "carryForward": "把这份文化带进设计",
+      "archiveImageNote": "档案馆影像 · 真实苗银记录",
+      "fitLabel": "契合",
+      "compatibility": {
+        "exact": "精确对应",
+        "compatible": "可转译对应"
+      }
     },
     "why": {
       "visualAffinity": "「{motif}」的形态语言与你选择的视觉偏好具有较高匹配度——仅为美学关联，非文化寓意。",
@@ -214,8 +269,6 @@
     "errorInterrupted": "翻译已被打断",
     "directionLabel": "文化方向",
     "directionMetaLabel": "阶段 2 · 文化匹配",
-    "evidenceLabel": "文化证据",
-    "verifiedSourcesLabel": "已核验来源",
     "noDirectionTitle": "未选择文化方向。",
     "noDirectionBody": "此简报在未引用文化传承的情况下翻译。它不作出任何文化主张——其解读层也被禁止编造任何主张。",
     "specsLabel": "设计翻译",
@@ -230,9 +283,6 @@
     "specsMotifNote": "纹样主题仅来自知识库——其文献寓意逐字引用，绝不扩展。",
     "specsMotifNone": "无——以形态主导的设计",
     "briefLabel": "设计简报",
-    "briefDocumentedLabel": "文献文化证据",
-    "briefNeverAi": "官方记录 · 绝非 AI 撰写",
-    "briefNoFacts": "此简报不涉及文献文化事实。",
     "interpretationLabel": "设计解读",
     "interpretationNote": "AI 设计解读 · 非文化事实",
     "discardedNote": "已从你的设计基因中丢弃——没有官方记录支持：{items}。",
@@ -252,10 +302,10 @@
   "designDirections": {
     "section1Label": "01 · 你的方向",
     "section1Note": "AI 偏好解读 · 非文化事实",
-    "orientationSummary": "从你的选择来看，你更倾向于一件 {style} 风格的 {product}——目前看来，知识库中有 {count} 个文化方向可能更符合你的探索。",
+    "orientationSummary": "从你的选择来看，你更倾向于一件 {style} 风格的 {product}——我们据此从贵州文化数据库中，为你筛选出最相关的文化线索。",
     "orientationNoMatch": "你还没有选定具体的文化方向；下面的方向会更侧重形态语言本身。",
     "orientationSelected": "你在阶段 2 关注的方向：{name}",
-    "orientationPool": "{count} 个文化方向进入本轮翻译",
+    "orientationPool": "文化数据库经产品与偏好筛选后，本轮为你保留 {count} 条最相关的文化线索",
     "section2Label": "02 · 为什么是这些方向",
     "section2Title": "你的偏好，如何一步步变成设计方向。",
     "layerPreferences": "客户偏好",
@@ -519,7 +569,8 @@
       "claimLevel": "主张等级",
       "confidence": "置信度",
       "facts": "文献事实",
-      "records": "官方记录"
+      "records": "官方记录",
+      "trustNote": "来源已核验——{kind}条目出自贵州官方非遗数据库，完整文献记录备档可查。"
     },
     "sources": {
       "none": "此提案未引用任何文化实体——它是纯形态语言的设计，不作出文化主张。"

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useCallback, useRef, useState } from "react";
 import Image from "next/image";
@@ -11,6 +11,8 @@ export interface InspirationImage {
   type: string;
   size: number;
   previewUrl: string;
+  /** Base64 data URL — the actual pixels, sent to the vision analysis API. */
+  dataUrl: string;
 }
 
 interface InspirationUploadProps {
@@ -45,14 +47,26 @@ export function InspirationUpload({
         setError(t("globalDemand.uploadErrorSize"));
         return;
       }
-      if (value?.previewUrl) URL.revokeObjectURL(value.previewUrl);
-      const previewUrl = URL.createObjectURL(file);
-      onChange({
-        name: file.name,
-        type: file.type,
-        size: file.size,
-        previewUrl,
-      });
+      // Read the pixels as a base64 data URL so the vision analysis API
+      // receives the actual image, not just metadata.
+      const reader = new FileReader();
+      reader.onload = () => {
+        const dataUrl = typeof reader.result === "string" ? reader.result : "";
+        if (dataUrl.length === 0) {
+          setError(t("globalDemand.uploadErrorType"));
+          return;
+        }
+        if (value?.previewUrl) URL.revokeObjectURL(value.previewUrl);
+        onChange({
+          name: file.name,
+          type: file.type,
+          size: file.size,
+          previewUrl: URL.createObjectURL(file),
+          dataUrl,
+        });
+      };
+      reader.onerror = () => setError(t("globalDemand.uploadErrorType"));
+      reader.readAsDataURL(file);
     },
     [maxBytes, onChange, t, value],
   );

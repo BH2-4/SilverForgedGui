@@ -29,14 +29,33 @@ import { ProviderError, type DemandProvider } from "./types";
  * the Claude 4.6+ family surface.
  */
 
-function toClaudeMessages(input: GlobalDemandInput) {
-  const messages: Array<{ role: "user" | "assistant"; content: string }> = [];
+/** Parse a data URL into an Anthropic base64 image block. */
+function toImageBlock(dataUrl: string): Anthropic.ImageBlockParam | null {
+  const match = /^data:([^;]+);base64,(.+)$/s.exec(dataUrl);
+  if (!match) return null;
+  const mediaType = match[1];
+  if (
+    mediaType !== "image/png" &&
+    mediaType !== "image/jpeg" &&
+    mediaType !== "image/webp" &&
+    mediaType !== "image/gif"
+  ) {
+    return null;
+  }
+  return {
+    type: "image",
+    source: { type: "base64", media_type: mediaType, data: match[2] },
+  };
+}
+
+function toClaudeMessages(input: GlobalDemandInput): Anthropic.MessageParam[] {
+  const messages: Anthropic.MessageParam[] = [];
 
   // Anthropic requires the first message to be `user`. The consumer's story
   // and structured preferences are the anchor for the whole exchange, so
   // they lead. Clarification turns (which begin with an `assistant` question)
   // are appended afterwards so the conversation reads:
-  //   user  → initial story + prefs
+  //   user  → [optional inspiration image] + initial story + prefs
   //   assistant → clarification Q1
   //   user  → answer 1
   //   ...
@@ -49,7 +68,11 @@ function toClaudeMessages(input: GlobalDemandInput) {
     structured.push(`Emotion: ${input.emotions.join(", ")}`);
   if (input.culturalVisibility)
     structured.push(`Cultural visibility: ${input.culturalVisibility}`);
-  if (input.image)
+  if (input.imageData)
+    structured.push(
+      "An inspiration image is attached above. Analyze its visual features for \"inspiration_analysis\". It shows what the user likes visually — it is not cultural evidence, and it never overrides the user's stated product choice.",
+    );
+  else if (input.image)
     structured.push(
       `Inspiration image attached (metadata only, not the pixels): ${input.image.name} (${input.image.type})`,
     );
@@ -67,7 +90,13 @@ function toClaudeMessages(input: GlobalDemandInput) {
     );
   }
 
-  messages.push({ role: "user", content: parts.join("\n\n") });
+  // Vision input: the inspiration image leads the first user turn so the
+  // model analyzes pixels, then the text anchors the structured signal.
+  const imageBlock = input.imageData ? toImageBlock(input.imageData) : null;
+  const firstContent: Anthropic.ContentBlockParam[] | string = imageBlock
+    ? [imageBlock, { type: "text", text: parts.join("\n\n") }]
+    : parts.join("\n\n");
+  messages.push({ role: "user", content: firstContent });
 
   for (const turn of input.history ?? []) {
     messages.push({ role: turn.role, content: turn.content });

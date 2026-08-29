@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -78,13 +78,11 @@ export function ProposalActions({
           <button
             type="button"
             onClick={() => router.push("/design-render")}
-            className="btn-pill btn-pill-primary px-7 py-3 text-[12px]"
+            data-variant="solid"
+            className="journey-cta"
           >
             {t("designProposal.actions.continueToRender")}
-            <ArrowRight
-              className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5"
-              strokeWidth={1.5}
-            />
+            <ArrowRight className="h-4 w-4" strokeWidth={1.5} />
           </button>
         </div>
       </section>
@@ -99,42 +97,29 @@ export function ProposalActions({
           {t("designProposal.actionsTitle")}
         </h3>
       </div>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-6">
         <button
           type="button"
           onClick={onConfirm}
-          className="group inline-flex items-center justify-between gap-3 rounded-[2px] border border-[rgba(245,245,247,0.38)] bg-[var(--color-ivory)] px-7 py-4 text-left transition-all duration-500 hover:bg-[var(--color-silver-200)]"
+          data-variant="solid"
+          className="journey-cta"
         >
-          <span className="flex flex-col gap-1">
-            <span className="text-[13px] font-medium tracking-[0.1em] text-[var(--color-bg)]">
-              {t("designProposal.actions.confirm")}
-            </span>
-            <span className="text-[12px] leading-relaxed text-[var(--color-silver-500)]">
-              {t("designProposal.actions.confirmHint")}
-            </span>
-          </span>
-          <ArrowRight
-            className="h-4 w-4 shrink-0 text-[var(--color-silver-600)] transition-transform duration-500 group-hover:translate-x-0.5"
-            strokeWidth={1.5}
-          />
+          {t("designProposal.actions.confirm")}
+          <ArrowRight className="h-4 w-4" strokeWidth={1.5} />
         </button>
-        <div className="flex flex-col gap-4 sm:flex-row">
+        <p className="max-w-xl text-[13px] leading-relaxed text-[var(--color-silver-500)]">
+          {t("designProposal.actions.confirmHint")}
+        </p>
+        <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
           <button
             type="button"
             onClick={() => router.push("/design-translation")}
-            className="group inline-flex flex-1 items-center gap-3 rounded-[2px] border border-[var(--color-line)] px-6 py-3.5 text-left transition-colors duration-500 hover:border-[rgba(245,245,247,0.22)] hover:bg-[rgba(245,245,247,0.03)]"
+            className="group inline-flex items-center gap-2 text-[12px] tracking-[0.12em] text-[var(--color-silver-400)] uppercase transition-colors hover:text-[var(--color-silver-100)]"
           >
-            <SlidersHorizontal
-              className="h-4 w-4 shrink-0 text-[var(--color-silver-500)]"
-              strokeWidth={1.5}
-            />
-            <span className="flex flex-col gap-1">
-              <span className="text-[12px] font-medium tracking-[0.1em] text-[var(--color-silver-200)]">
-                {t("designProposal.actions.adjust")}
-              </span>
-              <span className="text-[12px] leading-relaxed text-[var(--color-silver-500)]">
-                {t("designProposal.actions.adjustHint")}
-              </span>
+            <SlidersHorizontal className="h-3.5 w-3.5" strokeWidth={1.5} />
+            {t("designProposal.actions.adjust")}
+            <span className="text-[var(--color-silver-600)]">
+              {t("designProposal.actions.adjustHint")}
             </span>
           </button>
           <button
@@ -147,19 +132,12 @@ export function ProposalActions({
               }
               router.push("/cultural-match");
             }}
-            className="group inline-flex flex-1 items-center gap-3 rounded-[2px] border border-[var(--color-line)] px-6 py-3.5 text-left transition-colors duration-500 hover:border-[rgba(245,245,247,0.22)] hover:bg-[rgba(245,245,247,0.03)]"
+            className="group inline-flex items-center gap-2 text-[12px] tracking-[0.12em] text-[var(--color-silver-400)] uppercase transition-colors hover:text-[var(--color-silver-100)]"
           >
-            <RotateCcw
-              className="h-4 w-4 shrink-0 text-[var(--color-silver-500)]"
-              strokeWidth={1.5}
-            />
-            <span className="flex flex-col gap-1">
-              <span className="text-[12px] font-medium tracking-[0.1em] text-[var(--color-silver-200)]">
-                {t("designProposal.actions.reexplore")}
-              </span>
-              <span className="text-[12px] leading-relaxed text-[var(--color-silver-500)]">
-                {t("designProposal.actions.reexploreHint")}
-              </span>
+            <RotateCcw className="h-3.5 w-3.5" strokeWidth={1.5} />
+            {t("designProposal.actions.reexplore")}
+            <span className="text-[var(--color-silver-600)]">
+              {t("designProposal.actions.reexploreHint")}
             </span>
           </button>
         </div>

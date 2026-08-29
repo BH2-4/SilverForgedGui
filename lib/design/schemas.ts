@@ -27,6 +27,7 @@ import {
   EvidenceLevelSchema,
   MATCH_ENTITY_KINDS,
   MatchWhySchema,
+  ProductCompatibilitySchema,
   RegionInfoSchema,
   type CulturalMatchResult,
   type GuardrailResult,
@@ -79,6 +80,7 @@ export const CulturalMatchResultSchema = z.object({
   name: z.string().min(1),
   type: z.enum(MATCH_ENTITY_KINDS),
   region: z.string().nullable(),
+  product_compatibility: ProductCompatibilitySchema,
   match_score: z.number().int().min(0).max(100),
   score_breakdown: ScoreBreakdownSchema,
   score_breakdown_weighted: ScoreBreakdownSchema,
@@ -334,6 +336,20 @@ export const DesignBriefSchema = z.object({
   wearability: z.string().min(1),
   complexity: z.string().min(1),
   cultural_visibility: z.string().min(1),
+
+  /**
+   * Provenance of the spec values (honesty layer): "user" — the customer
+   * expressed this preference in Stage 1; "ai" — the engine suggested it
+   * (a default or a derivation), so the UI must label it AI SUGGESTED,
+   * never pretend the customer chose it. Form / material / motif /
+   * complexity are always engine-derived and labeled as such in the UI.
+   */
+  spec_provenance: z.object({
+    size: z.enum(["user", "ai"]),
+    weight: z.enum(["user", "ai"]),
+    cultural_visibility: z.enum(["user", "ai"]),
+    wearability: z.enum(["user", "ai"]),
+  }),
 
   heritage_reference: HeritageReferenceSchema.nullable(),
 

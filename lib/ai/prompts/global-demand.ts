@@ -45,6 +45,15 @@ You should reason about the following axes and only these:
 - Keep reasoning concise (1–3 sentences).
 - Return JSON only. No prose, no markdown, no backticks.
 
+## Inspiration image (optional)
+
+When an inspiration image is attached (as an image block), analyze ONLY its visual features and fill "inspiration_analysis" in the brief: form, silhouette, proportion, material impression, ornament density, pattern, geometry, finish, mood, visual keywords.
+
+Strict boundaries:
+- The image shows what the user LIKES visually. It is NOT cultural evidence: never infer Guizhou/Miao cultural origin, motif meaning, or regional style from it.
+- Record "observed_product_type" as what the image appears to show, but the brief's "product_type" ALWAYS follows the user's explicit choice (structured selection or story). If the image shows a bracelet but the user chose a necklace, product_type stays "necklace" — no exceptions.
+- When no image is attached, "inspiration_analysis" MUST be null. Never fabricate an analysis.
+
 ## Clarification behavior
 
 If the input is too sparse for a confident brief — for example, only "I want something meaningful" — return a clarification question instead of a full brief. Ask ONE focused question with 2–5 concrete options tied to specific brief axes. Never ask more than one question at a time.
@@ -84,8 +93,24 @@ Valid target values: "product_type", "style", "occasion", "emotion", "cultural_v
     "design_keywords": ["<0..10 lower-case tokens>"],
     "avoid": ["<0..10 lower-case tokens>"],
     "confidence": <number between 0 and 1>,
-    "reasoning": "<1 to 3 sentence editorial explanation>"
+    "reasoning": "<1 to 3 sentence editorial explanation>",
+    "inspiration_analysis": null
   }
+}
+
+"inspiration_analysis" is null when no inspiration image was attached. When an image IS attached, replace null with:
+{
+  "form": "<overall form, <=120 chars>",
+  "silhouette": "<dominant outline, <=120 chars>",
+  "proportion": "<scale relationship of parts, <=120 chars>",
+  "material_impression": "<perceived material, <=120 chars>",
+  "ornament_density": "<one of: minimal|restrained|moderate|rich|maximal>",
+  "pattern": "<surface pattern observed, <=160 chars>",
+  "geometry": "<structural geometry, <=120 chars>",
+  "finish": "<surface finish, <=120 chars>",
+  "mood": "<overall mood, <=120 chars>",
+  "visual_keywords": ["<0..8 lower-case visual tokens>"],
+  "observed_product_type": "<one of: necklace|earrings|bracelet|ring|brooch|pendant|cuff|anklet|hairpiece|unknown — what the image appears to show; NEVER overrides product_type>"
 }
 
 ## Style notes

@@ -5,6 +5,7 @@ import { SiteTopBar } from "@/components/shared/SiteTopBar";
 import { AtmosphereLayer } from "@/components/visual/AtmosphereLayer";
 import { ParticleField } from "@/components/visual/ParticleField";
 import { PageTransition } from "@/components/visual/PageTransition";
+import { JourneyRail } from "@/components/journey/JourneyRail";
 import { resolveLocale } from "@/lib/i18n/server";
 import { translate } from "@/lib/i18n/dictionaries";
 import { LOCALE_HTML_TAGS } from "@/lib/i18n/config";
@@ -51,6 +52,7 @@ export default async function RootLayout({
         <div className="relative z-10">
           <I18nProvider initialLocale={locale}>
             <SiteTopBar />
+            <JourneyRail />
             <PageTransition>{children}</PageTransition>
           </I18nProvider>
         </div>

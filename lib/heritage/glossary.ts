@@ -13,6 +13,9 @@
  */
 
 import type { GlobalDesignBrief } from "@/lib/ai/schemas";
+import type { ProductCompatibility } from "./types";
+
+export type { ProductCompatibility };
 
 /* -------------------------------------------------------------------------- */
 /*  Brief-level derived signals                                                */
@@ -59,6 +62,10 @@ export function deriveBriefSignals(brief: GlobalDesignBrief): BriefSignals {
     ...brief.style,
     ...brief.emotion,
     ...brief.design_keywords,
+    // Inspiration visual keywords are an AUXILIARY signal: the user's
+    // uploaded image shows what they like visually — aesthetic affinity
+    // only, never cultural evidence.
+    ...(brief.inspiration_analysis?.visual_keywords ?? []),
     brief.market.toLowerCase(),
     brief.occasion,
     brief.consumer_profile.toLowerCase(),
@@ -216,19 +223,96 @@ export const CATEGORY_EVERYDAY: Record<string, number> = {
   服饰整体: 0.2,
 };
 
-/** Product type → preferred item categories (documented taxonomy). */
+/**
+ * Product Compatibility (Stage 2 hard constraint).
+ *
+ * The user's product type is the highest-priority constraint: an entity
+ * whose documented form is a DIFFERENT product category (ring / earrings /
+ * headpiece / brooch for a bracelet request) must never enter the match
+ * results as if it were the requested product.
+ *
+ * Three tiers:
+ *   "exact"        — the dataset documents this very form (e.g. 银项链 for
+ *                    a necklace request, 手镯 for a cuff request).
+ *   "compatible"   — a translatable structure in the same body region or
+ *                    a cross-category design language (motifs, crafts,
+ *                    regional styles, projects) that applies to any
+ *                    product type without claiming to BE it.
+ *   "incompatible" — a different product category. Filtered out entirely
+ *                    before ranking — it may never appear in the results.
+ */
+
+/**
+ * Heritage item names that ARE the requested product type. Category-level
+ * proximity is NOT enough for "exact": 手镯 (bangle) is a documented wrist
+ * piece, but it is not a 手链 (chain bracelet) — for a bracelet request it
+ * is a Compatible Translation, never an Exact Match.
+ */
+export const PRODUCT_EXACT_ITEMS: Record<string, string[]> = {
+  necklace: ["银项链"],
+  earrings: ["耳环"],
+  // The dataset documents no chain bracelet: honest fallback, wrist
+  // structures (手镯) enter as Compatible Translation only.
+  bracelet: [],
+  cuff: ["手镯"],
+  // The dataset documents no rings / pendants / brooches / anklets.
+  ring: [],
+  pendant: [],
+  brooch: [],
+  hairpiece: [
+    "银凤冠", "银花帽", "银角", "银雀", "银簪", "银梳",
+    "银头围", "银头花", "银冠", "银帽",
+  ],
+  anklet: [],
+};
+
+/**
+ * Product type → documented categories that are structurally translatable.
+ * Presence in this table means COMPATIBLE (or EXACT via item name);
+ * absence means INCOMPATIBLE — the entry is filtered before ranking.
+ * Value = product_fit score (1 exact category, lower = more translation).
+ */
 export const PRODUCT_CATEGORY_FIT: Record<string, Record<string, number>> = {
-  necklace: { 颈饰: 1, "颈饰构件": 0.8, 胸饰: 0.7, 腰饰: 0.3, 头饰: 0.15, 手饰: 0.15, 耳饰: 0.15, "服饰配件": 0.15, "服饰整体": 0.1 },
-  earrings: { 耳饰: 1, 颈饰: 0.25, 手饰: 0.2, 胸饰: 0.2, 头饰: 0.2, 腰饰: 0.1, "颈饰构件": 0.2, "服饰配件": 0.1, "服饰整体": 0.1 },
-  bracelet: { 手饰: 1, 颈饰: 0.3, 腰饰: 0.25, 胸饰: 0.2, 耳饰: 0.15, 头饰: 0.15, "颈饰构件": 0.2, "服饰配件": 0.15, "服饰整体": 0.1 },
-  cuff: { 手饰: 1, 颈饰: 0.3, 腰饰: 0.25, 胸饰: 0.2, 耳饰: 0.15, 头饰: 0.15, "颈饰构件": 0.2, "服饰配件": 0.15, "服饰整体": 0.1 },
-  ring: { 手饰: 0.85, 颈饰: 0.25, 胸饰: 0.2, 耳饰: 0.2, 腰饰: 0.15, 头饰: 0.15, "颈饰构件": 0.15, "服饰配件": 0.1, "服饰整体": 0.1 },
-  pendant: { 胸饰: 0.9, 颈饰: 0.75, "颈饰构件": 0.6, 腰饰: 0.3, 手饰: 0.2, 耳饰: 0.2, 头饰: 0.15, "服饰配件": 0.15, "服饰整体": 0.1 },
-  brooch: { 胸饰: 0.95, 颈饰: 0.6, "颈饰构件": 0.5, 腰饰: 0.3, 头饰: 0.25, 手饰: 0.2, 耳饰: 0.2, "服饰配件": 0.2, "服饰整体": 0.15 },
-  hairpiece: { 头饰: 1, "服饰配件": 0.3, 颈饰: 0.2, 耳饰: 0.2, 胸饰: 0.15, 手饰: 0.15, 腰饰: 0.1, "颈饰构件": 0.1, "服饰整体": 0.1 },
-  anklet: { 腰饰: 0.3, 颈饰: 0.3, 手饰: 0.25, 胸饰: 0.2, 耳饰: 0.15, 头饰: 0.15, "颈饰构件": 0.2, "服饰配件": 0.15, "服饰整体": 0.1 },
+  // 项链: neck pieces + chest-hung forms (胸锁 hangs from the neck chain).
+  necklace: { 颈饰: 1, "颈饰构件": 0.8, 胸饰: 0.5 },
+  // 耳饰: only the earring category.
+  earrings: { 耳饰: 1 },
+  // 手链: wrist structures only — a chain bracelet translates from
+  // documented bangles (手镯); other body regions are a different product
+  // category and are filtered out.
+  bracelet: { 手饰: 0.85 },
+  // 手镯: the documented bangles are the exact form.
+  cuff: { 手饰: 1 },
+  // 戒指: the dataset documents no rings — no item enters as a match.
+  ring: {},
+  // 吊坠: chest-hung structures (胸锁) and hanging necklace components.
+  pendant: { 胸饰: 0.9, "颈饰构件": 0.6 },
+  // 胸针: chest-mounted structures.
+  brooch: { 胸饰: 0.9 },
+  // 头饰: the documented headpiece system.
+  hairpiece: { 头饰: 1 },
+  // 脚链: the dataset documents no anklets.
+  anklet: {},
+  // No product constraint → nothing is filtered, nothing is exact.
   unknown: { 耳饰: 0.5, 手饰: 0.5, 颈饰: 0.5, 胸饰: 0.5, 头饰: 0.5, 腰饰: 0.5, "颈饰构件": 0.5, "服饰配件": 0.5, "服饰整体": 0.5 },
 };
+
+/**
+ * Classify one heritage item against the requested product type.
+ * Cross-category entities (motifs, crafts, regional styles, projects) are
+ * always design-language material — classify them "compatible".
+ */
+export function classifyItemProductCompatibility(
+  productType: string,
+  itemName: string,
+  category: string,
+): ProductCompatibility {
+  if ((PRODUCT_EXACT_ITEMS[productType] ?? []).includes(itemName)) {
+    return "exact";
+  }
+  const fit = PRODUCT_CATEGORY_FIT[productType]?.[category];
+  return fit !== undefined ? "compatible" : "incompatible";
+}
 
 /** Product type → documented terms for regional-style feature matching. */
 export const PRODUCT_TERMS: Record<string, string[]> = {

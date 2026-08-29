@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { SectionLabel } from "@/components/shared/SectionLabel";
 import { useI18n } from "@/components/i18n/I18nProvider";
@@ -44,7 +44,7 @@ export function DnaSummary({ brief }: DnaSummaryProps) {
         </span>
       </div>
 
-      <div className="glass-panel grid grid-cols-2 gap-x-8 gap-y-6 rounded-[var(--radius-lg)] p-8 sm:grid-cols-3 lg:grid-cols-6">
+      <div className="grid grid-cols-2 gap-x-8 gap-y-6 sm:grid-cols-3 lg:grid-cols-6">
         <Stat label={t("common.labels.market")} value={tv("market", brief.market)} />
         <Stat
           label={t("common.labels.product")}

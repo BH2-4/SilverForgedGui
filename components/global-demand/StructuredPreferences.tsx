@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { SectionLabel } from "@/components/shared/SectionLabel";
 import { useI18n } from "@/components/i18n/I18nProvider";
@@ -106,7 +106,7 @@ export function StructuredPreferences({
     <section className="flex flex-col gap-8">
       <SectionLabel>{t("globalDemand.refineLabel")}</SectionLabel>
 
-      <div className="glass-panel grid grid-cols-1 gap-8 rounded-[var(--radius-lg)] p-6 sm:p-8 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-x-10 gap-y-8 md:grid-cols-2">
         <ChipGroup
           label={t("common.labels.product")}
           options={PRODUCT_OPTIONS}

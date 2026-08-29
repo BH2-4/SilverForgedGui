@@ -16,6 +16,10 @@
       "continueToAiSilverDesign": "Continue to AI Silver Design",
       "useThisDirection": "Use this direction",
       "selectedForTranslation": "Selected for translation",
+      "collapseDetails": "Collapse",
+      "viewDesignStory": "View design story",
+      "readDesignLog": "Read the full design log",
+      "viewFullDna": "View the full design DNA",
       "tryExample": "Try an example →",
       "generateConcepts": "Generate Silver Design Concepts",
       "viewProposal": "View Custom Design Proposal",
@@ -45,7 +49,9 @@
       "officialRecord": "Official record",
       "aiRationale": "AI rationale",
       "stage1AiInference": "Stage 1 · AI inference",
-      "engineDerived": "Engine-derived · deterministic"
+      "engineDerived": "Engine-derived · deterministic",
+      "userSelected": "Your choice",
+      "aiSuggested": "AI suggested"
     },
     "stages": {
       "interview": "00 · Memory Interview",
@@ -56,18 +62,55 @@
       "designRender": "05 · Design Render"
     },
     "navAria": "Pipeline stages",
-    "collectionLabel": "The Collection"
+    "collectionLabel": "The Collection",
+    "navJourney": "Journey",
+    "navAbout": "About"
+  },
+  "journey": {
+    "railAria": "Design journey navigation",
+    "eyebrow": "THE JOURNEY",
+    "title": "From memory, to silver.",
+    "subtitle": "One continuous journey — your story, carried through culture, design and forging, becomes a piece of silver you can wear.",
+    "prologueLabel": "Prologue · Optional",
+    "enter": "Enter",
+    "stations": {
+      "s0": {
+        "name": "Memory Interview",
+        "desc": "A few quiet questions to understand your taste and your life."
+      },
+      "s1": {
+        "name": "Your Story",
+        "desc": "Tell us what you want your silver to remember."
+      },
+      "s2": {
+        "name": "Cultural Memory",
+        "desc": "Discover where your story meets Guizhou."
+      },
+      "s3": {
+        "name": "Design Translation",
+        "desc": "Watch memory become design language."
+      },
+      "s4": {
+        "name": "Your Proposal",
+        "desc": "Shape the piece that belongs to you."
+      },
+      "s5": {
+        "name": "See Your Silver",
+        "desc": "Finally, see what you imagined."
+      }
+    }
   },
   "home": {
     "coCreationNote": "Global Co-Creation · V1",
     "chapterLabel": "A New Chapter of Silver",
-    "title1": "Not selling silver to the world.",
-    "title2": "Letting the world design it.",
+    "title1": "Bringing Guizhou silver craft to the world.",
+    "title2": "Letting the world find its own silver.",
     "intro": "Silver Future is an AI-powered co-creation atelier for Guizhou silver jewelry. Global taste meets Miao heritage — reimagined by intelligent design.",
     "engineNote": "Global Demand Engine · V1",
     "footer1": "Guizhou · Miao Silver · Reimagined",
     "footer2": "© 2026 Silver Future — Prototype",
     "exploreProcess": "Explore the process",
+    "scrollHint": "Scroll to explore",
     "processTitle": "The Five Stages",
     "processSub": "From your story to a piece of silver you can wear.",
     "stageEnter": "Enter",
@@ -147,7 +190,11 @@
       "stage3": "Verifying sources & guardrail"
     },
     "heritageDirectionsLabel": "Heritage Directions",
-    "topOfRanked": "{total} directions ranked · source-first",
+    "topOfRanked": "{pool} cultural directions in the database · Top {total} for your choices",
+    "selectionSource": {
+      "user": "Your pick",
+      "recommended": "Recommended top pick"
+    },
     "emptyLabel": "No Design DNA found",
     "emptyTitle": "First, tell us what you want to wear.",
     "emptyBody": "Cultural Match starts from a Design Brief. Complete Stage 1 in the Global Design Studio, then continue here.",
@@ -176,7 +223,15 @@
       "claimLevelLabel": "Claim level",
       "suggestionLabel": "Design suggestion",
       "boundaryLabel": "Cultural boundary",
-      "regionFallback": "Guizhou Miao silver — related visual language"
+      "regionFallback": "Guizhou Miao silver — related visual language",
+      "whyThisMatch": "Why this match",
+      "carryForward": "Carry this culture forward",
+      "archiveImageNote": "Archive image · real Miao silver record",
+      "fitLabel": "Fit",
+      "compatibility": {
+        "exact": "Exact match",
+        "compatible": "Compatible translation"
+      }
     },
     "why": {
       "visualAffinity": "The form language of \"{motif}\" aligns strongly with your visual preferences — an aesthetic affinity only, not a cultural meaning.",
@@ -214,8 +269,6 @@
     "errorInterrupted": "Something interrupted the translation",
     "directionLabel": "Cultural Direction",
     "directionMetaLabel": "Stage 2 · Heritage Match",
-    "evidenceLabel": "Cultural evidence",
-    "verifiedSourcesLabel": "Verified sources",
     "noDirectionTitle": "No cultural direction selected.",
     "noDirectionBody": "This brief is translated without a heritage reference. It makes no cultural claims — and its interpretation layer is forbidden from inventing any.",
     "specsLabel": "Design Translation",
@@ -230,9 +283,6 @@
     "specsMotifNote": "Motif subjects come from the knowledge base only — their documented meaning is quoted verbatim, never extended.",
     "specsMotifNone": "None — form-led design",
     "briefLabel": "Design Brief",
-    "briefDocumentedLabel": "Documented cultural evidence",
-    "briefNeverAi": "Official record · never AI-written",
-    "briefNoFacts": "No documented cultural facts apply to this brief.",
     "interpretationLabel": "Design interpretation",
     "interpretationNote": "AI design interpretation · not a cultural fact",
     "discardedNote": "Discarded from your DNA because no official record supports them: {items}.",
@@ -252,10 +302,10 @@
   "designDirections": {
     "section1Label": "01 · Your Direction",
     "section1Note": "AI preference reading · not cultural fact",
-    "orientationSummary": "From your choices, you lean toward a {style} {product} — as it stands, {count} cultural directions in the knowledge base may be worth your exploration.",
+    "orientationSummary": "From your choices, you lean toward a {style} {product} — we filter the Guizhou cultural database accordingly to surface the most relevant cultural leads for you.",
     "orientationNoMatch": "You haven't settled on a cultural direction yet; the directions below lean more on form language itself.",
     "orientationSelected": "The direction you explored in Stage 2: {name}",
-    "orientationPool": "{count} cultural directions entered this translation",
+    "orientationPool": "After product and preference filtering, {count} most-relevant cultural leads are kept for this translation",
     "section2Label": "02 · Why These Directions",
     "section2Title": "How your preferences become design directions, step by step.",
     "layerPreferences": "Your preferences",
@@ -519,7 +569,8 @@
       "claimLevel": "Claim level",
       "confidence": "Confidence",
       "facts": "Documented facts",
-      "records": "Official records"
+      "records": "Official records",
+      "trustNote": "Source verified — this {kind} entry comes from the official Guizhou intangible-heritage database; the full documentary record is archived and available on request."
     },
     "sources": {
       "none": "This proposal references no cultural entities — it is a purely formal design and makes no cultural claim."

@@ -4,7 +4,7 @@ import { GlobalDesignBriefSchema } from "@/lib/ai/schemas";
 import { HeritageDataError } from "@/lib/heritage/repository";
 import { runCulturalGuardrail } from "@/lib/heritage/guardrail";
 import { matchCulturalHeritage } from "@/lib/heritage/match";
-import { getSourceById } from "@/lib/heritage/repository";
+import { getSourceById, loadMotifs } from "@/lib/heritage/repository";
 import type { SourceRef } from "@/lib/heritage/types";
 import type { CulturalMatchApiResponse } from "@/types/cultural-match";
 
@@ -98,6 +98,7 @@ export async function POST(request: Request) {
   const body: CulturalMatchApiResponse = {
     success: true,
     design_dna: brief,
+    pool_total: loadMotifs().length,
     matches,
     guardrail,
     source_refs: sourceRefs,

@@ -7,6 +7,7 @@ import {
   PRODUCT_CATEGORY_FIT,
   PRODUCT_TERMS,
   REGION_PROFILE,
+  classifyItemProductCompatibility,
   deriveBriefSignals,
   extractRegions,
   motifAffinity,
@@ -36,6 +37,7 @@ import {
   type MatchEntityKind,
   type MatchWhy,
   type MatchWhyItem,
+  type ProductCompatibility,
   type RegionInfo,
   type ScoreBreakdown,
   type ScoreBreakdownWeighted,
@@ -48,12 +50,21 @@ import {
  * drawn from the SilverHeritage-GZ knowledge base.
  *
  * Scoring model (transparent, published, no black box):
- *   visual_style_fit   25  aesthetic affinity with the brief's style tokens
- *   product_fit        15  documented category vs. requested product type
- *   wearability_fit    15  everyday-wear spectrum vs. wearability preference
- *   regional_fit        20  cultural-visibility affinity of the region
- *   keyword_fit         10  explicit keyword/emotion gloss hits
- *   evidence_confidence 15  evidence level + source corroboration
+ *   product_fit        30  HARD CONSTRAINT — the requested product type
+ *                          filters the pool first (incompatible entities
+ *                          never enter the results), then ranks highest
+ *   visual_style_fit    22  aesthetic affinity with the brief's style tokens
+ *   wearability_fit     12  everyday-wear spectrum vs. wearability preference
+ *   regional_fit        12  cultural-visibility affinity of the region
+ *   keyword_fit         12  explicit keyword/emotion gloss hits
+ *   evidence_confidence 12  evidence level + source corroboration
+ *
+ * PRODUCT COMPATIBILITY (hard constraint):
+ *   Candidates are classified against the brief's product_type BEFORE
+ *   ranking. "incompatible" entities (a different product category) are
+ *   filtered out entirely; "exact" matches outrank "compatible"
+ *   translations so a documented form of the requested product can never
+ *   be displaced by a semantically-similar different product.
  *
  * FACT/INFERENCE SEPARATION (RULE-005):
  *   - `matched_reasons` are AI-side scoring rationale (labeled as such).
@@ -63,14 +74,36 @@ import {
  *     affinity — it is presented as a visual subject, never as symbolism.
  */
 
-const MAX_PER_KIND = 2;
-const TOP_N = 5;
+/** Only the Top 3 cultural directions are surfaced to the customer. */
+const TOP_N = 3;
+
+/**
+ * Per-kind caps keep the Top-N list diverse. heritage_item gets 3 — the
+ * item catalogue (22 entries) is the largest and most product-relevant
+ * part of the knowledge base. Projects are capped at 2 and displayed
+ * with a region prefix ("台江 · 银饰锻制技艺") because several national
+ * designations share the same project name and would otherwise look
+ * like duplicate cards.
+ */
+const KIND_CAPS: Record<MatchEntityKind, number> = {
+  motif: 2,
+  heritage_item: 3,
+  regional_style: 2,
+  craft: 2,
+  project: 2,
+};
+
+/** "贵州省雷山县" → "雷山" — short region label for display names. */
+function regionShort(region: string): string {
+  return region.replace(/^贵州省/, "").replace(/县$/, "");
+}
 
 interface Candidate {
   kind: MatchEntityKind;
   id: string;
   name: string;
   region: string | null;
+  compatibility: ProductCompatibility;
   breakdown: ScoreBreakdown;
   reasons: string[];
   evidence: string[];
@@ -233,6 +266,9 @@ function scoreMotif(brief: GlobalDesignBrief, signals: BriefSignals): Candidate[
       id: motif.id,
       name: motif.name,
       region: motif.region,
+      // A motif is a visual subject applicable to any product type —
+      // design-language material, never claimed as the product form.
+      compatibility: "compatible",
       breakdown,
       reasons,
       evidence: [
@@ -284,12 +320,26 @@ function scoreHeritageItems(brief: GlobalDesignBrief, signals: BriefSignals): Ca
     PRODUCT_CATEGORY_FIT[brief.product_type] ?? PRODUCT_CATEGORY_FIT.unknown;
 
   for (const item of loadHeritageItems()) {
+    // PRODUCT COMPATIBILITY — hard constraint. A different product
+    // category (e.g. a ring for a bracelet request) never enters the
+    // results, so it can never masquerade as a match.
+    const compatibility = classifyItemProductCompatibility(
+      brief.product_type,
+      item.name,
+      item.category,
+    );
+    if (compatibility === "incompatible") continue;
+
     // visual_style_fit — distance on the ornate spectrum.
     const ornate = ITEM_ORNATE[item.name] ?? 0.5;
     const visual = clamp01(1 - Math.abs(ornate - signals.ornate));
 
-    // product_fit — documented category vs. requested product type.
-    const product = productFitTable[item.category] ?? 0.3;
+    // product_fit — exact documented form ranks above translatable
+    // structures; the fit table carries the translation distance.
+    const product =
+      compatibility === "exact"
+        ? 1
+        : (productFitTable[item.category] ?? 0.3);
 
     // wearability_fit — everyday-wear spectrum vs. wearability preference.
     const wear = categoryWearabilityFit(item.category, brief, signals);
@@ -335,13 +385,13 @@ function scoreHeritageItems(brief: GlobalDesignBrief, signals: BriefSignals): Ca
     };
 
     const reasons: string[] = [];
-    if (product >= 0.7) {
+    if (compatibility === "exact") {
       reasons.push(
-        `Your "${brief.product_type}" direction aligns with ${item.name} — a documented ${item.category} heritage form.`,
+        `${item.name} is the documented form of your "${brief.product_type}" request — an exact match in the official data.`,
       );
-    } else if (product >= 0.45) {
+    } else {
       reasons.push(
-        `${item.name} is a related ${item.category} form adjacent to your "${brief.product_type}" direction.`,
+        `${item.name} is a documented ${item.category} form — a translatable structure for your "${brief.product_type}" request, not an exact match.`,
       );
     }
     if (brief.wearability === "high" && wear >= 0.75) {
@@ -374,6 +424,7 @@ function scoreHeritageItems(brief: GlobalDesignBrief, signals: BriefSignals): Ca
       id: item.id,
       name: item.name,
       region: item.region,
+      compatibility,
       breakdown,
       reasons,
       evidence: [item.description],
@@ -488,6 +539,9 @@ function scoreRegionalStyles(brief: GlobalDesignBrief): Candidate[] {
       id: style.id,
       name: `${style.region}银饰风格`,
       region: style.region,
+      // A regional style is a documented visual system spanning product
+      // categories — always translatable design language.
+      compatibility: "compatible",
       breakdown,
       reasons,
       evidence: [
@@ -599,6 +653,8 @@ function scoreCrafts(brief: GlobalDesignBrief): Candidate[] {
       id: craft.id,
       name: craft.name,
       region: null,
+      // A forging technique applies to any product type.
+      compatibility: "compatible",
       breakdown,
       reasons,
       evidence: [craft.description],
@@ -689,8 +745,12 @@ function scoreProjects(brief: GlobalDesignBrief): Candidate[] {
     out.push({
       kind: "project",
       id: project.id,
-      name: project.name,
+      /* Region prefix disambiguates the four national designations,
+         several of which share the same project name. */
+      name: `${regionShort(project.region)} · ${project.name}`,
       region: project.region,
+      // Institutional grounding context, not a product form.
+      compatibility: "compatible",
       breakdown,
       reasons,
       evidence: [project.description],
@@ -759,6 +819,7 @@ function assemble(candidate: Candidate): CulturalMatchResult {
     name: candidate.name,
     type: candidate.kind,
     region: candidate.region,
+    product_compatibility: candidate.compatibility,
     match_score: score,
     score_breakdown: candidate.breakdown,
     score_breakdown_weighted: weightedBreakdown,
@@ -776,7 +837,8 @@ function assemble(candidate: Candidate): CulturalMatchResult {
 
 /**
  * Match a GlobalDesignBrief against the heritage knowledge base.
- * Returns Top-N (≤5) heritage directions with type diversity (≤2 per kind).
+ * Returns the Top-3 heritage directions after the product-compatibility
+ * hard filter, with per-kind diversity caps.
  * Pure, deterministic, no AI calls — AI inference lives in Stage 1 only.
  */
 export function matchCulturalHeritage(
@@ -795,14 +857,22 @@ export function matchCulturalHeritage(
   candidates.sort((a, b) => {
     const scoreA = Object.values(weighted(a.breakdown)).reduce((s, v) => s + v, 0);
     const scoreB = Object.values(weighted(b.breakdown)).reduce((s, v) => s + v, 0);
-    return scoreB - scoreA;
+    if (scoreB !== scoreA) return scoreB - scoreA;
+    // Tie-break: an exact documented form of the requested product always
+    // outranks a compatible translation.
+    const tier: Record<ProductCompatibility, number> = {
+      exact: 0,
+      compatible: 1,
+      incompatible: 2,
+    };
+    return tier[a.compatibility] - tier[b.compatibility];
   });
 
   const perKindCount = new Map<MatchEntityKind, number>();
   const selected: Candidate[] = [];
   for (const candidate of candidates) {
     const count = perKindCount.get(candidate.kind) ?? 0;
-    if (count >= MAX_PER_KIND) continue;
+    if (count >= KIND_CAPS[candidate.kind]) continue;
     perKindCount.set(candidate.kind, count + 1);
     selected.push(candidate);
     if (selected.length >= TOP_N) break;

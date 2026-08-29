@@ -325,13 +325,11 @@ export function DesignTranslationStudio() {
         </p>
         <Link
           href="/cultural-match"
-          className="group inline-flex items-center gap-3 rounded-full border border-[var(--color-line-strong)] bg-[linear-gradient(180deg,var(--color-silver-100),var(--color-silver-300))] px-7 py-3.5 text-[12px] font-medium tracking-[0.14em] text-[var(--color-bg)] uppercase transition-all duration-300 hover:brightness-105 active:scale-[0.97]"
+          data-variant="solid"
+          className="journey-cta"
         >
           {t("common.actions.continueToCulturalMatch")}
-          <ArrowRight
-            className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5"
-            strokeWidth={1.5}
-          />
+          <ArrowRight className="h-4 w-4" strokeWidth={1.5} />
         </Link>
       </div>
     );
@@ -388,7 +386,7 @@ export function DesignTranslationStudio() {
         />
 
         {phase.showNotSureHint ? (
-          <div className="glass-panel flex flex-col gap-4 rounded-[var(--radius-lg)] p-7 text-[13px] leading-relaxed text-[var(--color-silver-400)]">
+          <div className="flex flex-col gap-4 border-t border-[var(--color-line)] pt-7 text-[13px] leading-relaxed text-[var(--color-silver-400)]">
             {t("designDirections.actions.notSureHint")}
             <Link
               href="/cultural-match"
@@ -440,7 +438,6 @@ export function DesignTranslationStudio() {
       <CulturalDirectionPanel
         match={phase.match}
         brief={body.design_brief}
-        sourceRefs={body.source_refs}
       />
 
       {/* DESIGN TRANSLATION — the spec grid */}

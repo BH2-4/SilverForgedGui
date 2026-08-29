@@ -16,6 +16,10 @@
       "continueToAiSilverDesign": "AIシルバーデザインへ進む",
       "useThisDirection": "この方向を採用",
       "selectedForTranslation": "翻訳に選択済み",
+      "collapseDetails": "折りたたむ",
+      "viewDesignStory": "デザインストーリーを見る",
+      "readDesignLog": "完全なデザインログを読む",
+      "viewFullDna": "完全なデザイン遺伝子を見る",
       "tryExample": "例を試す →",
       "generateConcepts": "シルバーデザイン案を生成",
       "viewProposal": "オーダーデザイン提案を見る",
@@ -45,7 +49,9 @@
       "officialRecord": "公式記録",
       "aiRationale": "AIの根拠",
       "stage1AiInference": "ステージ 1 · AI 推論",
-      "engineDerived": "エンジン生成 · 決定論的"
+      "engineDerived": "エンジン生成 · 決定論的",
+      "userSelected": "あなたの選択",
+      "aiSuggested": "AI の提案"
     },
     "stages": {
       "interview": "00 · メモリーインタビュー",
@@ -56,18 +62,55 @@
       "designRender": "05 · デザインレンダー"
     },
     "navAria": "パイプラインのステージ",
-    "collectionLabel": "コレクション"
+    "collectionLabel": "コレクション",
+    "navJourney": "旅路",
+    "navAbout": "About"
+  },
+  "journey": {
+    "railAria": "デザインの旅路ナビゲーション",
+    "eyebrow": "THE JOURNEY",
+    "title": "記憶から、銀へ。",
+    "subtitle": "一つの連続した旅——あなたの物語が、文化とデザインと鍛造を経て、身につけられる銀になります。",
+    "prologueLabel": "序章 · 任意",
+    "enter": "入る",
+    "stations": {
+      "s0": {
+        "name": "記憶の対話",
+        "desc": "いくつかの静かな質問で、あなたの感性と暮らしを知ります。"
+      },
+      "s1": {
+        "name": "あなたの物語",
+        "desc": "銀にどんな記憶を託したいか、教えてください。"
+      },
+      "s2": {
+        "name": "文化の記憶",
+        "desc": "貴州の本物の文化との出会いを見つける。"
+      },
+      "s3": {
+        "name": "デザインへの翻訳",
+        "desc": "記憶がデザイン言語になる瞬間を。"
+      },
+      "s4": {
+        "name": "あなただけの提案",
+        "desc": "あなたにしか似合わない一点を形にする。"
+      },
+      "s5": {
+        "name": "銀を見る",
+        "desc": "そして最後に、思い描いた銀に出会う。"
+      }
+    }
   },
   "home": {
     "coCreationNote": "グローバル共同制作 · V1",
     "chapterLabel": "銀の新章",
-    "title1": "銀細工を世界に売るのではない。",
-    "title2": "世界にデザインさせるのだ。",
+    "title1": "貴州の銀細工を世界へ。",
+    "title2": "世界が、自分だけの銀に出会う。",
     "intro": "Silver Future は、AIが駆動する貴州銀細工のデジタル工房です。世界のセンスとミャオ族の伝統が出会い——知能あるデザインで再解釈されます。",
     "engineNote": "グローバル需要エンジン · V1",
     "footer1": "貴州 · ミャオ族の銀 · 再解釈",
     "footer2": "© 2026 Silver Future — プロトタイプ",
     "exploreProcess": "プロセスを見る",
+    "scrollHint": "スクロールして探索",
     "processTitle": "五つの段階",
     "processSub": "あなたの物語から、身につけられる銀へ。",
     "stageEnter": "進む",
@@ -147,7 +190,11 @@
       "stage3": "出典とガードレールを検証しています"
     },
     "heritageDirectionsLabel": "文化の方向性",
-    "topOfRanked": "{total} 件の方向性を順位付け · 出典ファースト",
+    "topOfRanked": "データベースには {pool} 方向 · あなたの選択から Top {total} を推薦",
+    "selectionSource": {
+      "user": "あなたの選択",
+      "recommended": "おすすめ第一位"
+    },
     "emptyLabel": "デザイン DNA が見つかりません",
     "emptyTitle": "まず、身につけたいものを教えてください。",
     "emptyBody": "カルチュラルマッチはデザインブリーフから始まります。グローバルデザインスタジオでステージ 1 を完了してから、ここに戻って続けてください。",
@@ -176,7 +223,15 @@
       "claimLevelLabel": "主張レベル",
       "suggestionLabel": "デザイン提案",
       "boundaryLabel": "文化的境界",
-      "regionFallback": "貴州ミャオ銀飾——関連するビジュアル言語"
+      "regionFallback": "貴州ミャオ銀飾——関連するビジュアル言語",
+      "whyThisMatch": "なぜこの一致か",
+      "carryForward": "この文化をデザインへ",
+      "archiveImageNote": "アーカイブ映像 · 実在のミャオ銀記録",
+      "fitLabel": "適合",
+      "compatibility": {
+        "exact": "完全一致",
+        "compatible": "転訳可能"
+      }
     },
     "why": {
       "visualAffinity": "「{motif}」のフォルム言語はあなたの視覚的な好みと高い親和性を持ちます——あくまで美学的な親和性であり、文化的意味ではありません。",
@@ -214,8 +269,6 @@
     "errorInterrupted": "翻訳が中断されました",
     "directionLabel": "文化の方向性",
     "directionMetaLabel": "ステージ 2 · 文化マッチ",
-    "evidenceLabel": "文化的エビデンス",
-    "verifiedSourcesLabel": "検証済みの出典",
     "noDirectionTitle": "文化の方向性が選択されていません。",
     "noDirectionBody": "このブリーフは文化伝統を参照せずに翻訳されています。いかなる文化的主張も行わず——解釈レイヤーがそれを捏造することも禁じられています。",
     "specsLabel": "デザイン翻訳",
@@ -230,9 +283,6 @@
     "specsMotifNote": "モチーフの主題は知識ベースのみに由来します——文献上の意味は逐語的に引用され、決して拡張されません。",
     "specsMotifNone": "なし——フォルム主導のデザイン",
     "briefLabel": "デザインブリーフ",
-    "briefDocumentedLabel": "文献上の文化的エビデンス",
-    "briefNeverAi": "公式記録 · AI の執筆ではありません",
-    "briefNoFacts": "このブリーフに該当する文献上の文化的事実はありません。",
     "interpretationLabel": "デザイン解釈",
     "interpretationNote": "AI のデザイン解釈 · 文化的な事実ではありません",
     "discardedNote": "公式記録による裏付けがないため、あなたのデザイン DNA から除外されました：{items}。",
@@ -252,10 +302,10 @@
   "designDirections": {
     "section1Label": "01 · あなたの方向性",
     "section1Note": "AI による好みの解釈 · 文化的な事実ではありません",
-    "orientationSummary": "あなたの選択から見ると、{style}な{product}により近いようです。現時点では、ナレッジベースの中から{count}つの文化的方向性があなたの探索に合うかもしれません。",
+    "orientationSummary": "あなたの選択から見ると、{style}な{product}により近いようです。貴州の文化データベースから、あなたに最も関連する文化の手がかりを絞り込んでいます。",
     "orientationNoMatch": "まだ特定の文化的方向性は定まっていません。以下の方向性は形の言語そのものを重視します。",
     "orientationSelected": "ステージ 2 で探求した方向性：{name}",
-    "orientationPool": "この翻訳に参加した文化的方向性は{count}件",
+    "orientationPool": "製品と好みによる絞り込みの結果、最も関連性の高い{count}件の文化の手がかりをこの翻訳に残しました",
     "section2Label": "02 · なぜこの方向性なのか",
     "section2Title": "あなたの好みが、どう一步步デザインの方向性になっていくか。",
     "layerPreferences": "お客様の好み",
@@ -519,7 +569,8 @@
       "claimLevel": "主張レベル",
       "confidence": "信頼度",
       "facts": "文献上の事実",
-      "records": "公式記録"
+      "records": "公式記録",
+      "trustNote": "出典は検証済み——この{kind}項目は貴州の公式無形文化遺産データベースに由来し、完全な文献記録は保管されています。"
     },
     "sources": {
       "none": "この提案はいかなる文化実体も参照していません——純粋に形態言語によるデザインで、文化的主張を行いません。"

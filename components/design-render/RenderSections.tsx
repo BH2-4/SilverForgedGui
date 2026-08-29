@@ -3,6 +3,7 @@
 import { ArrowUpRight } from "lucide-react";
 import { SectionLabel } from "@/components/shared/SectionLabel";
 import { useI18n } from "@/components/i18n/I18nProvider";
+import { Disclosure } from "@/components/shared/Disclosure";
 import type { ImagePrompt } from "@/lib/design/render-prompt";
 import type {
   DesignProposal,
@@ -12,19 +13,6 @@ import type {
 /* -------------------------------------------------------------------------- */
 /*  Shared presentational bits                                                 */
 /* -------------------------------------------------------------------------- */
-
-function Row({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div className="flex flex-col gap-2 border-t border-[var(--color-line)] pt-5">
-      <span className="text-[11px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
-        {label}
-      </span>
-      <div className="text-[14px] leading-relaxed text-[var(--color-silver-200)]">
-        {children}
-      </div>
-    </div>
-  );
-}
 
 function SourceChip({ id }: { id: string }) {
   return (
@@ -45,7 +33,7 @@ interface RenderImageProps {
 }
 
 export function RenderImage({ imageUrl, prompt, model }: RenderImageProps) {
-  const { t } = useI18n();
+  const { t, tv } = useI18n();
 
   return (
     <section className="flex flex-col gap-10">
@@ -71,25 +59,57 @@ export function RenderImage({ imageUrl, prompt, model }: RenderImageProps) {
             className="mx-auto block h-auto max-h-[64vh] w-auto max-w-full object-contain"
           />
         </div>
-        <figcaption className="mt-8 flex w-full max-w-2xl flex-col gap-2 border-t border-[var(--color-line)] pt-5">
-          <span className="text-[11px] tracking-[0.18em] text-[var(--color-silver-500)] uppercase">
-            {t("designRender.aiNoticeLabel")}
-          </span>
-          <p className="text-[13px] leading-relaxed text-[var(--color-silver-300)]">
-            {t("designRender.aiNoticeBody")}
-          </p>
-          <p className="text-[12px] leading-relaxed text-[var(--color-silver-400)]">
-            {t("designRender.aiNoticeBody2")}
-          </p>
-          <p className="text-[12px] leading-relaxed text-[var(--color-silver-500)]">
-            {t("designRender.aiNoticeBody3")}
-          </p>
-          <span className="font-mono text-[11px] tracking-[0.06em] text-[var(--color-silver-600)]">
-            {t("designRender.providerNote", {
-              provider: prompt.vision.visual_style,
-              model,
-            })}
-          </span>
+        <figcaption className="mt-10 flex w-full max-w-2xl flex-col gap-6">
+          <div className="flex flex-col gap-2 border-t border-[var(--color-line)] pt-6">
+            <span className="exhibit-row flex items-baseline gap-5">
+              <span className="exhibit-label w-28 shrink-0">
+                {t("designRender.field.subject")}
+              </span>
+              <span className="text-[14px] text-[var(--color-ivory)]">
+                {tv("product", prompt.form.product_type)} ·{" "}
+                {t(`designProposal.tier.${prompt.vision.visual_style}`)}
+              </span>
+            </span>
+            <span className="exhibit-row flex items-baseline gap-5">
+              <span className="exhibit-label w-28 shrink-0">
+                {t("designRender.field.finish")}
+              </span>
+              <span className="text-[14px] text-[var(--color-silver-200)]">
+                {tv("renderFinish", prompt.material.finish)}
+              </span>
+            </span>
+            <span className="exhibit-row flex items-baseline gap-5">
+              <span className="exhibit-label w-28 shrink-0">
+                {t("designRender.field.craft")}
+              </span>
+              <span className="text-[14px] text-[var(--color-silver-200)]">
+                {prompt.craft.primary} · {tv("shared", prompt.craft.fineness)}
+              </span>
+            </span>
+          </div>
+
+          <Disclosure label={t("common.actions.viewDesignStory")}>
+            <div className="flex flex-col gap-3">
+              <span className="text-[11px] tracking-[0.18em] text-[var(--color-silver-500)] uppercase">
+                {t("designRender.aiNoticeLabel")}
+              </span>
+              <p className="text-[13px] leading-relaxed text-[var(--color-silver-300)]">
+                {t("designRender.aiNoticeBody")}
+              </p>
+              <p className="text-[12px] leading-relaxed text-[var(--color-silver-400)]">
+                {t("designRender.aiNoticeBody2")}
+              </p>
+              <p className="text-[12px] leading-relaxed text-[var(--color-silver-500)]">
+                {t("designRender.aiNoticeBody3")}
+              </p>
+              <span className="pt-1 font-mono text-[11px] tracking-[0.06em] text-[var(--color-silver-600)]">
+                {t("designRender.providerNote", {
+                  provider: prompt.vision.visual_style,
+                  model,
+                })}
+              </span>
+            </div>
+          </Disclosure>
         </figcaption>
       </figure>
     </section>
@@ -115,47 +135,62 @@ export function RenderWhy({ prompt }: { prompt: ImagePrompt }) {
         </p>
       </div>
 
-      <div className="grid gap-x-10 sm:grid-cols-2">
-        <div className="flex flex-col gap-5">
-          <Row label={t("designRender.field.subject")}>
+      <div className="grid grid-cols-2 gap-x-8 gap-y-2 border-t border-[var(--color-line)] pt-8 sm:grid-cols-4">
+        <div className="design-attr">
+          <span className="design-attr-label">{t("designRender.field.subject")}</span>
+          <span className="design-attr-value">
             {tv("product", prompt.form.product_type)} ·{" "}
             {t(`designProposal.tier.${prompt.vision.visual_style}`)}
-          </Row>
-          <Row label={t("designRender.field.scale")}>
-            {tv("shared", prompt.form.scale)} · {tv("thickness", prompt.form.thickness)}
-          </Row>
-          <Row label={t("designRender.field.finish")}>
-            {tv("renderFinish", prompt.material.finish)}
-          </Row>
-          <Row label={t("designRender.field.craft")}>
-            {prompt.craft.primary} · {tv("shared", prompt.craft.fineness)}
-          </Row>
+          </span>
         </div>
-        <div className="flex flex-col gap-5">
-          <Row label={t("designRender.field.motif")}>
-            {prompt.motif !== null ? (
-              <span className="flex flex-col gap-1.5">
-                <span>{prompt.motif.name}</span>
-                <span className="text-[12px] leading-relaxed text-[var(--color-silver-500)]">
-                  {t("designTranslation.motifPresented.visual-subject")}
-                </span>
-              </span>
-            ) : (
-              t("designTranslation.motifNone")
-            )}
-          </Row>
-          <Row label={t("designRender.field.composition")}>
+        <div className="design-attr">
+          <span className="design-attr-label">{t("designRender.field.scale")}</span>
+          <span className="design-attr-value">
+            {tv("shared", prompt.form.scale)} · {tv("thickness", prompt.form.thickness)}
+          </span>
+        </div>
+        <div className="design-attr">
+          <span className="design-attr-label">{t("designRender.field.finish")}</span>
+          <span className="design-attr-value">
+            {tv("renderFinish", prompt.material.finish)}
+          </span>
+        </div>
+        <div className="design-attr">
+          <span className="design-attr-label">{t("designRender.field.craft")}</span>
+          <span className="design-attr-value">
+            {prompt.craft.primary} · {tv("shared", prompt.craft.fineness)}
+          </span>
+        </div>
+        <div className="design-attr">
+          <span className="design-attr-label">{t("designRender.field.motif")}</span>
+          <span className="design-attr-value">
+            {prompt.motif !== null ? prompt.motif.name : t("designTranslation.motifNone")}
+          </span>
+        </div>
+        <div className="design-attr">
+          <span className="design-attr-label">{t("designRender.field.composition")}</span>
+          <span className="design-attr-value">
             {tv("arrangement", prompt.form.arrangement)} ·{" "}
             {tv("coverage", prompt.form.coverage)}
-          </Row>
-          <Row label={t("designRender.field.scene")}>
+          </span>
+        </div>
+        <div className="design-attr">
+          <span className="design-attr-label">{t("designRender.field.scene")}</span>
+          <span className="design-attr-value">
             {tv("occasion", prompt.wearing_scene)}
-          </Row>
-          <Row label={t("designRender.field.vision")}>
-            {prompt.vision.camera}
-          </Row>
+          </span>
+        </div>
+        <div className="design-attr">
+          <span className="design-attr-label">{t("designRender.field.vision")}</span>
+          <span className="design-attr-value">{prompt.vision.camera}</span>
         </div>
       </div>
+
+      {prompt.motif !== null && (
+        <p className="max-w-xl text-[12px] leading-relaxed text-[var(--color-silver-600)]">
+          {t("designTranslation.motifPresented.visual-subject")}
+        </p>
+      )}
     </section>
   );
 }

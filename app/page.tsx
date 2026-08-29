@@ -6,7 +6,8 @@ import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { useI18n } from "@/components/i18n/I18nProvider";
-import { MotionReveal } from "@/components/visual/MotionReveal";
+import { HeroIntroScene } from "@/components/home/HeroIntroScene";
+import { JourneySection } from "@/components/journey/JourneySection";
 import { COLLECTION_URL } from "@/lib/collection-url";
 import { STORY_3D_URL } from "@/lib/story-url";
 
@@ -15,7 +16,9 @@ import { STORY_3D_URL } from "@/lib/story-url";
  *
  * 五幕滚动叙事：滚动不是"向下移动页面"，而是"控制设计过程"。
  *
- *   ACT 1  SILVER FUTURE        银饰静置于黑暗展厅（视觉主角，45–65vh）
+ *   ACT 1  HERO FIRST VIEW       数字银饰展厅首屏（HeroIntroScene）：
+ *                                 左侧克制叙事 + 右侧银饰主体 + 巨大
+ *                                 墙面字沉入黑暗，滚动 = 走近银饰
  *   ACT 2  FROM HERITAGE        银饰靠近——scale 随滚动增长
  *   ACT 3  MATERIAL & CRAFT     银的局部放大（花丝/錾刻质感）
  *   ACT 4  CULTURE              文化来源（档案馆意象）
@@ -29,138 +32,20 @@ import { STORY_3D_URL } from "@/lib/story-url";
  * 品牌视觉，不代表任何具体文化结论。
  */
 
-const STAGES = [
-  {
-    code: "00",
-    href: "/design-interview",
-    titleKey: "common.stages.interview",
-    subKey: "interview.intro",
-  },
-  {
-    code: "01",
-    href: "/global-design",
-    titleKey: "common.stages.globalDemand",
-    subKey: "globalDemand.headerSubtitle",
-  },
-  {
-    code: "02",
-    href: "/cultural-match",
-    titleKey: "common.stages.culturalMatch",
-    subKey: "culturalMatch.headerSubtitle",
-  },
-  {
-    code: "03",
-    href: "/design-translation",
-    titleKey: "common.stages.designTranslation",
-    subKey: "designTranslation.headerSubtitle",
-  },
-  {
-    code: "04",
-    href: "/design-proposal",
-    titleKey: "common.stages.designProposal",
-    subKey: "designProposal.headerSubtitle",
-  },
-  {
-    code: "05",
-    href: "/design-render",
-    titleKey: "common.stages.designRender",
-    subKey: "designRender.headerSubtitle",
-  },
-] as const;
-
 export default function Home() {
   const { t } = useI18n();
 
   return (
     <main className="relative">
-      <ActOne />
+      <HeroIntroScene />
       <ActTwo />
       <ActThree />
       <ActFour />
       <ActFive />
-      <ProcessIndex />
+      <JourneySection />
       <AtelierFooter />
       <span className="sr-only">{t("home.coCreationNote")}</span>
     </main>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/*  ACT 1 — SILVER FUTURE · 银饰静置于黑暗展厅                                */
-/* -------------------------------------------------------------------------- */
-
-function ActOne() {
-  const { t } = useI18n();
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"],
-  });
-
-  /* 滚动 → 银饰靠近（scale 1→1.3）+ 标题退场 */
-  const pieceScale = useTransform(scrollYProgress, [0, 1], [1, 1.3]);
-  const pieceY = useTransform(scrollYProgress, [0, 1], ["0%", "10%"]);
-  const titleOpacity = useTransform(scrollYProgress, [0, 0.55], [1, 0]);
-  const titleY = useTransform(scrollYProgress, [0, 0.55], [0, -40]);
-  const glowOpacity = useTransform(scrollYProgress, [0, 1], [1, 0.4]);
-
-  return (
-    <section ref={ref} className="relative h-[165vh]">
-      <div className="sticky top-0 flex h-dvh flex-col items-center justify-center overflow-hidden">
-        {/* 展厅光 —— 银饰周围的极微弱空间光 */}
-        <motion.div
-          aria-hidden
-          style={{ opacity: glowOpacity }}
-          className="pointer-events-none absolute inset-0"
-        >
-          <div
-            className="absolute left-1/2 top-1/2 h-[70vmin] w-[70vmin] -translate-x-1/2 -translate-y-1/2"
-            style={{
-              background:
-                "radial-gradient(closest-side, rgba(231,226,211,0.09), transparent 72%)",
-            }}
-          />
-        </motion.div>
-
-        {/* 视觉主角 —— 贵州苗银项圈，占 viewport 45–65% */}
-        <motion.div
-          data-motion-scroll=""
-          style={{ scale: pieceScale, y: pieceY }}
-          className="exhibition-plinth relative z-10"
-        >
-          <div
-            className="relative h-[52vmin] w-[52vmin] sm:h-[58vmin] sm:w-[58vmin]"
-            style={{
-              maskImage:
-                "radial-gradient(closest-side, black 62%, transparent 98%)",
-              WebkitMaskImage:
-                "radial-gradient(closest-side, black 62%, transparent 98%)",
-            }}
-          >
-            <Image
-              src="/atelier/hero-silver.jpg"
-              alt={t("home.chapterLabel")}
-              fill
-              priority
-              sizes="(min-width: 1024px) 60vmin, 90vw"
-              className="object-contain"
-            />
-          </div>
-        </motion.div>
-
-        {/* 标题 —— 巨字沉在银饰之后 */}
-        <motion.div
-          style={{ opacity: titleOpacity, y: titleY }}
-          className="pointer-events-none absolute inset-0 z-0 flex flex-col items-center justify-end pb-16 sm:pb-20"
-        >
-          <h1 className="type-display text-center">
-            Silver
-            <br />
-            Future
-          </h1>
-        </motion.div>
-      </div>
-    </section>
   );
 }
 
@@ -397,62 +282,13 @@ function ActFive() {
             </a>
           </div>
           <a
-            href="#process"
+            href="#journey"
             className="mt-8 text-[12px] tracking-[0.18em] text-[var(--color-silver-500)] uppercase underline decoration-[var(--color-line-strong)] underline-offset-8 transition-colors duration-300 hover:text-[var(--color-silver-300)]"
           >
             {t("home.exploreProcess")}
           </a>
         </div>
       </motion.div>
-    </section>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/*  PROCESS INDEX · 五段流程索引（编辑式目录，非卡片）                          */
-/* -------------------------------------------------------------------------- */
-
-function ProcessIndex() {
-  const { t } = useI18n();
-
-  return (
-    <section
-      id="process"
-      className="mx-auto max-w-[1400px] px-8 pb-32 sm:px-12 lg:px-16"
-    >
-      <MotionReveal as="div" className="flex flex-col gap-6 pb-16">
-        <span className="act-label">{t("home.processTitle")}</span>
-        <h2 className="act-title max-w-3xl">{t("home.processSub")}</h2>
-      </MotionReveal>
-
-      <div className="flex flex-col">
-        {STAGES.map((s, i) => (
-          <MotionReveal key={s.code} as="div" delay={i * 60}>
-            <Link
-              href={s.href}
-              className="group relative flex flex-col gap-3 border-t border-[var(--color-line)] py-9 transition-colors duration-500 last:border-b hover:border-[var(--color-line-strong)] sm:flex-row sm:items-center sm:justify-between sm:py-10"
-            >
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:gap-10">
-                <span className="font-mono text-[13px] tracking-[0.14em] text-[var(--color-silver-600)] transition-colors duration-500 group-hover:text-[var(--color-silver-300)]">
-                  {s.code}
-                </span>
-                <h3 className="text-[24px] font-semibold tracking-[-0.02em] text-[var(--color-ivory)] transition-transform duration-500 group-hover:translate-x-1.5 sm:text-[30px]">
-                  {t(s.titleKey).replace(/^\d+\s*·\s*/, "")}
-                </h3>
-              </div>
-              <div className="flex items-center gap-8 sm:gap-12">
-                <p className="hidden max-w-sm text-[13px] leading-relaxed text-[var(--color-silver-500)] lg:block">
-                  {t(s.subKey)}
-                </p>
-                <ArrowUpRight
-                  className="h-4 w-4 shrink-0 text-[var(--color-silver-500)] transition-all duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[var(--color-ivory)]"
-                  strokeWidth={1.5}
-                />
-              </div>
-            </Link>
-          </MotionReveal>
-        ))}
-      </div>
     </section>
   );
 }

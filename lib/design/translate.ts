@@ -216,7 +216,11 @@ function groundProject(project: HeritageProject): HeritageGround {
   return {
     kind: "project",
     id: project.id,
-    displayName: project.name,
+    /* Must match the Stage 2 engine's candidate name (region-prefixed) —
+       directions.ts verifies payload integrity against this string. */
+    displayName: `${project.region
+      .replace(/^贵州省/, "")
+      .replace(/县$/, "")} · ${project.name}`,
     region: project.region,
     sourceIds: project.source_ids,
     evidenceLevel: project.evidence_level,
@@ -440,6 +444,7 @@ export function translateDesign(input: TranslateDesignInput): TranslateDesignOut
      this direction, so its design language leads. */
   const complexity = TIER_COMPLEXITY[input.direction.tier];
   const sizePreference = input.direction.recommended_scale;
+  const inspiration = dna.inspiration_analysis ?? null;
   const formLanguage = [
     ...(sizePreference === "small"
       ? ["compact proportions"]
@@ -452,10 +457,22 @@ export function translateDesign(input: TranslateDesignInput): TranslateDesignOut
         ? ["layered structural silhouette"]
         : []),
     ...(FORM_LANGUAGE_BY_PRODUCT[dna.product_type] ?? FORM_LANGUAGE_BY_PRODUCT.unknown),
+    /* Inspiration image participates as VISUAL PREFERENCE ONLY — it shapes
+       the form direction the customer likes, never the cultural grounding. */
+    ...(inspiration
+      ? [
+        `silhouette echoing your inspiration image (${inspiration.silhouette.toLowerCase()})`,
+        `proportion following the reference (${inspiration.proportion.toLowerCase()})`,
+      ]
+      : []),
   ];
 
-  const finish = FINISH_BY_COMPLEXITY[complexity];
-  const palette = PALETTE_BY_COMPLEXITY[complexity];
+  const finish = inspiration
+    ? `${FINISH_BY_COMPLEXITY[complexity]}, surface cue from the inspiration image (${inspiration.finish.toLowerCase()})`
+    : FINISH_BY_COMPLEXITY[complexity];
+  const palette = inspiration
+    ? [...PALETTE_BY_COMPLEXITY[complexity], inspiration.material_impression.toLowerCase()]
+    : PALETTE_BY_COMPLEXITY[complexity];
   const motifElement = ground?.motifElement ?? null;
   const treatment = MOTIF_TREATMENT[complexity];
 
@@ -507,8 +524,14 @@ export function translateDesign(input: TranslateDesignInput): TranslateDesignOut
   }
 
   interpretation.push(
-    `Finish strategy — ${finish} — chosen so the cultural reference stays "${dna.cultural_visibility}" at ${complexity} complexity.`,
+    `Finish strategy — ${FINISH_BY_COMPLEXITY[complexity]} — chosen so the cultural reference stays "${dna.cultural_visibility}" at ${complexity} complexity.`,
   );
+
+  if (inspiration) {
+    interpretation.push(
+      `Your inspiration image reads as "${inspiration.mood}" — its ${inspiration.silhouette.toLowerCase()} silhouette and ${inspiration.finish.toLowerCase()} finish guide the form direction as your visual preference only, never as cultural evidence.`,
+    );
+  }
 
   /* 5 — Cultural constraints (hard boundaries for design and copy). */
   const constraints: string[] = [];
@@ -600,6 +623,14 @@ export function translateDesign(input: TranslateDesignInput): TranslateDesignOut
     cultural_visibility:
       VISIBILITY_TEXT[dna.cultural_visibility] ??
       "Balanced — clearly readable at conversational distance",
+    /* Honesty layer: which specs the customer chose vs the engine filled
+       in. Unknown DNA preferences mean the engine defaulted — labeled. */
+    spec_provenance: {
+      size: "ai",
+      weight: dna.weight_preference !== "unknown" ? "user" : "ai",
+      cultural_visibility: dna.cultural_visibility !== "unknown" ? "user" : "ai",
+      wearability: dna.wearability !== "unknown" ? "user" : "ai",
+    },
     heritage_reference: ground
       ? {
         match_id: ground.id,

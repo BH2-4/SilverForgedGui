@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { ArrowRight, RotateCcw } from "lucide-react";
@@ -21,7 +21,7 @@ export function ReadyToCreate({ brief, onRestart }: ReadyToCreateProps) {
   const { t } = useI18n();
 
   return (
-    <section className="glass-panel flex flex-col gap-8 rounded-[var(--radius-lg)] p-8 sm:p-10">
+    <section className="flex flex-col gap-8 border-t border-[var(--color-line)] pt-12">
       <SectionLabel>{t("designTranslation.readyLabel")}</SectionLabel>
       <div className="flex flex-col gap-4">
         <h3 className="font-sans text-[24px] leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[28px]">
@@ -44,13 +44,11 @@ export function ReadyToCreate({ brief, onRestart }: ReadyToCreateProps) {
         </button>
         <Link
           href="/design-proposal"
-          className="group inline-flex items-center gap-3 rounded-full border border-[var(--color-line-strong)] bg-[rgba(231,226,211,0.06)] px-7 py-3.5 text-[12px] font-medium tracking-[0.16em] text-[var(--color-ivory)] uppercase transition-colors hover:border-[var(--color-accent)]"
+          data-variant="solid"
+          className="journey-cta"
         >
           {t("common.actions.viewProposal")}
-          <ArrowRight
-            className="h-4 w-4 transition-colors group-hover:text-[var(--color-accent)]"
-            strokeWidth={1.5}
-          />
+          <ArrowRight className="h-4 w-4" strokeWidth={1.5} />
         </Link>
       </div>
       <div className="text-[11px] tracking-[0.22em] text-[var(--color-silver-600)] uppercase">

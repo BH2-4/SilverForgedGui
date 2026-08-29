@@ -401,7 +401,7 @@ export function generateDesignDirections(
     }
     /* Keep the Stage 2 choice visible even if the re-run pool drifts. */
     if (!pool.some((m) => m.id === match.id)) {
-      pool = [match, ...pool].slice(0, 5);
+      pool = [match, ...pool].slice(0, 8);
     }
   }
 

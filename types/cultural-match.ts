@@ -24,6 +24,9 @@ export type CulturalMatchApiResponse =
       /** The Stage-1 brief this match was computed from (AI inference —
        *  kept separate from heritage facts per RULE-005). */
       design_dna: import("@/lib/ai/schemas").GlobalDesignBrief;
+      /** Total cultural directions in the database (the ranked pool the
+       *  Top-N was selected FROM — the DB size, never the match count). */
+      pool_total: number;
       matches: import("@/lib/heritage/types").CulturalMatchResult[];
       guardrail: import("@/lib/heritage/types").GuardrailResult;
       /** Resolved references for every source_id used by the matches. */

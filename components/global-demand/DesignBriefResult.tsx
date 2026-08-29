@@ -1,8 +1,9 @@
-﻿"use client";
+"use client";
 
 import { ArrowRight, RotateCcw } from "lucide-react";
 import { SectionLabel } from "@/components/shared/SectionLabel";
 import { useI18n } from "@/components/i18n/I18nProvider";
+import { Disclosure } from "@/components/shared/Disclosure";
 import type { GlobalDesignBrief } from "@/lib/ai/schemas";
 
 interface DesignBriefResultProps {
@@ -11,19 +12,13 @@ interface DesignBriefResultProps {
   onContinue: () => void;
 }
 
-function Stat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex flex-col gap-2 border-t border-[var(--color-line)] pt-4">
-      <span className="text-[11px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
-        {label}
-      </span>
-      <span className="font-sans text-[20px] leading-[1.15] tracking-[-0.005em] text-[var(--color-ivory)]">
-        {value}
-      </span>
-    </div>
-  );
-}
-
+/**
+ * EXPERIENCE LAYER · Design Reveal
+ *
+ * Stage 1 的结果不再以「报告表格」铺开，而是先给出 AI 的一句话理解，
+ * 再以展签（design-attr）呈现关键属性；完整设计基因收进渐进披露，
+ * 用户需要时才展开。业务数据（brief）一字不改。
+ */
 export function DesignBriefResult({
   brief,
   onReset,
@@ -46,84 +41,45 @@ export function DesignBriefResult({
       : null,
   ].filter((s): s is string => Boolean(s));
 
+  // 第一层 —— 展签式关键属性
+  const keyAttrs: Array<{ label: string; value: string }> = [
+    { label: t("common.labels.market"), value: tv("market", brief.market) },
+    { label: t("common.labels.product"), value: tv("product", brief.product_type) },
+    { label: t("common.labels.occasion"), value: tv("occasion", brief.occasion) },
+    { label: t("common.labels.style"), value: joinTokens(tv, "style", brief.style) },
+    { label: t("common.labels.emotion"), value: joinTokens(tv, "emotion", brief.emotion) },
+    {
+      label: t("common.labels.culturalVisibility"),
+      value: tv("shared", brief.cultural_visibility),
+    },
+  ];
+
+  // 第二层 —— 完整设计基因（渐进披露）
+  const fullDna: Array<{ label: string; value: string }> = [
+    { label: t("common.labels.wearability"), value: tv("shared", brief.wearability) },
+    { label: t("common.labels.complexity"), value: tv("shared", brief.complexity) },
+    { label: t("common.labels.size"), value: tv("shared", brief.size_preference) },
+    { label: t("common.labels.weight"), value: tv("shared", brief.weight_preference) },
+    {
+      label: t("common.labels.priceSensitivity"),
+      value: tv("shared", brief.price_sensitivity),
+    },
+  ];
+
   return (
     <div className="animate-fade-in flex flex-col gap-16 py-6">
-      {/* ─────────────────────  Design DNA  ───────────────────── */}
-      <section className="flex flex-col gap-10">
+      {/* ─────────────  Reveal hero —— 结果标题  ───────────── */}
+      <section className="flex flex-col gap-8">
         <div className="flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <SectionLabel className="mb-6">
-              {t("globalDemand.resultDnaLabel")}
-            </SectionLabel>
-            <h2 className="font-sans text-[28px] leading-[1.05] tracking-[-0.02em] text-[var(--color-ivory)] sm:text-[32px]">
-              {t("globalDemand.resultTitle")}
-            </h2>
-          </div>
-          <div className="text-right">
-            <div className="text-[11px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
-              {t("common.labels.confidence")}
-            </div>
-            <div className="font-sans text-[24px] text-[var(--color-ivory)]">
-              {confidencePct}
-              <span className="text-[var(--color-silver-500)]">%</span>
-            </div>
-          </div>
+          <SectionLabel>{t("globalDemand.resultDnaLabel")}</SectionLabel>
+          <span className="text-[11px] tracking-[0.22em] text-[var(--color-silver-600)] uppercase">
+            {t("common.labels.confidence")} {confidencePct}%
+          </span>
         </div>
-
-        <div className="glass-panel grid grid-cols-2 gap-x-8 gap-y-6 rounded-[var(--radius-lg)] p-8 sm:grid-cols-3 lg:grid-cols-4">
-          <Stat label={t("common.labels.market")} value={tv("market", brief.market)} />
-          <Stat
-            label={t("common.labels.product")}
-            value={tv("product", brief.product_type)}
-          />
-          <Stat
-            label={t("common.labels.occasion")}
-            value={tv("occasion", brief.occasion)}
-          />
-          <Stat
-            label={t("common.labels.style")}
-            value={joinTokens(tv, "style", brief.style)}
-          />
-          <Stat
-            label={t("common.labels.emotion")}
-            value={joinTokens(tv, "emotion", brief.emotion)}
-          />
-          <Stat
-            label={t("common.labels.culturalVisibility")}
-            value={tv("shared", brief.cultural_visibility)}
-          />
-          <Stat
-            label={t("common.labels.wearability")}
-            value={tv("shared", brief.wearability)}
-          />
-          <Stat
-            label={t("common.labels.complexity")}
-            value={tv("shared", brief.complexity)}
-          />
-          <Stat
-            label={t("common.labels.size")}
-            value={tv("shared", brief.size_preference)}
-          />
-          <Stat
-            label={t("common.labels.weight")}
-            value={tv("shared", brief.weight_preference)}
-          />
-          <Stat
-            label={t("common.labels.priceSensitivity")}
-            value={tv("shared", brief.price_sensitivity)}
-          />
-          <div className="col-span-2 flex flex-col gap-2 border-t border-[var(--color-line)] pt-4 sm:col-span-3 lg:col-span-1">
-            <span className="text-[11px] tracking-[0.22em] text-[var(--color-silver-500)] uppercase">
-              {t("common.labels.consumerProfile")}
-            </span>
-            <span className="text-[14px] leading-relaxed text-[var(--color-silver-200)]">
-              {brief.consumer_profile}
-            </span>
-          </div>
-        </div>
+        <h2 className="act-title">{t("globalDemand.resultTitle")}</h2>
       </section>
 
-      {/* ─────────────────  AI Interpretation  ───────────────── */}
+      {/* ─────────────  一句话 —— AI 的理解  ───────────── */}
       <section className="flex flex-col gap-6">
         <SectionLabel>{t("globalDemand.aiInterpretationLabel")}</SectionLabel>
         <p className="font-sans max-w-3xl text-[22px] leading-[1.35] text-[var(--color-ivory)] sm:text-[24px]">
@@ -136,7 +92,40 @@ export function DesignBriefResult({
         )}
       </section>
 
-      {/* ─────────────────  Design Signals  ──────────────────── */}
+      {/* ─────────────  关键属性 —— 展签网格  ───────────── */}
+      <section className="flex flex-col gap-6">
+        <SectionLabel>{t("globalDemand.resultDnaLabel")}</SectionLabel>
+        <div className="grid grid-cols-2 gap-x-8 gap-y-2 sm:grid-cols-3">
+          {keyAttrs.map((attr) => (
+            <div className="design-attr" key={attr.label}>
+              <span className="design-attr-label">{attr.label}</span>
+              <span className="design-attr-value">{attr.value}</span>
+            </div>
+          ))}
+        </div>
+        <Disclosure label={t("common.actions.viewFullDna")}>
+          <div className="flex flex-col gap-8">
+            <div className="grid grid-cols-2 gap-x-8 gap-y-2 sm:grid-cols-3">
+              {fullDna.map((attr) => (
+                <div className="design-attr" key={attr.label}>
+                  <span className="design-attr-label">{attr.label}</span>
+                  <span className="design-attr-value">{attr.value}</span>
+                </div>
+              ))}
+            </div>
+            <div className="design-attr">
+              <span className="design-attr-label">
+                {t("common.labels.consumerProfile")}
+              </span>
+              <span className="max-w-2xl text-[14px] leading-relaxed text-[var(--color-silver-200)]">
+                {brief.consumer_profile}
+              </span>
+            </div>
+          </div>
+        </Disclosure>
+      </section>
+
+      {/* ─────────────  Design Signals  ───────────── */}
       <section className="flex flex-col gap-6">
         <SectionLabel>{t("globalDemand.signalsLabel")}</SectionLabel>
         <div className="flex flex-wrap gap-2.5">
@@ -171,10 +160,10 @@ export function DesignBriefResult({
         )}
       </section>
 
-      {/* ─────────────────  What Comes Next  ─────────────────── */}
-      <section className="glass-panel flex flex-col gap-8 rounded-[var(--radius-lg)] p-8 sm:p-10">
-        <SectionLabel>{t("globalDemand.whatComesNextLabel")}</SectionLabel>
+      {/* ─────────────  What Comes Next —— 编辑级收尾  ───────────── */}
+      <section className="flex flex-col gap-8 border-t border-[var(--color-line)] pt-12">
         <div className="flex flex-col gap-4">
+          <SectionLabel>{t("globalDemand.whatComesNextLabel")}</SectionLabel>
           <h3 className="font-sans text-[24px] leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[28px]">
             {t("globalDemand.whatComesNextTitle")}
           </h3>
@@ -195,10 +184,11 @@ export function DesignBriefResult({
           <button
             type="button"
             onClick={onContinue}
-            className="group inline-flex items-center gap-3 rounded-full border border-[var(--color-line-strong)] bg-[linear-gradient(180deg,var(--color-silver-100),var(--color-silver-300))] px-7 py-3.5 text-[12px] font-medium tracking-[0.16em] text-[var(--color-bg)] uppercase transition-all duration-300 hover:brightness-105 active:scale-[0.97]"
+            data-variant="solid"
+            className="journey-cta"
           >
             {t("common.actions.continueToCulturalMatch")}
-            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" strokeWidth={1.5} />
+            <ArrowRight className="h-4 w-4" strokeWidth={1.5} />
           </button>
         </div>
         <div className="text-[11px] tracking-[0.22em] text-[var(--color-silver-600)] uppercase">

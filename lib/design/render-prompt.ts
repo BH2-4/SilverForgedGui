@@ -129,6 +129,24 @@ const PRODUCT_NOUN: Record<string, string> = {
   unknown: "a silver jewelry piece",
 };
 
+/**
+ * PRODUCT LOCK — the customer's product choice is the single hardest
+ * constraint in the whole pipeline. A bracelet request must render as a
+ * bracelet; the model may never drift to a semantically similar category
+ * (bracelet → ring, earrings → brooch, …).
+ */
+function buildProductLock(productType: string): string[] {
+  const chosen = PRODUCT_NOUN[productType] ? productType : "unknown";
+  const others = Object.keys(PRODUCT_NOUN)
+    .filter((type) => type !== chosen && type !== "unknown")
+    .join(", ");
+  return [
+    `PRODUCT TYPE: ${chosen.toUpperCase()} — a hard constraint on the product category`,
+    `Do not generate any other product category (${others})`,
+    "Do not reinterpret the product category",
+  ];
+}
+
 const REGION_ANCHOR: Record<string, string> = {
   miao: "inspired by traditional Miao silver ornamentation from Guizhou, China",
   dong: "inspired by traditional Dong silver ornamentation from Guizhou, China",
@@ -257,6 +275,9 @@ function buildNegativeConstraints(proposal: z.infer<typeof DesignProposalSchema>
     "text",
     "watermark",
     "logo",
+    /* PRODUCT LOCK mirrored in the negative list — a bracelet must never
+       render as a ring, whatever the semantic drift. */
+    `a different type of jewelry instead of the requested ${proposal.form.product_type}`,
   ];
 
   /* Conditional honesty: only forbid what the proposal itself rejects. */
@@ -378,7 +399,14 @@ export function buildImagePrompt(
 
   /* ---- F: safety constraints ---- */
   const cultural_constraints = buildCulturalConstraints(motif);
-  const negative_constraints = buildNegativeConstraints(proposal);
+
+  /* PRODUCT LOCK — the "do not drift" half lives in the negative list,
+     the affirmative half leads the prompt body below. */
+  const productLock = buildProductLock(form.product_type);
+  const negative_constraints = [
+    ...buildNegativeConstraints(proposal),
+    ...productLock.slice(1),
+  ];
 
   /* ---- A: customer intent echo (UI trace only) ---- */
   const intent = {
@@ -394,8 +422,12 @@ export function buildImagePrompt(
   const productNoun = PRODUCT_NOUN[form.product_type] ?? form.product_type;
   const regionAnchor = REGION_ANCHOR["miao"] ?? "";
 
+  /* Inspiration analysis (optional) — visual features only, never cultural
+     claims. Null when the customer uploaded no image: no fake analysis. */
+  const inspiration = input.handoff.designDna.inspiration_analysis ?? null;
+
   const segments: string[] = [
-    `${vision.camera}, ${ARRANGEMENT_TEXT[form.arrangement]} ${productNoun} in ${FINISH_TEXT[material.finish]}`,
+    `${productLock[0]} — ${vision.camera}, ${ARRANGEMENT_TEXT[form.arrangement]} ${productNoun} in ${FINISH_TEXT[material.finish]}`,
     `genuine metal silver surface with realistic metallic reflections and subtle tarnish accents`,
     `${THICKNESS_TEXT[form.thickness]}, ${SCALE_TEXT[form.scale]}`,
     `${FINENESS_TEXT[craft.fineness]} — ${craftVisualLanguage(craft.primary)} (${craft.primary} in the Guizhou Miao silversmith tradition)`,
@@ -404,6 +436,12 @@ export function buildImagePrompt(
 
   if (regionAnchor) {
     segments.push(regionAnchor);
+  }
+
+  if (inspiration !== null) {
+    segments.push(
+      `visual features guided by the customer's inspiration image: ${inspiration.silhouette.toLowerCase()} silhouette, ${inspiration.form.toLowerCase()} form, ${inspiration.material_impression.toLowerCase()} material impression, ${inspiration.finish.toLowerCase()} finish, ${inspiration.pattern.toLowerCase()} pattern, ${inspiration.mood.toLowerCase()} mood — treated purely as visual preference, not as cultural evidence`,
+    );
   }
 
   if (motif !== null) {

@@ -464,7 +464,7 @@ function RenderActions({ confirmed, onRegenerate, onBack, onConfirm }: RenderAct
 
   if (confirmed) {
     return (
-      <section className="glass-panel flex flex-col gap-8 rounded-[var(--radius-lg)] p-8 sm:p-10">
+      <section className="flex flex-col gap-8 border-t border-[var(--color-line-strong)] pt-12">
         <SectionLabel>{t("designRender.confirmedLabel")}</SectionLabel>
         <div className="flex flex-col gap-4">
           <h3 className="font-sans text-[24px] leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[28px]">
@@ -495,67 +495,47 @@ function RenderActions({ confirmed, onRegenerate, onBack, onConfirm }: RenderAct
   }
 
   return (
-    <section className="glass-panel flex flex-col gap-8 rounded-[var(--radius-lg)] p-8 sm:p-10">
+    <section className="flex flex-col gap-8 border-t border-[var(--color-line-strong)] pt-12">
       <SectionLabel>{t("designRender.actionsLabel")}</SectionLabel>
       <div className="flex flex-col gap-4">
         <h3 className="font-sans text-[24px] leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[28px]">
           {t("designRender.actionsTitle")}
         </h3>
+        <p className="max-w-xl text-[13px] leading-relaxed text-[var(--color-silver-500)]">
+          {t("designRender.actions.loveHint")}
+        </p>
       </div>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-6">
         <button
           type="button"
           onClick={onConfirm}
-          className="group inline-flex items-center justify-between gap-3 rounded-full border border-[var(--color-line-strong)] bg-[rgba(231,226,211,0.06)] px-7 py-4 text-left transition-colors hover:border-[var(--color-accent)]"
+          data-variant="solid"
+          className="journey-cta"
         >
-          <span className="flex flex-col gap-1">
-            <span className="text-[13px] font-medium tracking-[0.1em] text-[var(--color-ivory)]">
-              {t("designRender.actions.love")}
-            </span>
-            <span className="text-[12px] leading-relaxed text-[var(--color-silver-500)]">
-              {t("designRender.actions.loveHint")}
-            </span>
-          </span>
-          <Heart
-            className="h-4 w-4 shrink-0 text-[var(--color-silver-400)] transition-colors group-hover:text-[var(--color-accent)]"
-            strokeWidth={1.5}
-          />
+          <Heart className="h-4 w-4" strokeWidth={1.5} aria-hidden />
+          {t("designRender.actions.love")}
         </button>
-        <div className="flex flex-col gap-4 sm:flex-row">
+        <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
           <button
             type="button"
             onClick={onRegenerate}
-            className="group inline-flex flex-1 items-center gap-3 rounded-full border border-[var(--color-line)] px-6 py-3.5 text-left transition-colors hover:border-[var(--color-silver-400)]"
+            className="group inline-flex items-center gap-2 text-[12px] tracking-[0.12em] text-[var(--color-silver-400)] uppercase transition-colors hover:text-[var(--color-silver-100)]"
           >
-            <Sparkles
-              className="h-4 w-4 shrink-0 text-[var(--color-silver-500)]"
-              strokeWidth={1.5}
-            />
-            <span className="flex flex-col gap-1">
-              <span className="text-[12px] font-medium tracking-[0.1em] text-[var(--color-silver-200)]">
-                {t("designRender.actions.regenerate")}
-              </span>
-              <span className="text-[12px] leading-relaxed text-[var(--color-silver-500)]">
-                {t("designRender.actions.regenerateHint")}
-              </span>
+            <Sparkles className="h-3.5 w-3.5" strokeWidth={1.5} />
+            {t("designRender.actions.regenerate")}
+            <span className="text-[var(--color-silver-600)]">
+              {t("designRender.actions.regenerateHint")}
             </span>
           </button>
           <button
             type="button"
             onClick={onBack}
-            className="group inline-flex flex-1 items-center gap-3 rounded-full border border-[var(--color-line)] px-6 py-3.5 text-left transition-colors hover:border-[var(--color-silver-400)]"
+            className="group inline-flex items-center gap-2 text-[12px] tracking-[0.12em] text-[var(--color-silver-400)] uppercase transition-colors hover:text-[var(--color-silver-100)]"
           >
-            <ArrowLeft
-              className="h-4 w-4 shrink-0 text-[var(--color-silver-500)]"
-              strokeWidth={1.5}
-            />
-            <span className="flex flex-col gap-1">
-              <span className="text-[12px] font-medium tracking-[0.1em] text-[var(--color-silver-200)]">
-                {t("designRender.actions.back")}
-              </span>
-              <span className="text-[12px] leading-relaxed text-[var(--color-silver-500)]">
-                {t("designRender.actions.backHint")}
-              </span>
+            <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1.5} />
+            {t("designRender.actions.back")}
+            <span className="text-[var(--color-silver-600)]">
+              {t("designRender.actions.backHint")}
             </span>
           </button>
         </div>

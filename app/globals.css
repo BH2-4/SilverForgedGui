@@ -45,9 +45,9 @@
   /* Durations — one clock the whole atelier runs on. */
   --dur-hover: 280ms;
   --dur-reveal: 640ms;
-  --dur-transition: 780ms;
+  --dur-transition: 980ms;
   --dur-object: 1100ms;
-  --dur-wash: 460ms;
+  --dur-wash: 640ms;
 
   /* Depth shadows — never harsh, only spatial. */
   --shadow-object-1: 0 1px 0 rgba(255, 255, 255, 0.03) inset,
@@ -420,12 +420,12 @@
 @keyframes atelier-page-enter {
   from {
     opacity: 0;
-    transform: perspective(1400px) scale(0.945) translate3d(0, 22px, 0);
-    filter: blur(10px);
+    transform: perspective(1600px) scale(1.05) translate3d(0, 14px, 0);
+    filter: blur(12px);
   }
   to {
     opacity: 1;
-    transform: perspective(1400px) scale(1) translate3d(0, 0, 0);
+    transform: perspective(1600px) scale(1) translate3d(0, 0, 0);
     filter: blur(0);
   }
 }
@@ -628,6 +628,76 @@ html[data-stage="home"] #particle-field {
 }
 
 /* --------------------------------------------------------------------
+ * HERO FIRST VIEW · 数字银饰展厅首屏
+ * 左侧克制叙事 + 右侧银饰主体 + 巨大墙面字（SILVER FUTURE）沉入黑暗。
+ * --------------------------------------------------------------------*/
+
+/* 墙面大字 —— 展览墙上的巨型 typography，银饰挂在它前面：
+   低透明度银白、轻微 blur、左缘渐隐入黑暗、右缘出血到视口外。 */
+.hero-wall {
+  filter: blur(1.5px);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 32%);
+  mask-image: linear-gradient(to right, transparent, black 32%);
+  user-select: none;
+  height: 100%;
+}
+.hero-wall-type {
+  display: block;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: clamp(7rem, 23vw, 24rem);
+  line-height: 0.86;
+  letter-spacing: -0.045em;
+  color: rgba(231, 226, 211, 0.09);
+}
+
+/* 左侧陈述 —— 陈述级标题（巨字的角色已交给墙面） */
+.hero-statement {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: clamp(1.7rem, 2.6vw, 2.5rem);
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  color: var(--color-ivory);
+}
+
+/* 探索提示 —— 编号 + 细线 + 文案，细线缓慢呼吸 */
+.hero-scroll-num {
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  color: var(--color-silver-600);
+  font-variant-numeric: tabular-nums;
+}
+.hero-scroll-text {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-silver-500);
+}
+.hero-scroll-line {
+  width: 1px;
+  height: 44px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--color-silver-400)
+  );
+  transform-origin: top center;
+  animation: hero-breathe 3.6s ease-in-out infinite;
+}
+@keyframes hero-breathe {
+  0%,
+  100% {
+    transform: scaleY(0.32);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+/* --------------------------------------------------------------------
  * STAGE SYSTEM · Stage 1–5 统一视觉语言（第二阶段重构）
  * 每一页共享的编辑级排版、展签、输入控件与空间深度。
  * --------------------------------------------------------------------*/
@@ -795,6 +865,536 @@ html[data-stage="design-render"] .stage-space::after {
   );
 }
 
+/* --------------------------------------------------------------------
+ * EXPERIENCE LAYER · Stage 1–5 体验重构（第三阶段）
+ * 渐进披露 / 档案馆卡片 / 设计标签 / 旅程按钮 / 焦点模式。
+ * 全部为表现层工具类，业务组件零耦合。
+ * --------------------------------------------------------------------*/
+
+/* 旅程按钮 —— 「继续这段旅程」级的编辑级 CTA：
+   细边、银白、箭头位移，与 btn-pill 同族但更轻、更修长。 */
+.journey-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 26px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-ivory);
+  background: transparent;
+  border: 1px solid var(--color-line-strong);
+  border-radius: 2px;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-hover) var(--ease-atelier),
+    border-color var(--dur-hover) var(--ease-atelier),
+    padding-right var(--dur-hover) var(--ease-atelier);
+}
+.journey-cta:hover {
+  border-color: rgba(245, 245, 247, 0.5);
+  background: rgba(245, 245, 247, 0.04);
+  padding-right: 32px;
+}
+.journey-cta:disabled {
+  cursor: not-allowed;
+  opacity: 0.35;
+  padding-right: 26px;
+}
+.journey-cta:disabled:hover {
+  border-color: var(--color-line-strong);
+  background: transparent;
+}
+.journey-cta svg {
+  transition: transform var(--dur-hover) var(--ease-atelier);
+}
+.journey-cta:hover svg {
+  transform: translateX(5px);
+}
+.journey-cta[data-variant="solid"] {
+  color: var(--color-bg);
+  background: var(--color-ivory);
+  border-color: var(--color-ivory);
+}
+.journey-cta[data-variant="solid"]:hover {
+  background: var(--color-silver-200);
+  border-color: var(--color-silver-200);
+}
+
+/* 档案馆卡片 —— Stage 2 文化对象以图像为先：
+   黑色空间中一件被顶灯照亮的展品，默认只露出影像与名称。 */
+.archive-card {
+  position: relative;
+  background: #050506;
+  border: 1px solid var(--color-line);
+  overflow: hidden;
+  cursor: pointer;
+  transition:
+    border-color var(--dur-hover) var(--ease-atelier),
+    transform var(--dur-reveal) var(--ease-atelier),
+    box-shadow var(--dur-reveal) var(--ease-atelier);
+}
+.archive-card:hover {
+  border-color: var(--color-line-strong);
+  transform: translate3d(0, -2px, 0);
+  box-shadow: 0 24px 48px -28px rgba(0, 0, 0, 0.95);
+}
+.archive-card[data-selected="true"] {
+  border-color: rgba(231, 226, 211, 0.45);
+  box-shadow: 0 0 0 1px rgba(231, 226, 211, 0.22);
+}
+.archive-card-image {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #080808;
+}
+.archive-card-image img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  opacity: 0.82;
+  filter: saturate(0.86) contrast(1.02);
+  transform: scale(1.001);
+  transition:
+    transform 1600ms var(--ease-atelier),
+    opacity var(--dur-hover) var(--ease-atelier);
+}
+.archive-card:hover .archive-card-image img {
+  opacity: 1;
+  transform: scale(1.03);
+}
+/* 顶部展灯渐隐 —— 影像上缘沉入黑暗 */
+.archive-card-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(5, 5, 6, 0.86) 0%,
+    rgba(5, 5, 6, 0.24) 34%,
+    transparent 62%
+  );
+  pointer-events: none;
+}
+/* 焦点模式 —— 影像放大成视觉主体，信息层在影像下方展开 */
+.archive-card[data-focused="true"] .archive-card-image {
+  aspect-ratio: 16 / 9;
+}
+.archive-card[data-focused="true"] .archive-card-image img {
+  opacity: 1;
+  transform: scale(1.02);
+}
+
+/* 设计标签 —— FORM / MATERIAL / FINISH 式的设计参数呈现：
+   小号大写 + 细线 + 大数值，像图纸上的标注，不是表格。 */
+.design-attr {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding-block: 16px;
+  border-top: 1px solid var(--color-line);
+}
+.design-attr-label {
+  font-size: 10px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--color-silver-600);
+}
+.design-attr-value {
+  font-size: 15px;
+  line-height: 1.35;
+  letter-spacing: -0.005em;
+  color: var(--color-silver-100);
+}
+
+/* 渐进披露触发器 —— 「WHY THIS MATCH →」式的编辑级展开按钮 */
+.disclosure-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding-block: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-silver-400);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid transparent;
+  cursor: pointer;
+  transition:
+    color var(--dur-hover) var(--ease-atelier),
+    border-color var(--dur-hover) var(--ease-atelier);
+}
+.disclosure-trigger:hover {
+  color: var(--color-ivory);
+  border-bottom-color: var(--color-line-strong);
+}
+.disclosure-trigger svg {
+  transition: transform 420ms var(--ease-atelier);
+}
+.disclosure-trigger[data-open="true"] svg {
+  transform: rotate(90deg);
+}
+.disclosure-body {
+  overflow: hidden;
+}
+
+/* 匹配桥 —— Stage 3 顶部「你的故事 × 文化」的相遇时刻：
+   两条极细的银线从左右收拢向中心的一个光点。 */
+.match-bridge {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.match-bridge-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    to var(--bridge-dir, right),
+    transparent,
+    rgba(231, 226, 211, 0.28)
+  );
+}
+.match-bridge-node {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(231, 226, 211, 0.65);
+  box-shadow: 0 0 12px 2px rgba(231, 226, 211, 0.18);
+  flex-shrink: 0;
+}
+
+/* 契合度 —— 匹配分数的克制呈现：一根细线 + 小数字，不做仪表盘 */
+.fit-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.fit-line-bar {
+  height: 1px;
+  flex: 1;
+  background: rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+.fit-line-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  right: auto;
+  width: var(--fit, 50%);
+  background: linear-gradient(
+    to right,
+    rgba(231, 226, 211, 0.3),
+    rgba(231, 226, 211, 0.75)
+  );
+  transition: width 900ms var(--ease-atelier);
+}
+
+/* 旅程阶段行 —— 页脚的 INTENT → CULTURE → MATCH → DESIGN → REVEAL
+   迷你进度（配合 stage-index 使用，当前高亮，走过微亮，未来低对比） */
+.journey-steps {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap-x: 10px;
+  gap-y: 4px;
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--color-silver-600);
+}
+.journey-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: color 600ms var(--ease-atelier);
+}
+.journey-step[data-state="done"] {
+  color: var(--color-silver-500);
+}
+.journey-step[data-state="current"] {
+  color: var(--color-ivory);
+}
+.journey-step-sep {
+  width: 18px;
+  height: 1px;
+  background: var(--color-line);
+}
+
+/* ==========================================================================
+   JOURNEY RAIL — Stage 页面右侧的空间导航（垂线 + 节点）
+   ========================================================================== */
+.journey-rail {
+  position: fixed;
+  right: 22px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 26px;
+  pointer-events: none;
+}
+.journey-rail-node {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  pointer-events: auto;
+  padding: 4px 0;
+}
+/* 节点间的连接垂线 */
+.journey-rail-node:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: calc(50% + 7px);
+  right: 2.5px;
+  height: 26px;
+  width: 1px;
+  background: var(--color-line);
+}
+.journey-rail-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: 1px solid rgba(231, 226, 211, 0.35);
+  background: transparent;
+  transition: all 500ms var(--ease-atelier);
+}
+.journey-rail-node.is-visited .journey-rail-dot {
+  border-color: rgba(231, 226, 211, 0.5);
+  background: rgba(231, 226, 211, 0.32);
+}
+.journey-rail-node.is-active .journey-rail-dot {
+  width: 9px;
+  height: 9px;
+  border-color: var(--color-ivory);
+  background: var(--color-ivory);
+  box-shadow: 0 0 14px 1px rgba(231, 226, 211, 0.22);
+}
+.journey-rail-label {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%) translateX(6px);
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  white-space: nowrap;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-silver-200);
+  opacity: 0;
+  transition: opacity 400ms var(--ease-atelier), transform 400ms var(--ease-atelier);
+  pointer-events: none;
+}
+.journey-rail-code {
+  font-family: var(--font-inter);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--color-silver-500);
+}
+.journey-rail-node:hover .journey-rail-label,
+.journey-rail-node:focus-visible .journey-rail-label,
+.journey-rail-node.is-active .journey-rail-label {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+@media (max-width: 1279px) {
+  .journey-rail {
+    display: none;
+  }
+}
+
+/* JOURNEY 菜单 —— 顶栏 hover 展开的旅程站点面板 */
+.journey-menu-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 12px 14px;
+  border-left: 1px solid transparent;
+  transition: background-color var(--dur-hover) var(--ease-atelier),
+    border-color var(--dur-hover) var(--ease-atelier);
+}
+.journey-menu-item:hover,
+.journey-menu-item:focus-visible {
+  background: rgba(255, 255, 255, 0.03);
+  border-left-color: rgba(231, 226, 211, 0.4);
+  outline: none;
+}
+.journey-menu-item[data-active] {
+  background: rgba(255, 255, 255, 0.02);
+  border-left-color: var(--color-ivory);
+}
+
+/* ==========================================================================
+   JOURNEY SECTION — 首页的设计旅程（银色垂线路径 + 站点行）
+   ========================================================================== */
+.journey-path::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 14px;
+  bottom: 14px;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--color-line) 6%,
+    var(--color-line) 94%,
+    transparent
+  );
+}
+.journey-station {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6vw;
+  padding: 34px 0 34px 0;
+  border-top: 0.5px solid rgba(255, 255, 255, 0.05);
+  transition: border-color 500ms var(--ease-atelier);
+}
+.journey-station:last-child {
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.05);
+}
+.journey-station:hover {
+  border-color: rgba(231, 226, 211, 0.16);
+}
+.journey-station-node {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 11px;
+  height: 11px;
+}
+.journey-station-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  border: 1px solid rgba(231, 226, 211, 0.4);
+  background: transparent;
+  transition: all 600ms var(--ease-atelier);
+}
+.journey-station:hover .journey-station-dot {
+  border-color: var(--color-ivory);
+  background: var(--color-ivory);
+  box-shadow: 0 0 12px 1px rgba(231, 226, 211, 0.2);
+}
+.journey-station-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-left: 28px;
+}
+.journey-station-head {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+.journey-station-code {
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  color: var(--color-silver-600);
+  transition: color 500ms var(--ease-atelier);
+}
+.journey-station-name {
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--color-ivory);
+  transition: transform 600ms var(--ease-atelier);
+}
+.journey-station:hover .journey-station-name {
+  transform: translateX(6px);
+}
+.journey-station:hover .journey-station-code {
+  color: var(--color-silver-300);
+}
+.journey-station-tag {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-silver-600);
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  padding: 2px 10px;
+}
+.journey-station-desc {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--color-silver-500);
+  max-width: 34em;
+  transition: color 500ms var(--ease-atelier);
+}
+.journey-station:hover .journey-station-desc {
+  color: var(--color-silver-300);
+}
+.journey-station-enter {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-silver-600);
+  transition: color 500ms var(--ease-atelier);
+}
+.journey-station-enter-text {
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 500ms var(--ease-atelier), transform 500ms var(--ease-atelier);
+}
+.journey-station:hover .journey-station-enter,
+.journey-station:focus-visible .journey-station-enter {
+  color: var(--color-silver-100);
+}
+.journey-station:hover .journey-station-enter-text,
+.journey-station:focus-visible .journey-station-enter-text {
+  opacity: 1;
+  transform: translateX(0);
+}
+.journey-station-enter svg {
+  transition: transform 500ms var(--ease-atelier);
+}
+.journey-station:hover .journey-station-enter svg {
+  transform: translateX(4px);
+}
+/* 序章（00 可选访谈）——弱化呈现 */
+.journey-station[data-prologue] .journey-station-name {
+  font-size: 20px;
+  color: var(--color-silver-300);
+}
+.journey-station[data-prologue] .journey-station-desc {
+  font-size: 12px;
+}
+.journey-station[data-prologue] .journey-station-dot {
+  border-style: dashed;
+}
+@media (max-width: 640px) {
+  .journey-station {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .journey-station-enter {
+    margin-left: 28px;
+  }
+  .journey-station-name {
+    font-size: 22px;
+  }
+}
+
 /* Accessibility — respect reduced motion strictly. Fade stays (opacity
    is not motion), transforms/parallax/wash animation are neutralized. */
 @media (prefers-reduced-motion: reduce) {
@@ -807,11 +1407,35 @@ html[data-stage="design-render"] .stage-space::after {
   .brand-grain::after,
   .nav-stage[aria-current="page"] .nav-stage-line,
   .exhibition-emerge,
-  .atelier-develop {
+  .atelier-develop,
+  .archive-card,
+  .archive-card-image img,
+  .journey-cta,
+  .journey-cta svg,
+  .disclosure-trigger svg,
+  .fit-line-bar::after,
+  .journey-step,
+  .journey-station,
+  .journey-station-name,
+  .journey-station-code,
+  .journey-station-desc,
+  .journey-station-enter,
+  .journey-station-enter-text,
+  .journey-station-dot,
+  .journey-rail-dot,
+  .hero-scroll-line {
     animation: none !important;
     transition: opacity var(--dur-reveal) linear !important;
     transform: none !important;
     filter: none !important;
+  }
+  /* 这些元素用 transform 定位，只重置过渡，不归零位移。 */
+  .journey-rail-label,
+  .journey-rail-node,
+  .journey-menu-panel,
+  .journey-menu-item {
+    transition: none !important;
+    animation: none !important;
   }
   [data-reveal] {
     opacity: 1 !important;
@@ -823,5 +1447,21 @@ html[data-stage="design-render"] .stage-space::after {
   }
   html[data-stage]::before {
     transition: none !important;
+  }
+}
+
+/* 移动端降级 —— 触屏上收起悬浮位移与长过渡，只保留渐显。 */
+@media (hover: none), (max-width: 767px) {
+  .archive-card:hover {
+    transform: none;
+  }
+  .archive-card-image img {
+    transition: opacity var(--dur-hover) var(--ease-atelier);
+  }
+  .archive-card:hover .archive-card-image img {
+    transform: none;
+  }
+  .journey-cta:hover {
+    padding-right: 26px;
   }
 }

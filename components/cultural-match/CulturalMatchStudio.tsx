@@ -46,6 +46,8 @@ export function CulturalMatchStudio() {
   const [phase, setPhase] = useState<Phase>({ kind: "loading" });
   const [stage, setStage] = useState(0);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  /** Selection provenance: user pick vs. Top-1 recommended default. */
+  const [selectionSource, setSelectionSource] = useState<"user" | "recommended">("recommended");
 
   useEffect(() => {
     if (stage >= MATCH_STAGE_KEYS.length - 1) return;
@@ -68,6 +70,7 @@ export function CulturalMatchStudio() {
         }
         setPhase({ kind: "ready", brief, body });
         setSelectedId(body.matches[0]?.id ?? null);
+        setSelectionSource("recommended");
       } catch (err) {
         setPhase({
           kind: "error",
@@ -124,13 +127,14 @@ export function CulturalMatchStudio() {
           designBrief: phase.brief,
           selectedMatch,
           guardrail: phase.body.guardrail,
+          selectionSource,
         }),
       );
     } catch {
       /* storage unavailable — the target page will show its empty state */
     }
     router.push("/design-translation");
-  }, [phase, selectedId, router]);
+  }, [phase, selectedId, selectionSource, router]);
 
   /* ------------------------------  States  ------------------------------ */
 
@@ -225,10 +229,13 @@ export function CulturalMatchStudio() {
         <div className="flex flex-wrap items-end justify-between gap-4">
           <SectionLabel>{t("culturalMatch.heritageDirectionsLabel")}</SectionLabel>
           <span className="text-[11px] tracking-[0.22em] text-[var(--color-silver-600)] uppercase">
-            {t("culturalMatch.topOfRanked", { total: body.matches.length })}
+            {t("culturalMatch.topOfRanked", {
+              pool: body.pool_total,
+              total: body.matches.length,
+            })}
           </span>
         </div>
-        <div className="flex flex-col gap-8">
+        <div className="grid gap-6 lg:grid-cols-2">
           {body.matches.map((match, i) => (
             <HeritageDirectionCard
               key={match.id}
@@ -237,7 +244,10 @@ export function CulturalMatchStudio() {
               rank={i + 1}
               selection={{
                 selected: selectedId === match.id,
-                onSelect: () => setSelectedId(match.id),
+                onSelect: () => {
+                  setSelectedId(match.id);
+                  setSelectionSource("user");
+                },
               }}
             />
           ))}
@@ -245,9 +255,15 @@ export function CulturalMatchStudio() {
       </section>
 
       {/* Continue to Stage 3 — Design Translation */}
-      <section className="glass-panel flex flex-col gap-8 rounded-[var(--radius-lg)] p-8 sm:p-10">
-        <SectionLabel>{t("culturalMatch.whatComesNextLabel")}</SectionLabel>
+      <section className="flex flex-col gap-8 border-t border-[var(--color-line)] pt-12">
+        {/* 相遇时刻 —— 你的故事 × 你带走的文化 */}
+        <div className="match-bridge" aria-hidden>
+          <span className="match-bridge-line" style={{ "--bridge-dir": "left" } as React.CSSProperties} />
+          <span className="match-bridge-node" />
+          <span className="match-bridge-line" />
+        </div>
         <div className="flex flex-col gap-4">
+          <SectionLabel>{t("culturalMatch.whatComesNextLabel")}</SectionLabel>
           <h3 className="font-sans text-[24px] leading-[1.15] tracking-[-0.01em] text-[var(--color-ivory)] sm:text-[28px]">
             {t("culturalMatch.whatComesNextTitle")}
           </h3>
@@ -258,6 +274,13 @@ export function CulturalMatchStudio() {
               })
               : t("culturalMatch.whatComesNextBodyNone")}
           </p>
+          {selectedMatch && (
+            <span className="w-fit rounded-full border border-[var(--color-line)] px-2.5 py-0.5 text-[10px] tracking-[0.16em] text-[var(--color-silver-400)] uppercase">
+              {selectionSource === "user"
+                ? t("culturalMatch.selectionSource.user")
+                : t("culturalMatch.selectionSource.recommended")}
+            </span>
+          )}
         </div>
         <div className="flex flex-col gap-4 pt-4 sm:flex-row sm:items-center sm:justify-between">
           <button
@@ -272,14 +295,12 @@ export function CulturalMatchStudio() {
             type="button"
             disabled={!selectedMatch}
             onClick={handleContinueToTranslation}
-            className={`group inline-flex items-center gap-3 rounded-full border px-7 py-3.5 text-[12px] font-medium tracking-[0.16em] uppercase transition-all duration-300 ${selectedMatch
-              ? "border-[var(--color-line-strong)] bg-[linear-gradient(180deg,var(--color-silver-100),var(--color-silver-300))] text-[var(--color-bg)] hover:brightness-105 active:scale-[0.97]"
-              : "cursor-not-allowed border-[var(--color-line)] text-[var(--color-silver-500)]"
-              }`}
+            data-variant={selectedMatch ? "solid" : undefined}
+            className="journey-cta"
           >
             {t("common.actions.continueToDesignTranslation")}
             <ArrowRight
-              className={`h-4 w-4 transition-transform duration-300 ${selectedMatch ? "group-hover:translate-x-0.5" : ""}`}
+              className="h-4 w-4"
               strokeWidth={1.5}
             />
           </button>
