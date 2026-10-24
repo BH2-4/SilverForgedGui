@@ -44,6 +44,11 @@ function pathnameToStage(pathname: string | null): string {
 export function PageTransition({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const stage = useMemo(() => pathnameToStage(pathname), [pathname]);
+  /* Q03 最小适配（主责授权）：gallery 路由的全屏 3D 画布依赖
+     position:fixed 相对视口；.atelier-page 的入场动画以 both 填充
+     持有 transform，会使 transform 祖先成为 fixed 后代的包含块。
+     gallery 下改用无 transform 的静态包装，其余路由行为不变。 */
+  const isGallery = pathname?.startsWith("/gallery") ?? false;
   /* First mount vs subsequent navigations get slightly different washes.
      The first paint uses a shorter wash so the hero doesn't stall; a
      real navigation runs the full one. */
@@ -68,8 +73,13 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
       <div key={washKey} className="atelier-wash" aria-hidden />
       {/* Page frame — the content itself. The keyed remount ensures the
           .atelier-page enter animation re-runs on every navigation, so
-          the two motions (wash out + page in) stay coordinated. */}
-      <div key={`page-${stage}-${washKey}`} className="atelier-page">
+          the two motions (wash out + page in) stay coordinated. Gallery
+          routes get a transform-free frame so their fixed WebGL canvas
+          resolves against the viewport. */}
+      <div
+        key={`page-${stage}-${washKey}`}
+        className={isGallery ? undefined : "atelier-page"}
+      >
         {children}
       </div>
     </>

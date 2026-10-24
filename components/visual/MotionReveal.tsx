@@ -63,7 +63,10 @@ export function MotionReveal({
     return () => io.disconnect();
   }, [threshold]);
 
-  const Tag = as as React.ElementType;
+  // Q03 说明：@react-three/fiber 的类型会全局扩展 React.JSX.IntrinsicElements，
+  // 使 React.ElementType 的动态标签 props 联合塌缩为 never；此处收窄为字面量
+  // "div" 仅为类型解析，运行时仍使用传入的 as 值，行为不变。
+  const Tag = as as "div";
   return (
     <Tag
       ref={ref as never}

@@ -25,7 +25,7 @@ export function SiteTopBar() {
 
   return (
     <div className="sticky top-0 z-40 border-b border-[var(--color-line)] bg-[rgba(0,0,0,0.78)] backdrop-blur-md supports-[backdrop-filter]:bg-[rgba(0,0,0,0.62)]">
-      <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-8 px-8 py-5 sm:px-12 lg:px-16">
+      <div className="mx-auto flex max-w-[1400px] flex-col items-start gap-3 px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between sm:gap-8 sm:px-12 sm:py-5 lg:px-16">
         <BrandMark />
 
         {/* JOURNEY —— 一处入口，展开整条旅程 */}
@@ -81,17 +81,24 @@ export function SiteTopBar() {
           </div>
         </nav>
 
-        <div className="flex items-center gap-7">
+        <div className="flex flex-wrap items-center gap-4 sm:gap-7">
+          {/* 3D 数字展厅 —— 站内 gallery 路由（Q03 并入统一应用） */}
+          <Link
+            href="/gallery"
+            className="inline-flex items-center gap-1.5 border-b border-transparent pb-0.5 text-[11px] tracking-[0.12em] text-[var(--color-silver-300)] uppercase transition-colors duration-300 hover:border-[var(--color-silver-300)] hover:text-[var(--color-ivory)] sm:text-[13px] sm:tracking-[0.16em]"
+          >
+            {t("common.galleryLabel")}
+          </Link>
           {/* 成品直购线 —— 跳转独立站，与定制线并行 */}
           <a
             href={COLLECTION_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="group hidden items-center gap-1.5 border-b border-transparent pb-0.5 text-[13px] tracking-[0.16em] text-[var(--color-silver-300)] uppercase transition-colors duration-300 hover:border-[var(--color-silver-300)] hover:text-[var(--color-ivory)] sm:inline-flex"
+            className="group inline-flex items-center gap-1.5 border-b border-transparent pb-0.5 text-[11px] tracking-[0.12em] text-[var(--color-silver-300)] uppercase transition-colors duration-300 hover:border-[var(--color-silver-300)] hover:text-[var(--color-ivory)] sm:text-[13px] sm:tracking-[0.16em]"
           >
             {t("common.collectionLabel")}
             <ArrowUpRight
-              className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              className="h-3 w-3 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 sm:h-3.5 sm:w-3.5"
               strokeWidth={1.5}
             />
           </a>
