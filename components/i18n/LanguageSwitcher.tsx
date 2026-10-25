@@ -17,16 +17,16 @@ export function LanguageSwitcher({ className }: { className?: string }) {
   return (
     <nav
       aria-label="Language"
-      className={`flex items-center gap-3 text-[13px] tracking-[0.14em] uppercase ${className ?? ""}`}
+      className={`flex items-center gap-2 whitespace-nowrap text-[11px] tracking-[0.08em] uppercase sm:gap-3 sm:text-[13px] sm:tracking-[0.14em] ${className ?? ""}`}
     >
       {LOCALES.map((loc, i) => {
         const active = locale === loc;
         return (
-          <span key={loc} className="flex items-center gap-3">
+          <span key={loc} className="flex items-center gap-2 sm:gap-3">
             {i > 0 && (
               <span
                 aria-hidden
-                className="h-px w-2.5 bg-[var(--color-line-strong)]"
+                className="h-px w-2 bg-[var(--color-line-strong)] sm:w-2.5"
               />
             )}
             <button
@@ -34,7 +34,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
               lang={loc}
               onClick={() => setLocale(loc)}
               aria-current={active ? "true" : undefined}
-              className={`transition-colors duration-300 ${
+              className={`whitespace-nowrap transition-colors duration-300 ${
                 active
                   ? "cursor-default text-[var(--color-ivory)]"
                   : "cursor-pointer text-[var(--color-silver-500)] hover:text-[var(--color-silver-200)]"

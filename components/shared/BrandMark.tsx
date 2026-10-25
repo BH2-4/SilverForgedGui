@@ -24,8 +24,8 @@ export function BrandMark({
   className,
 }: BrandMarkProps) {
   const content = (
-    <span className={cn("brand-mark inline-flex items-center gap-3", className)}>
-      <span className="brand-mark-text text-[18px] font-semibold leading-none tracking-[0.12em] uppercase">
+    <span className={cn("brand-mark inline-flex items-center gap-2 whitespace-nowrap sm:gap-3", className)}>
+      <span className="brand-mark-text text-[13px] font-semibold leading-none tracking-[0.12em] uppercase sm:text-[18px]">
         Silver&nbsp;Forged&nbsp;Gui
       </span>
       {showZh && (
@@ -36,7 +36,7 @@ export function BrandMark({
           />
           <span
             aria-hidden
-            className="text-[14px] tracking-[0.32em] text-[var(--color-silver-500)]"
+            className="text-[12px] tracking-[0.18em] whitespace-nowrap text-[var(--color-silver-500)] sm:text-[14px] sm:tracking-[0.32em]"
           >
             银中贵
           </span>

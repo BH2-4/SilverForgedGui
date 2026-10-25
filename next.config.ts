@@ -20,6 +20,28 @@ const nextConfig: NextConfig = {
         destination: "/collection/index.html",
         permanent: false,
       },
+      // 发布收敛：3D 子域迁入主站后，旧展厅域名的根路径、产品路由
+      // 与素材路径 308 到主域 /gallery/... 对应位置。仅按 host 命中，
+      // 主域自身的 /gallery 正常服务、不受影响；查询参数由 Next 默认
+      // 保留。初切用临时重定向（非 301）以便观察与回退。
+      ...[
+        "/",
+        "/product",
+        "/products",
+        "/products/:slug",
+        "/images/:path*",
+        "/models/:path*",
+      ].flatMap((source) =>
+        [
+          "3d.silverforgedgui.eurekadelta.com",
+          "3d.randomplayx.com",
+        ].map((host) => ({
+          source,
+          has: [{ type: "host" as const, value: host }],
+          destination: `https://silverforgedgui.eurekadelta.com/gallery${source}`,
+          permanent: false,
+        }))
+      ),
       // Spree 遗留店域名（shop.）整体迁往成品独立站：按 host 命中，
       // 任意旧路径一律 301 到 /collection（旧深链在静态站无对应页面）。
       {

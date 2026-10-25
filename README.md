@@ -68,6 +68,12 @@ Production Branch 设置为 `silver-forged-gui`，并在环境变量中填入上
 
 代码已做 Serverless 适配：参考图通过 `outputFileTracingIncludes` 打包进 `/api/design-render` 函数，`maxDuration=60` 覆盖 30-90 秒的生图耗时。
 
+## 统一站与 3D 展厅（2026-10）
+
+- 原独立 3D 展厅（同仓库 main 分支历史）已按文件级迁入本应用：路由收敛为 `/gallery`、`/gallery/product`、`/gallery/products`、`/gallery/products/[slug]`，组件在 `components/gallery/`、数据在 `data/gallery/`、素材在 `public/gallery/`；样式以 `.g-scope` 作用域隔离，不覆盖主站全局。
+- 3D 子域（`3d.silverforgedgui.eurekadelta.com`、`3d.randomplayx.com`）按 host 命中重定向至主域 `/gallery/...`（见 `next.config.ts`，初切为临时重定向）；主域 `/gallery` 直接服务。
+- 成品独立站入口经 `lib/collection-url.ts` 默认指向站内 `/collection/index.html`；展厅链接经 `lib/story-url.ts` 默认 `/gallery`。
+
 ## 目录结构
 
 ```
