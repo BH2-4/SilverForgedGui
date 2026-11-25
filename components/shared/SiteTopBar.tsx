@@ -89,7 +89,7 @@ export function SiteTopBar() {
           >
             {t("common.galleryLabel")}
           </Link>
-          {/* 成品直购线 —— 跳转独立站，与定制线并行 */}
+          {/* 成品系列入口，与定制线并行 */}
           <a
             href={COLLECTION_URL}
             target="_blank"

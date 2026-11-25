@@ -2,13 +2,13 @@
 (function () {
     'use strict';
 
-    var KEY = 'miao_inquiry_v1';
+    var KEY = 'miao_ready_made_inquiry_v1';
     var ASSET_BASE = window.ASSET_BASE || '';
 
     function read() {
         try {
             var v = JSON.parse(localStorage.getItem(KEY));
-            return Array.isArray(v) ? v : [];
+            return Array.isArray(v) ? v.filter(catalogProduct) : [];
         } catch (e) { return []; }
     }
     function write(list) {
@@ -18,19 +18,12 @@
         document.dispatchEvent(new CustomEvent('inquiry:change', { detail: list }));
     }
 
-    function productOf(sku) {
-        if (typeof PRODUCTS === 'undefined') return null;
-        for (var i = 0; i < PRODUCTS.length; i++) {
-            if (PRODUCTS[i].sku === sku) return PRODUCTS[i];
-        }
-        return null;
-    }
-
     var Inquiry = {
         list: read,
         count: function () { return read().length; },
         has: function (sku) { return read().indexOf(sku) !== -1; },
         add: function (sku) {
+            if (!catalogProduct(sku)) return;
             var l = read();
             if (l.indexOf(sku) === -1) { l.push(sku); write(l); }
         },
@@ -64,8 +57,8 @@
             '</div>' +
             '<div id="drawerItems" class="flex-1 overflow-y-auto"></div>' +
             '<div class="p-6" style="border-top:1px solid var(--line)">' +
-            '  <a href="' + ASSET_BASE + 'contact/index.html" class="btn-silver block text-center">Submit Inquiry</a>' +
-            '  <p class="text-xs mt-3 text-center" style="color:var(--faint)">No payment is taken. We reply with prices &amp; availability.</p>' +
+            '  <a href="' + ASSET_BASE + 'contact/index.html" class="btn-silver block text-center">Prepare Inquiry</a>' +
+            '  <p class="text-xs mt-3 text-center" style="color:var(--faint)">' + CATALOG_PRICE_NOTE + '</p>' +
             '</div>';
         document.body.appendChild(overlay);
         document.body.appendChild(drawer);
@@ -83,8 +76,7 @@
         }
         var html = '';
         l.forEach(function (sku) {
-            var p = productOf(sku);
-            if (!p) return;
+            var p = catalogProduct(sku);
             html +=
                 '<div class="flex items-center gap-4 px-6 py-4" style="border-bottom:1px solid var(--line-soft)">' +
                 '  <a href="' + ASSET_BASE + 'products/detail.html?sku=' + p.sku + '" class="w-16 h-16 flex-shrink-0 img-frame">' +
@@ -92,7 +84,7 @@
                 '  </a>' +
                 '  <div class="flex-1 min-w-0">' +
                 '    <p class="text-sm font-semibold truncate">' + p.name + '</p>' +
-                '    <p class="plate-sku mt-1">' + p.sku + '</p>' +
+                '    <p class="text-sm mt-1" style="color:var(--silver)">' + catalogPrice(p) + '</p>' +
                 '  </div>' +
                 '  <button data-inquiry-remove="' + p.sku + '" class="text-xs tracking-widest uppercase" style="color:var(--faint)">Remove</button>' +
                 '</div>';

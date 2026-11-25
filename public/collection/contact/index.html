@@ -53,7 +53,7 @@
                 Prepare Your Inquiry List
             </h1>
             <p class="max-w-xl" style="color:var(--muted)">
-                Review your selected archive pieces and add your custom requirements.
+                Review your selected jewellery and add your custom requirements.
                 Save a summary while our contact details are being confirmed. Nothing is sent from this page.
             </p>
         </div>
@@ -78,7 +78,7 @@
                 <p class="max-w-xl mb-8 text-sm" style="color:var(--silver-bright)">
                     Contact details are being confirmed. You can prepare and copy your inquiry now;
                     your list will stay in this browser until you choose to remove it.
-                    Archive pieces are references; availability is not confirmed.
+                    <span data-catalog-price-note></span>
                 </p>
                 <form id="inquiryForm" class="max-w-xl" novalidate>
                     <p class="eyebrow mb-6 pb-3" style="border-bottom:1px solid var(--line-soft)">Your Details (Optional)</p>
@@ -149,7 +149,7 @@
         </div>
     </footer>
 
-    <script src="../assets/js/data.js"></script>
+    <script src="../assets/js/catalog.js"></script>
     <script src="../assets/js/inquiry.js"></script>
     <script>
         var MESSAGE_DRAFT_KEY = 'miao_inquiry_message_v1';
@@ -173,17 +173,15 @@
                 if (value) lines.push(field[1] + ': ' + value);
             });
             var list = window.Inquiry.list();
-            lines.push('', 'Selected archive pieces (' + list.length + '):');
+            lines.push('', 'Selected ready-made pieces (' + list.length + '):');
             if (!list.length) lines.push('No pieces selected.');
             list.forEach(function (sku) {
-                var product = productOf(sku);
-                lines.push('- ' + sku + (product ? ' — ' + product.name : ' (not found in the current archive; please confirm)'));
-                if (product) {
-                    lines.push('  https://silverforgedgui.eurekadelta.com/collection/products/detail.html?sku=' + encodeURIComponent(sku));
-                }
+                var product = catalogProduct(sku);
+                lines.push('- ' + sku + ' — ' + product.name + ' — ' + catalogPrice(product));
+                lines.push('  https://silverforgedgui.eurekadelta.com/collection/products/detail.html?sku=' + encodeURIComponent(sku));
             });
             lines.push('', 'Custom requirements:', document.getElementById('fMessage').value.trim() || 'Not specified.',
-                '', 'Archive pieces are references. Availability, pricing and timing require confirmation.');
+                '', CATALOG_PRICE_NOTE);
             var summary = lines.join('\n');
             document.getElementById('inquirySummary').value = summary;
             document.getElementById('summaryStatus').textContent = '';
@@ -205,21 +203,6 @@
             }
         }
 
-        function productOf(sku) {
-            for (var i = 0; i < PRODUCTS.length; i++) {
-                if (PRODUCTS[i].sku === sku) return PRODUCTS[i];
-            }
-            return null;
-        }
-
-        // 未知 SKU 来自 localStorage（本页之外可写），按不可信文本处理：
-        // 转义后再拼入 HTML 正文与属性；data-remove 取值经 DOM 解码还原为原始字符串。
-        function escapeHtml(value) {
-            return String(value).replace(/[&<>"']/g, function (c) {
-                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-            });
-        }
-
         function renderPreview() {
             var box = document.getElementById('inquiryPreview');
             var footer = document.getElementById('previewFooter');
@@ -237,27 +220,14 @@
             }
             var html = '';
             list.forEach(function (sku) {
-                var p = productOf(sku);
-                if (!p) {
-                    // 与摘要口径一致：未知 SKU 不静默隐藏，明示需确认，可手动移除
-                    html += '<li class="flex items-center gap-4 py-4" style="border-bottom:1px solid var(--line-soft)">' +
-                        '<div class="w-16 h-16 flex-shrink-0 img-frame"></div>' +
-                        '<div class="flex-1 min-w-0">' +
-                        '<p class="text-sm font-semibold">Unknown piece</p>' +
-                        '<p class="plate-sku mt-1">' + escapeHtml(sku) + '</p>' +
-                        '<p class="text-xs mt-1" style="color:var(--faint)">Not in the current archive — needs confirmation</p>' +
-                        '</div>' +
-                        '<button data-remove="' + escapeHtml(sku) + '" class="text-xs tracking-widest uppercase flex-shrink-0 transition-colors hover:text-white" style="color:var(--faint)">Remove</button>' +
-                        '</li>';
-                    return;
-                }
+                var p = catalogProduct(sku);
                 html += '<li class="flex items-center gap-4 py-4" style="border-bottom:1px solid var(--line-soft)">' +
-                    '<div class="w-16 h-16 flex-shrink-0 img-frame">' +
+                    '<a href="../products/detail.html?sku=' + p.sku + '" class="w-16 h-16 flex-shrink-0 img-frame">' +
                     '<img src="' + window.ASSET_BASE + p.img + '" alt="' + p.name + '" class="w-full h-full object-contain p-1" loading="lazy" />' +
-                    '</div>' +
+                    '</a>' +
                     '<div class="flex-1 min-w-0">' +
                     '<p class="text-sm font-semibold truncate">' + p.name + '</p>' +
-                    '<p class="plate-sku mt-1">' + p.sku + '</p>' +
+                    '<p class="text-sm mt-1" style="color:var(--silver)">' + catalogPrice(p) + '</p>' +
                     '</div>' +
                     '<button data-remove="' + p.sku + '" class="text-xs tracking-widest uppercase flex-shrink-0 transition-colors hover:text-white" style="color:var(--faint)">Remove</button>' +
                     '</li>';
@@ -266,7 +236,6 @@
             box.querySelectorAll('[data-remove]').forEach(function (btn) {
                 btn.addEventListener('click', function () {
                     window.Inquiry.remove(btn.getAttribute('data-remove'));
-                    renderPreview();
                 });
             });
         }
@@ -276,7 +245,7 @@
         // 跨标签页同步：其他页面（如详情页）加入/移除清单后，本页预览与摘要随之刷新。
         // 键名与 inquiry.js 内部 KEY 保持一致（该常量未导出，此处按约定硬编码）。
         window.addEventListener('storage', function (e) {
-            if (e.key === 'miao_inquiry_v1' || e.key === null) renderPreview();
+            if (e.key === 'miao_ready_made_inquiry_v1' || e.key === null) renderPreview();
         });
 
         document.addEventListener('DOMContentLoaded', function () {
@@ -286,6 +255,7 @@
             } catch (e) {
                 document.getElementById('draftStatus').textContent = 'Browser storage is unavailable. Keep this page open or copy your summary to save your requirements.';
             }
+            document.querySelector('[data-catalog-price-note]').textContent = CATALOG_PRICE_NOTE;
             renderPreview();
 
             document.getElementById('inquiryForm').addEventListener('input', function (e) {
@@ -296,7 +266,6 @@
 
             document.getElementById('clearListBtn').addEventListener('click', function () {
                 window.Inquiry.clear();
-                renderPreview();
             });
 
             document.getElementById('inquiryForm').addEventListener('submit', function (e) {

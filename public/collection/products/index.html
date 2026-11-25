@@ -38,39 +38,10 @@
     </header>
 
     <main class="max-w-7xl mx-auto px-6 md:px-10 py-16">
-        <!-- Page header -->
-        <div class="mb-12" style="border-left:1px solid var(--silver);padding-left:32px">
-            <p class="eyebrow mb-4">The Collection</p>
-            <h1 class="font-display font-light text-4xl md:text-5xl mb-4" style="color:var(--silver-bright)">
-                Ninety-One Pieces of Hand-Forged Silver
-            </h1>
-            <p class="max-w-xl" style="color:var(--muted)">
-                Every piece in the archive. Browse by family, open a piece for detail,
-                and add it to your inquiry list.
-            </p>
-        </div>
+        <h1 class="font-display text-5xl mb-4">Ready-Made Jewellery</h1>
+        <p class="mb-10" style="color:var(--muted)" data-catalog-price-note></p>
+        <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
 
-        <div class="flex flex-col lg:flex-row gap-12">
-            <!-- Sidebar -->
-            <aside class="w-full lg:w-56 flex-shrink-0">
-                <div class="sticky top-28">
-                    <p class="eyebrow mb-4 pb-3" style="border-bottom:1px solid var(--line-soft)">Categories</p>
-                    <ul id="categoryNav" class="space-y-1"></ul>
-                </div>
-            </aside>
-
-            <!-- Grid -->
-            <div class="flex-1">
-                <div class="flex items-center justify-between mb-8">
-                    <p class="plate-sku" id="resultCount"></p>
-                    <p class="plate-sku" id="pageIndicator"></p>
-                </div>
-                <div id="productGrid" class="grid grid-cols-2 md:grid-cols-3 gap-6"></div>
-                <div class="text-center mt-14">
-                    <button id="loadMoreBtn" class="btn-ghost hidden">Load More</button>
-                </div>
-            </div>
-        </div>
         <!-- Custom design exit -->
         <div class="mt-24 pt-16 text-center" style="border-top:1px solid var(--line-soft)">
             <p class="eyebrow mb-4">Not in the collection?</p>
@@ -96,69 +67,13 @@
         </div>
     </footer>
 
-    <script src="../assets/js/data.js"></script>
+    <script src="../assets/js/catalog.js"></script>
     <script src="../assets/js/inquiry.js"></script>
     <script>
-        var ITEMS_PER_PAGE = 12;
-        var currentCategory = 'all';
-        var shown = 0;
-
-        function cardHTML(p) {
-            return '<a href="detail.html?sku=' + p.sku + '" class="plate group">' +
-                '<div class="img-frame aspect-square m-3 flex items-center justify-center overflow-hidden">' +
-                '<img src="' + ASSET_BASE + p.img + '" alt="' + p.name + '" class="w-full h-full object-contain p-4" loading="lazy" /></div>' +
-                '<div class="px-4 pb-5">' +
-                '<p class="plate-sku">' + p.sku + '</p>' +
-                '<p class="text-sm font-semibold mt-1" style="color:var(--silver-bright)">' + p.name + '</p>' +
-                '<button data-inquiry-add="' + p.sku + '" class="mt-3 text-xs tracking-widest uppercase font-semibold" style="color:var(--muted)">+ Inquiry</button>' +
-                '</div></a>';
-        }
-
-        function renderNav() {
-            var counts = { all: PRODUCTS.length };
-            PRODUCTS.forEach(function (p) { counts[p.category] = (counts[p.category] || 0) + 1; });
-            var html = '<li><a class="category-link block py-2 text-sm" href="#" data-category="all" ' +
-                'style="' + (currentCategory === 'all' ? 'color:var(--silver-bright);border-left:1px solid var(--silver)' : 'color:var(--muted)') + ';padding-left:12px">' +
-                'All Pieces <span class="plate-sku">' + counts.all + '</span></a></li>';
-            CATEGORIES.forEach(function (c) {
-                var active = currentCategory === c.id;
-                html += '<li><a class="category-link block py-2 text-sm" href="#" data-category="' + c.id + '" ' +
-                    'style="' + (active ? 'color:var(--silver-bright);border-left:1px solid var(--silver)' : 'color:var(--muted)') + ';padding-left:12px">' +
-                    c.label + ' <span class="plate-sku">' + (counts[c.id] || 0) + '</span></a></li>';
-            });
-            document.getElementById('categoryNav').innerHTML = html;
-            document.querySelectorAll('.category-link').forEach(function (a) {
-                a.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    currentCategory = a.getAttribute('data-category');
-                    shown = 0;
-                    var url = 'index.html' + (currentCategory === 'all' ? '' : '?category=' + currentCategory);
-                    history.replaceState(null, '', url);
-                    render();
-                });
-            });
-        }
-
-        function render() {
-            renderNav();
-            var items = currentCategory === 'all'
-                ? PRODUCTS
-                : PRODUCTS.filter(function (p) { return p.category === currentCategory; });
-            document.getElementById('resultCount').textContent = items.length + ' PIECES';
-            var slice = items.slice(0, shown + ITEMS_PER_PAGE);
-            shown = slice.length;
-            document.getElementById('productGrid').innerHTML = slice.map(cardHTML).join('');
-            document.getElementById('pageIndicator').textContent = shown + ' / ' + items.length;
-            document.getElementById('loadMoreBtn').classList.toggle('hidden', shown >= items.length);
-        }
-
-        document.getElementById('loadMoreBtn').addEventListener('click', function () { render(); });
-
-        document.addEventListener('DOMContentLoaded', function () {
-            var cat = new URLSearchParams(window.location.search).get('category');
-            if (cat && CATEGORIES.some(function (c) { return c.id === cat; })) currentCategory = cat;
-            render();
-        });
+        document.querySelector('[data-catalog-price-note]').textContent = CATALOG_PRICE_NOTE;
+        document.getElementById('productGrid').innerHTML = CATALOG_PRODUCTS.map(function (product) {
+            return catalogCard(product, true);
+        }).join('');
     </script>
 </body>
 

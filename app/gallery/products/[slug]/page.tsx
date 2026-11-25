@@ -74,7 +74,7 @@ function PersonalizationTags({ p }: { p: Product }) {
       <p style={{ marginTop: 4, marginBottom: 0, fontSize: 12, color: "#8b93a7" }}>
         定制选项为工坊能力展示；{" "}
         <a href="/collection?utm_source=gallery&utm_medium=product-detail&utm_campaign=custom">
-          类似款式可至成品系列选款并联系询价
+          浏览当前成品系列并准备询价
         </a>
       </p>
     </section>

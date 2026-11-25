@@ -50,6 +50,7 @@
                 Every piece in this archive is shaped by that living tradition: silver melted,
                 hammered, drawn and assembled entirely by hand.
             </p>
+            <a class="nav-link inline-block mt-6" href="#artifact-archive">Browse the Artifact Archive ↓</a>
         </div>
 
         <!-- Craft process -->
@@ -98,21 +99,14 @@
                    style="color:var(--silver-bright);text-decoration:underline;text-underline-offset:6px">Explore the craft in 3D →</a>
             </p>
         </section>
-    </main>
-
-    <!-- CTA -->
-    <section class="border-t grain relative" style="border-color:var(--line-soft);background:var(--surface-2)">
-        <div class="max-w-3xl mx-auto px-6 py-20 text-center relative z-10">
-            <h2 class="font-display font-light text-4xl md:text-5xl mb-6" style="color:var(--silver-bright)">
-                See What the Forge Produces
-            </h2>
-            <p class="mb-10" style="color:var(--muted)">
-                Ninety-one hand-forged pieces — headdresses, necklaces, bracelets and vessels —
-                each one documented in the archive.
+        <section id="artifact-archive" class="mt-24 mb-16 scroll-mt-24">
+            <h2 class="font-display font-light text-4xl mb-4" style="color:var(--silver-bright)">Miao Silver Artifact Archive</h2>
+            <p class="mb-8" style="color:var(--muted)">
+                Historical photographs of headdresses, necklaces, bracelets, vessels and other artifacts documented in the collection.
             </p>
-            <a href="../products/index.html" class="btn-silver inline-block">View the Collection</a>
-        </div>
-    </section>
+            <div id="artifactGroups"></div>
+        </section>
+    </main>
 
     <!-- Footer -->
     <footer class="border-t" style="border-color:var(--line-soft)">
@@ -128,6 +122,7 @@
     </footer>
 
     <script src="../assets/js/data.js"></script>
+    <script src="../assets/js/catalog.js"></script>
     <script src="../assets/js/inquiry.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -171,11 +166,20 @@
                 return galleryCard(p, p.sku + ' · Pattern record', 'Pattern record ' + p.sku);
             }).join('');
 
+            document.getElementById('artifactGroups').innerHTML = CATEGORIES.map(function (category) {
+                var artifacts = PRODUCTS.filter(function (item) { return item.category === category.id; });
+                return '<details class="border-t py-4" style="border-color:var(--line-soft)">' +
+                    '<summary class="cursor-pointer" style="color:var(--silver-bright)">' + category.label + ' · ' + artifacts.length + '</summary>' +
+                    '<div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-5">' + artifacts.map(function (item) {
+                        return galleryCard(item, item.sku + ' · ' + item.name, item.name);
+                    }).join('') + '</div></details>';
+            }).join('');
+
             // fade-in on scroll
             var io = new IntersectionObserver(function (entries) {
                 entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('visible'); io.unobserve(en.target); } });
             }, { threshold: .1 });
-            document.querySelectorAll('section, .plate').forEach(function (el) { el.classList.add('reveal'); io.observe(el); });
+            document.querySelectorAll('section, #processGrid .plate, #craftGrid .plate, #patternGrid .plate').forEach(function (el) { el.classList.add('reveal'); io.observe(el); });
         });
     </script>
 </body>
