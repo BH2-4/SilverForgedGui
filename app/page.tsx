@@ -270,7 +270,7 @@ function ActFive() {
               {t("common.actions.enterStudio")}
               <ArrowUpRight className="h-4 w-4" strokeWidth={1.5} />
             </Link>
-            {/* 成品直购线 —— 跳转独立站，与定制线并行 */}
+            {/* 成品系列入口，与定制线并行 */}
             <a
               href={COLLECTION_URL}
               target="_blank"

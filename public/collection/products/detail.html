@@ -38,66 +38,65 @@
     </header>
 
     <main class="max-w-7xl mx-auto px-6 md:px-10 py-16">
-        <!-- breadcrumb -->
         <p class="plate-sku mb-10">
             <a href="index.html" class="hover:text-white transition-colors">Collection</a>
-            <span id="crumbCat" class="mx-2">/</span>
-            <span id="crumbSku" style="color:var(--muted)"></span>
+            <span id="crumbSku" class="ml-2" style="color:var(--muted)"></span>
         </p>
-
-        <div class="grid lg:grid-cols-2 gap-16 items-start mb-24">
-            <!-- main image -->
-            <div>
-                <div class="img-frame aspect-square flex items-center justify-center p-10">
-                    <img id="mainImg" src="" alt="" class="w-full h-full object-contain" />
-                </div>
-                <p class="plate-sku mt-4 text-center">Archive photograph · click to enlarge</p>
+        <section id="missingPiece" hidden>
+            <h1 id="missingTitle" class="font-display text-4xl mb-4">Piece unavailable</h1>
+            <p id="missingDescription" class="mb-6" style="color:var(--muted)">This piece is outside the current ready-made collection.</p>
+            <div class="flex flex-wrap gap-4">
+                <a href="index.html" class="btn-silver">Browse Ready-Made Jewellery</a>
+                <a href="../heritage/index.html#artifact-archive" class="btn-ghost">View the Heritage Archive</a>
             </div>
-
-            <!-- info -->
-            <div class="lg:pt-6">
-                <p class="plate-sku mb-3" id="dSku"></p>
-                <h1 class="font-display font-light text-4xl md:text-5xl mb-6" id="dName" style="color:var(--silver-bright)"></h1>
-                <div class="mb-10" style="border-top:1px solid var(--line-soft)"></div>
-
-                <dl class="space-y-5 mb-10 text-sm">
-                    <div class="flex gap-6">
-                        <dt class="eyebrow w-36 flex-shrink-0 pt-1">Category</dt>
-                        <dd id="dCategory" style="color:var(--muted)"></dd>
-                    </div>
-                    <div class="flex gap-6">
-                        <dt class="eyebrow w-36 flex-shrink-0 pt-1">Craft</dt>
-                        <dd style="color:var(--muted)">Hand-forged, traditional Miao silversmithing</dd>
-                    </div>
-                    <div class="flex gap-6">
-                        <dt class="eyebrow w-36 flex-shrink-0 pt-1">Provenance</dt>
-                        <dd style="color:var(--muted)">From the atelier archive · certified, see <a href="../certifications/index.html" class="underline hover:text-white transition-colors">Certificates</a></dd>
-                    </div>
-                    <div class="flex gap-6">
-                        <dt class="eyebrow w-36 flex-shrink-0 pt-1">Price</dt>
-                        <dd style="color:var(--silver)">On inquiry — add to your list for a quote</dd>
-                    </div>
-                </dl>
-
-                <div class="flex flex-wrap gap-4 mb-10">
-                    <button id="addBtn" data-inquiry-add="" class="btn-silver">
-                        <span data-inquiry-add-label>Add to Inquiry List</span>
-                    </button>
-                    <button data-inquiry-toggle class="btn-ghost">View Inquiry List</button>
-                </div>
-
-                <p class="text-sm leading-relaxed" style="color:var(--faint)">
-                    Each piece is photographed as archived. Dimensions, weight and current
-                    availability are confirmed individually when you submit an inquiry.
-                </p>
-            </div>
-        </div>
-
-        <!-- related -->
-        <section>
-            <p class="eyebrow mb-6">More from this family</p>
-            <div id="relatedGrid" class="grid grid-cols-2 md:grid-cols-4 gap-6"></div>
         </section>
+
+        <div id="pieceDetail" hidden>
+            <div class="grid lg:grid-cols-2 gap-16 items-start mb-24">
+                <div>
+                    <div class="img-frame aspect-square flex items-center justify-center p-10">
+                        <img id="mainImg" alt="" class="w-full h-full object-contain" />
+                    </div>
+                    <p class="plate-sku mt-4 text-center">Product photograph · click to enlarge</p>
+                </div>
+
+                <div class="lg:pt-6">
+                    <p class="plate-sku mb-3" id="dSku"></p>
+                    <h1 class="font-display font-light text-4xl md:text-5xl mb-6" id="dName" style="color:var(--silver-bright)"></h1>
+                    <div class="mb-10" style="border-top:1px solid var(--line-soft)"></div>
+
+                    <dl class="space-y-5 mb-10 text-sm">
+                        <div class="flex gap-4">
+                            <dt class="eyebrow w-24 shrink-0 pt-1">Category</dt>
+                            <dd id="dCategory" style="color:var(--muted)"></dd>
+                        </div>
+                        <div class="flex gap-4">
+                            <dt class="eyebrow w-24 shrink-0 pt-1">Material</dt>
+                            <dd id="dMaterial" style="color:var(--muted)"></dd>
+                        </div>
+                        <div class="flex gap-4">
+                            <dt class="eyebrow w-24 shrink-0 pt-1">Price</dt>
+                            <dd>
+                                <p id="dPrice" style="color:var(--silver)"></p>
+                                <p id="priceNote" class="mt-2" style="color:var(--muted)"></p>
+                            </dd>
+                        </div>
+                    </dl>
+
+                    <div class="flex flex-wrap gap-4">
+                        <button id="addBtn" class="btn-silver">
+                            <span data-inquiry-add-label>Add to Inquiry List</span>
+                        </button>
+                        <button data-inquiry-toggle class="btn-ghost">View Inquiry List</button>
+                    </div>
+                </div>
+            </div>
+
+            <section aria-labelledby="relatedTitle">
+                <h2 id="relatedTitle" class="font-display text-3xl mb-6">More Ready-Made Jewellery</h2>
+                <div id="relatedGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
+            </section>
+        </div>
     </main>
 
     <!-- Footer -->
@@ -115,50 +114,57 @@
 
     <!-- lightbox -->
     <div id="lightbox" class="fixed inset-0 z-[110] hidden items-center justify-center p-8" style="background:rgba(5,5,6,.92)">
-        <img id="lightboxImg" src="" alt="" class="max-w-full max-h-full object-contain" />
+        <img id="lightboxImg" alt="" class="max-w-full max-h-full object-contain" />
     </div>
 
+    <script src="../assets/js/catalog.js"></script>
     <script src="../assets/js/data.js"></script>
     <script src="../assets/js/inquiry.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var sku = new URLSearchParams(window.location.search).get('sku');
-            var p = PRODUCTS.find(function (x) { return x.sku === sku; }) || PRODUCTS[0];
-            var cat = CATEGORIES.find(function (c) { return c.id === p.category; });
-
-            document.title = p.name + ' | Silver Forged Gui';
-            document.getElementById('mainImg').src = ASSET_BASE + p.img;
-            document.getElementById('mainImg').alt = p.name;
-            document.getElementById('dSku').textContent = p.sku;
-            document.getElementById('dName').textContent = p.name;
-            document.getElementById('dCategory').textContent = cat.label + ' · ' + cat.zh;
-            document.getElementById('crumbCat').textContent = '/ ' + cat.label;
-            document.getElementById('crumbSku').textContent = p.sku;
-            document.getElementById('addBtn').setAttribute('data-inquiry-add', p.sku);
-
-            // related: same category, exclude current, up to 4
-            var rel = PRODUCTS.filter(function (x) { return x.category === p.category && x.sku !== p.sku; }).slice(0, 4);
-            if (rel.length < 4) {
-                PRODUCTS.forEach(function (x) {
-                    if (rel.length < 4 && x.category !== p.category && x.sku !== p.sku) rel.push(x);
-                });
+            var product = catalogProduct(sku);
+            if (!product) {
+                var archivePiece = PRODUCTS.find(function (item) { return item.sku === sku; });
+                if (archivePiece) {
+                    document.getElementById('missingTitle').textContent = archivePiece.name;
+                    document.getElementById('missingDescription').textContent = 'This historical piece appears in the Miao silver heritage archive.';
+                }
+                document.getElementById('missingPiece').hidden = false;
+                return;
             }
-            document.getElementById('relatedGrid').innerHTML = rel.map(function (r) {
-                return '<a href="detail.html?sku=' + r.sku + '" class="plate">' +
-                    '<div class="img-frame aspect-square m-3 flex items-center justify-center overflow-hidden">' +
-                    '<img src="' + ASSET_BASE + r.img + '" alt="' + r.name + '" class="w-full h-full object-contain p-4" loading="lazy" /></div>' +
-                    '<div class="px-4 pb-5">' +
-                    '<p class="plate-sku">' + r.sku + '</p>' +
-                    '<p class="text-sm font-semibold mt-1" style="color:var(--silver-bright)">' + r.name + '</p>' +
-                    '</div></a>';
+
+            document.title = product.name + ' | Silver Forged Gui';
+            var mainImage = document.getElementById('mainImg');
+            mainImage.src = window.ASSET_BASE + product.img;
+            mainImage.alt = product.name;
+            document.getElementById('dSku').textContent = product.sku;
+            document.getElementById('dName').textContent = product.name;
+            document.getElementById('dCategory').textContent = product.category;
+            document.getElementById('dMaterial').textContent = product.material;
+            document.getElementById('dPrice').textContent = catalogPrice(product);
+            document.getElementById('priceNote').textContent = CATALOG_PRICE_NOTE;
+            document.getElementById('crumbSku').textContent = '/ ' + product.sku;
+            document.getElementById('addBtn').setAttribute('data-inquiry-add', product.sku);
+
+            var related = CATALOG_PRODUCTS.filter(function (item) { return item.sku !== product.sku; });
+            related.sort(function (left, right) {
+                return Number(right.category === product.category) - Number(left.category === product.category);
+            });
+            document.getElementById('relatedGrid').innerHTML = related.slice(0, 3).map(function (item) {
+                return catalogCard(item, false);
             }).join('');
+            document.getElementById('pieceDetail').hidden = false;
 
             // lightbox
             var lb = document.getElementById('lightbox');
             var lbImg = document.getElementById('lightboxImg');
-            document.getElementById('mainImg').style.cursor = 'zoom-in';
-            document.getElementById('mainImg').addEventListener('click', function () {
-                lbImg.src = ASSET_BASE + p.img; lb.classList.remove('hidden'); lb.classList.add('flex');
+            mainImage.style.cursor = 'zoom-in';
+            mainImage.addEventListener('click', function () {
+                lbImg.src = mainImage.src;
+                lbImg.alt = mainImage.alt;
+                lb.classList.remove('hidden');
+                lb.classList.add('flex');
             });
             lb.addEventListener('click', function () {
                 lb.classList.add('hidden'); lb.classList.remove('flex');
